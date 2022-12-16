@@ -1,3 +1,4 @@
+@import 'normalize.css';
 %tpclfontsize {
   font-family: 'DM Sans', sans-serif;
   font-style: normal;
@@ -25,7 +26,8 @@ body {
 
 .container {
   margin: 0 auto;
-  max-width: 1160px;
+  max-width: 1180px;
+  padding: 0px 10px;
 }
 
 .header {
@@ -93,6 +95,16 @@ body {
 
 .main{
   flex: 1 0 auto;
+  &__wrapper{
+    display: flex;
+    padding: 10px;
+  }
+  &__aside{
+    flex: 0 1 25%;
+  }
+  &__catalog{
+    flex: 1 0 75%;
+  }
 }
 
 .footer {
