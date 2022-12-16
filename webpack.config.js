@@ -30,12 +30,19 @@ const baseConfig = {
                 test: /\.(scss|css)$/,
                 use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
             },
+            // {
+            //     test: /\.(?:ico|gif|png|jpg|jpeg|svg|webp)$/i,
+            //     loader: 'file-loader',
+            //     options: {
+            //         outputPath: 'assets/img',
+            //         name: '[name].[ext]',
+            //     },
+            // },
             {
-                test: /\.(?:ico|gif|png|jpg|jpeg|svg|webp)$/i,
+                test: /\.(png|jpg|svg|gif|webp)$/,
                 loader: 'file-loader',
                 options: {
-                    outputPath: 'assets/images',
-                    name: '[name].[ext]',
+                    outputPath: 'assets/img',
                 },
             },
         ],
