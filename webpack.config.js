@@ -9,6 +9,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const baseConfig = {
     entry: path.resolve(__dirname, './src/index'),
     output: {
+        assetModuleFilename: 'assets/img/[hash][ext][query]',
+        clean: true,
         path: path.resolve(__dirname, './dist'),
         filename: 'main.js',
     },
@@ -38,13 +40,6 @@ const baseConfig = {
             //         name: '[name].[ext]',
             //     },
             // },
-            {
-                test: /\.(png|jpg|svg|gif|webp)$/,
-                loader: 'file-loader',
-                options: {
-                    outputPath: 'assets/img',
-                },
-            },
         ],
     },
     resolve: {
@@ -54,6 +49,7 @@ const baseConfig = {
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, './src/index.html'),
             filename: 'index.html',
+            favicon: './src/assets/img/favcion.ico',
         }),
         new MiniCssExtractPlugin({
             filename: '[name].[contenthash].css',
@@ -63,8 +59,8 @@ const baseConfig = {
         new CopyPlugin({
             patterns: [
                 {
-                    from: 'src/assets',
-                    to: 'assets',
+                    from: 'src/assets/data',
+                    to: 'assets/data',
                 },
             ],
         }),
