@@ -1,0 +1,143 @@
+%tpclfontsize {
+    font-family: 'DM Sans', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    color: #231f20;
+}
+
+%backimg {
+    background-repeat: no-repeat;
+    background-position: 0 center;
+    background-size: 100% 100%;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    background-color: #fff;
+}
+
+.container {
+    margin: 0 auto;
+    max-width: 1160px;
+}
+
+.header {
+    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 10%);
+
+    &__container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        @media screen and (max-width: 570px) {
+           flex-direction: column;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 5px;
+
+            &__pict {
+                width: 50px;
+                height: 50px;
+                background-image: url(../assets/img/logo.svg);
+                @extend %backimg;
+            }
+
+            &__caption {
+
+                .logo__home {
+                    @extend %tpclfontsize;
+                    font-weight: bold;
+                    transition: 1s;
+                    text-decoration: none;
+                    &:hover {
+                        color: #ff0000;
+                    }
+                }
+            }
+        }
+    }
+
+    .container {
+        
+        .price-basket {
+            &__name {
+                @extend %tpclfontsize;
+                font-size: 20px;
+            }
+        }
+
+        .to-basket {
+
+            &__pict {
+                width: 50px;
+                height: 50px;
+                background-image: url(../assets/img/to-basket.svg);
+                @extend %backimg;
+                transition: 1s;
+                cursor: pointer;
+                &:hover {
+                    opacity: 0.4;
+                }
+            }
+        }
+
+    }
+}
+
+.footer {
+    background: #d50438;
+
+    &__container {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .container {
+
+        .github {
+            display: flex;
+            gap: 15px;
+            &__pict {
+                width: 50px;
+                height: 50px;
+                background-image: url(../assets/img/github.svg);
+                @extend %backimg;
+                transition: 1s;
+                cursor: pointer;
+                &:hover {
+                    opacity: 0.4;
+                }
+            }
+
+            .author2 {
+                -webkit-filter: invert(100%);
+                filter: invert(100%);
+            }
+        }
+    
+        .year {
+            @extend %tpclfontsize;
+            font-size: 20px;
+        }
+    
+        .course {
+    
+            &__pict {
+                width: 120px;
+                height: 90px;
+                background-image: url(../assets/img/rs_school.svg);
+                @extend %backimg;
+                transition: 1s;
+                cursor: pointer;
+                &:hover {
+                    opacity: 0.4;
+                }
+            }
+        }
+    }
+}
