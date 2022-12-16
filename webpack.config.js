@@ -3,64 +3,64 @@ const { merge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const EslingPlugin = require('eslint-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-let mode = 'development'
-if(process.env.NODE_ENV === 'production'){
-    mode = 'production'
-}
 
 const baseConfig = {
     entry: path.resolve(__dirname, './src/index'),
-    mode: mode,
+    output: {
+        path: path.resolve(__dirname, './dist'),
+        filename: 'main.js',
+    },
     module: {
         rules: [
-            { 
-                test: /\.ts$/i, 
-                use: 'ts-loader' 
+            {
+                test: /\.ts$/i,
+                use: 'ts-loader',
             },
             {
                 test: /\.(png|svg|jpg|jpeg|gif)$/i,
-                type: "asset/resource",
+                type: 'asset/resource',
             },
             {
-                test: /\.(sa|sc|c)ss$/,
-                use: [
-                    (mode === 'development') ? "style-loader" : MiniCssExtractPlugin.loader,
-                    "css-loader",
-                    {
-                        loader: "postcss-loader",
-                        options: {
-                            postcssOptions: {
-                                plugins: [
-                                    [
-                                        "postcss-preset-env",
-                                        {
-
-                                        }
-                                    ],
-                                ],
-                            },
-                        },
-                    },
-                    "sass-loader"
-                ],
+                test: /\.tsx?$/,
+                use: ['ts-loader'],
+            },
+            {
+                test: /\.(scss|css)$/,
+                use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
+            },
+            {
+                test: /\.(?:ico|gif|png|jpg|jpeg|svg|webp)$/i,
+                loader: 'file-loader',
+                options: {
+                    outputPath: 'assets/images',
+                    name: '[name].[ext]',
+                },
             },
         ],
     },
     resolve: {
-        extensions: ['.ts', '.js'],
-    },
-    output: {
-        filename: 'index.js',
-        path: path.resolve(__dirname, './dist'),
+        extensions: ['.ts', '.js', '.tsx'],
     },
     plugins: [
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, './src/index.html'),
             filename: 'index.html',
         }),
+        new MiniCssExtractPlugin({
+            filename: '[name].[contenthash].css',
+        }),
         new CleanWebpackPlugin(),
-        new EslingPlugin({ extensions: 'ts' })
+        new EslingPlugin({ extensions: 'ts' }),
+        new CopyPlugin({
+            patterns: [
+                {
+                    from: 'src/assets',
+                    to: 'assets',
+                },
+            ],
+        }),
     ],
 };
 
