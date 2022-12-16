@@ -23,6 +23,9 @@ html, body {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        @media screen and (max-width: 570px) {
+           flex-direction: column;
+        }
 
         .logo {
             display: flex;
@@ -58,5 +61,19 @@ html, body {
                 font-size: 20px;
             }
         }
+
+        .to-basket {
+
+            &__pict {
+                width: 50px;
+                height: 50px;
+                transition: 1s;
+                cursor: pointer;
+                &:hover {
+                    opacity: 0.4;
+                }
+            }
+        }
+
     }
 }
