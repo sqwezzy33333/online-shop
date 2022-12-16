@@ -87,3 +87,57 @@ html, body {
 
     }
 }
+
+.footer {
+    background: #d50438;
+
+    &__container {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .container {
+
+        .github {
+            display: flex;
+            gap: 15px;
+            &__pict {
+                width: 50px;
+                height: 50px;
+                background-image: url(../assets/img/github.svg);
+                @extend %backimg;
+                transition: 1s;
+                cursor: pointer;
+                &:hover {
+                    opacity: 0.4;
+                }
+            }
+
+            .author2 {
+                -webkit-filter: invert(100%);
+                filter: invert(100%);
+            }
+        }
+    
+        .year {
+            @extend %tpclfontsize;
+            font-size: 20px;
+        }
+    
+        .course {
+    
+            &__pict {
+                width: 120px;
+                height: 90px;
+                background-image: url(../assets/img/rs_school.svg);
+                @extend %backimg;
+                transition: 1s;
+                cursor: pointer;
+                &:hover {
+                    opacity: 0.4;
+                }
+            }
+        }
+    }
+}
