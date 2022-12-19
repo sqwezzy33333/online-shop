@@ -7,69 +7,69 @@ const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const baseConfig = {
-    entry: path.resolve(__dirname, './src/index'),
-    output: {
-        assetModuleFilename: 'assets/img/[hash][ext][query]',
-        clean: true,
-        path: path.resolve(__dirname, './dist'),
-        filename: 'main.js',
-    },
-    module: {
-        rules: [
-            {
-                test: /\.ts$/i,
-                use: 'ts-loader',
-            },
-            {
-                test: /\.(png|svg|jpg|jpeg|gif)$/i,
-                type: 'asset/resource',
-            },
-            {
-                test: /\.tsx?$/,
-                use: ['ts-loader'],
-            },
-            {
-                test: /\.(scss|css)$/,
-                use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
-            },
-            // {
-            //     test: /\.(?:ico|gif|png|jpg|jpeg|svg|webp)$/i,
-            //     loader: 'file-loader',
-            //     options: {
-            //         outputPath: 'assets/img',
-            //         name: '[name].[ext]',
-            //     },
-            // },
-        ],
-    },
-    resolve: {
-        extensions: ['.ts', '.js', '.tsx'],
-    },
-    plugins: [
-        new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, './src/index.html'),
-            filename: 'index.html',
-            favicon: './src/assets/img/favicon.ico',
-        }),
-        new MiniCssExtractPlugin({
-            filename: '[name].[contenthash].css',
-        }),
-        new CleanWebpackPlugin(),
-        new EslingPlugin({ extensions: 'ts' }),
-        new CopyPlugin({
-            patterns: [
-                {
-                    from: 'src/assets/data',
-                    to: 'assets/data',
-                },
-            ],
-        }),
+  entry: path.resolve(__dirname, './src/index'),
+  output: {
+    assetModuleFilename: 'assets/img/[hash][ext][query]',
+    clean: true,
+    path: path.resolve(__dirname, './dist'),
+    filename: 'main.js',
+  },
+  module: {
+    rules: [
+      {
+        test: /\.ts$/i,
+        use: 'ts-loader',
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: 'asset/resource',
+      },
+      {
+        test: /\.tsx?$/,
+        use: ['ts-loader'],
+      },
+      {
+        test: /\.(scss|css)$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
+      },
+      // {
+      //     test: /\.(?:ico|gif|png|jpg|jpeg|svg|webp)$/i,
+      //     loader: 'file-loader',
+      //     options: {
+      //         outputPath: 'assets/img',
+      //         name: '[name].[ext]',
+      //     },
+      // },
     ],
+  },
+  resolve: {
+    extensions: ['.ts', '.js', '.tsx'],
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, './src/index.html'),
+      filename: 'index.html',
+      favicon: './src/assets/img/favicon.ico',
+    }),
+    new MiniCssExtractPlugin({
+      filename: '[name].[contenthash].css',
+    }),
+    new CleanWebpackPlugin(),
+    new EslingPlugin({ extensions: 'ts' }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: 'src/assets/data',
+          to: 'assets/data',
+        },
+      ],
+    }),
+  ],
 };
 
 module.exports = ({ mode }) => {
-    const isProductionMode = mode === 'prod';
-    const envConfig = isProductionMode ? require('./webpack.prod.config') : require('./webpack.dev.config');
+  const isProductionMode = mode === 'prod';
+  const envConfig = isProductionMode ? require('./webpack.prod.config') : require('./webpack.dev.config');
 
-    return merge(baseConfig, envConfig);
+  return merge(baseConfig, envConfig);
 };

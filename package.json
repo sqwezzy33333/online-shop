@@ -1,7 +1,7 @@
 {
     "name": "online-store",
     "version": "1.0.0",
-    "description": "",
+    "description": "It is a team project from Rs school stage2",
     "main": "webpack.base.config.js",
     "scripts": {
         "start": "webpack serve --open --config ./webpack.config.js --env mode=dev",
