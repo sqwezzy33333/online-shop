@@ -21,8 +21,12 @@ export class DrawElements {
         this.loadData = new Loader('./assets/data/data.json');
     }
 
+    async getArrayProducts(){
+        return await this.loadData.load();
+    }
+
     async drawCartGoods() {
-        const products: IProduct[] = await this.loadData.load();
+        const products: IProduct[] = await this.getArrayProducts();
         const product: IProduct = products[0];
         console.log(product);
         return products;
