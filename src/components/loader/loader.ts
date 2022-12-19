@@ -14,6 +14,7 @@ export class Loader {
         return inform.json();
       })
       .catch((err) => console.log(err));
-    return data;
+    const products = await data.then(result => result.products);
+    return products;
   }
 }
