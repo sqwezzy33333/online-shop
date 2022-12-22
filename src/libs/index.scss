@@ -130,15 +130,24 @@ body {
   }
 
   &__catalog{
-    display: grid;
-    gap: 20px;
-    grid-template-columns: 1fr 1fr 1fr;
-    flex: 1 0 75%;
     padding: 20px 30px;
     box-shadow: 0 2px 4px 0 rgb(0 0 0 / 10%);
   }
 
   .catalog {
+
+    &__products {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: 1fr 1fr 1fr;
+      flex: 1 0 75%;
+      @media screen and (max-width: 910px) {
+        grid-template-columns: 1fr 1fr;
+      }
+      @media screen and (max-width: 650px) {
+        grid-template-columns: 1fr;
+      }
+    }
 
     &__product {
       display: flex;
