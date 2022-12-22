@@ -16,7 +16,7 @@ export class DrawElements {
         const products: IProduct[] = await this.getArrayProducts();
         for(let i = 0; i < products.length; i++){
             const product: IProduct = products[i];
-            const catalog = document.querySelector('.main__catalog') as HTMLElement;
+            const catalog = document.querySelector('.catalog__products') as HTMLElement;
             const div = document.createElement('div') as HTMLElement;
             div.classList.add("catalog__product");
             div.classList.add("product");
