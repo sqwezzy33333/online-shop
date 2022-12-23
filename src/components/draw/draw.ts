@@ -1,40 +1,23 @@
 import { Loader } from '../loader/loader';
-
-interface IProduct {
-    brand: string;
-    category: string;
-    description: string;
-    discountPercentage: number;
-    id: number;
-    images: string[];
-    price: number;
-    rating: number;
-    stock: number;
-    thumbnail: string;
-    title: string;
-}
+import { IProduct } from '../types/types';
 
 export class DrawElements {
-    loadData: Loader;
+  loadData: Loader;
 
-    constructor() {
-        this.loadData = new Loader('./assets/data/data.json');
-    }
+  constructor() {
+    this.loadData = new Loader('./assets/data/data.json');
+  }
 
-    async getArrayProducts(){
-        return await this.loadData.load();
-    }
-
-
-    async drawCartGoods() {
-        const products: IProduct[] = await this.getArrayProducts();
-        for(let i = 0; i < products.length; i++){
-            const product: IProduct = products[i];
-            const catalog = document.querySelector('.main__catalog') as HTMLElement;
-        const div = document.createElement('div') as HTMLElement;
-        div.classList.add("catalog__product");
-        div.classList.add("product");
-        const cart: string = `
+  async drawCartGoods(data:IProduct[]) {
+    console.log(data)
+    let products: IProduct[] = data;
+    for (let i = 0; i < products.length; i++) {
+      const product: IProduct = products[i];
+      const catalog = document.querySelector('.main__catalog') as HTMLElement;
+      const div = document.createElement('div') as HTMLElement;
+      div.classList.add('catalog__product');
+      div.classList.add('product');
+      const cart: string = `
             <div class="product__discount-wrap">
             <p class="product__discount">-${product.discountPercentage}%</p>
             </div>
@@ -49,15 +32,19 @@ export class DrawElements {
             </div>
             <div class="product__price-wrap">
             <p class="product__price price">${product.price}$ 
-                <span class="price__old">${Math.round(product.price * (product.discountPercentage / 100) + product.price)}$</span>
-                <span class="price__discount">${Math.round(product.price - (product.price * (product.discountPercentage / 100) + product.price))}$</span>
+                <span class="price__old">${Math.round(
+                  product.price * (product.discountPercentage / 100) + product.price
+                )}$</span>
+                <span class="price__discount">${Math.round(
+                  product.price - (product.price * (product.discountPercentage / 100) + product.price)
+                )}$</span>
             </p>
             </div>
             <div class="product__add-wrap">
             <button class="product__add">Add to cart</button>
             </div>`;
-        div.innerHTML = cart;
-        catalog.appendChild(div);
-        }
-    } 
+      div.innerHTML = cart;
+      catalog.appendChild(div);
+    }
+  }
 }
