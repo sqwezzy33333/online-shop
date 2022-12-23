@@ -1,12 +1,6 @@
-import { Loader } from '../loader/loader';
 import { IProduct } from '../types/types';
 
 export class DrawElements {
-  loadData: Loader;
-
-  constructor() {
-    this.loadData = new Loader('./assets/data/data.json');
-  }
 
   async drawCartGoods(data:IProduct[]) {
     console.log(data)
