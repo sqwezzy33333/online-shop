@@ -1,7 +1,7 @@
-import { IProduct } from '../types/types';
+import { IProduct } from '../components/types/types';
 
-export class DrawElements {
-  async drawCartGoods(data: IProduct[]) {
+export class MainPage {
+  async draw(data: IProduct[]) {
     const catalog = document.querySelector('.main__catalog') as HTMLElement;
     catalog.innerHTML = '';
     let products: IProduct[] = data;
