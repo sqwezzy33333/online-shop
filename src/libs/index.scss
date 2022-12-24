@@ -130,11 +130,35 @@ body {
   }
 
   &__catalog{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     padding: 20px 30px;
     box-shadow: 0 2px 4px 0 rgb(0 0 0 / 10%);
   }
 
   .catalog {
+    
+    .search {
+      align-self: flex-end;
+      &__button {
+        color: #231f20;
+        border: 1px solid #231f20;
+        display: flex;
+        border-radius: 10px;
+        background-color: transparent;
+      }
+
+      &__text {
+        @extend %tpclfontsize;
+        font-size: 16px;
+        &:before {
+          content: "\21C5";
+          font-size: 20px;
+          margin-right: 5px;
+        }
+      }
+    }
 
     &__products {
       display: grid;
