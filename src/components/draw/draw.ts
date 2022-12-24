@@ -1,13 +1,12 @@
 import { IProduct } from '../types/types';
 
 export class DrawElements {
-
-  async drawCartGoods(data:IProduct[]) {
-    console.log(data)
+  async drawCartGoods(data: IProduct[]) {
+    const catalog = document.querySelector('.main__catalog') as HTMLElement;
+    catalog.innerHTML = '';
     let products: IProduct[] = data;
     for (let i = 0; i < products.length; i++) {
       const product: IProduct = products[i];
-      const catalog = document.querySelector('.main__catalog') as HTMLElement;
       const div = document.createElement('div') as HTMLElement;
       div.classList.add('catalog__product');
       div.classList.add('product');
