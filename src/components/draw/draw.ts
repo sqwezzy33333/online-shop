@@ -13,7 +13,6 @@ export class DrawElements {
     let products: IProduct[] = data;
     for (let i = 0; i < products.length; i++) {
       const product: IProduct = products[i];
-      const catalog = document.querySelector('.main__catalog') as HTMLElement;
       const div = document.createElement('div') as HTMLElement;
       div.classList.add('catalog__product');
       div.classList.add('product');
