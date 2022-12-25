@@ -45,7 +45,9 @@ export class FilterCategory {
       const path = document.location.pathname;
       const query = transformToURLParams(filters);
 
-      window.history.replaceState(filters, '', `${path}${query}`);
+      window.history.pushState(filters, '', `${path}${query}`);
+      window.history.pushState(filters, '', `${path}${query}`);
+      history.back();
     }
     filterRow.forEach((item) => {
       const input = item.children[0] as HTMLInputElement;
@@ -61,11 +63,9 @@ export class FilterCategory {
         } else {
           let arrayFromCategory = allFilters.category.split(',');
           let filtredArrayOfCategory = arrayFromCategory.filter((element) => {
-            console.log(element, input.id);
             return element !== input.id && element !== '';
           });
           allFilters.category = filtredArrayOfCategory.toString();
-          console.log(filtredArrayOfCategory);
           syncURL(allFilters);
           localStorage.setItem('category', allFilters.category);
         }

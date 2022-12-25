@@ -24,12 +24,8 @@ class App {
   async render(): Promise<void> {
     const data = await this.loader.load();
     window.addEventListener('popstate', (event) => {
-      console.log(`Данные навигации: ${JSON.stringify(event.state)}`)
+      console.log(`Данные навигации: `)
     });
-      /* let url: string = window.location.href;
-      let arrayOfURL: string[] = url.split('=');
-      let paramsString: string = arrayOfURL[1]; */
-      //let arrayOfParams: string[] = paramsString.split(",")
   }
   async init() {
     await this.start();
