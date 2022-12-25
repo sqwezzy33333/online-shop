@@ -11,3 +11,10 @@ export interface IProduct {
   thumbnail: string;
   images: string[];
 }
+
+export type Filters = {
+  category: string;
+  brand: string;
+  price: number;
+  stock: number;
+};

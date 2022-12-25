@@ -1,4 +1,5 @@
 import { IProduct } from '../types/types';
+import { allFilters } from './allFiltersObject';
 
 export class FilterCategory {
   async drawFilter(data: [IProduct]): Promise<void> {
@@ -32,42 +33,41 @@ export class FilterCategory {
 
   checkFilter(): void {
     const filterRow = document.querySelectorAll('.filters__input-row');
+    function transformToURLParams(filters: Object) {
+      const query = Object.entries(filters)
+        .map(([key, value]) => {
+          return `${key}=${value}`;
+        })
+        .join('&');
+      return `?${query}`;
+    }
+    function syncURL(filters: Object) {
+      const path = document.location.pathname;
+      const query = transformToURLParams(filters);
+
+      window.history.replaceState(filters, '', `${path}${query}`);
+    }
     filterRow.forEach((item) => {
       const input = item.children[0] as HTMLInputElement;
       input.addEventListener('change', function () {
-        let searchArray: (string | null)[] = [`category?=`];
         if (input.checked) {
-          if (localStorage.getItem('category') !== null) {
-            let arrayFromLocalStorage = localStorage.getItem('category')?.split(',');
-            if (arrayFromLocalStorage) searchArray = searchArray.concat(arrayFromLocalStorage);
+          let localStorageCategory = localStorage.getItem('category');
+          if (localStorageCategory) {
+            allFilters.category = localStorageCategory;
           }
-          if (localStorage.getItem('category') === '') searchArray = [`category?=`];
-          let searchArrayFromString: string[] = `${searchArray.toString()},${input.id}`.split('');
-          searchArrayFromString.splice(10, 1);
-          let serchParams = searchArrayFromString.join('');
-          window.history.pushState({'gg':'dd'}, '', serchParams);
-          searchArray.shift();
-          searchArray.push(`${input.id}`);
-          localStorage.setItem('category', `${searchArray}`);
+          allFilters.category += `${input.id},`;
+          localStorage.setItem('category', allFilters.category);
+          syncURL(allFilters);
         } else {
-          let searchArray: (string | null)[] = [`category?=`];
-          let url: string = window.location.href;
-          let serchParams: string[] = url.split('=');
-          let arrayCategories: string[] | undefined = serchParams[1].split(',');
-          if (localStorage.getItem('category')) arrayCategories = localStorage.getItem('category')?.split(',');
-          let filtredArrayOfCategories;
-          let urlToString: string[];
-          let serchParamsForHistory: string;
-          if (arrayCategories !== undefined) {
-            filtredArrayOfCategories = arrayCategories.filter((el) => {
-              return el !== input.id;
-            });
-            localStorage.setItem('category', filtredArrayOfCategories.toString());
-            urlToString = searchArray.concat(filtredArrayOfCategories).toString().split('');
-            urlToString.splice(10, 1);
-            serchParamsForHistory = urlToString.join('');
-            window.history.replaceState({'gg':'dd'}, '', serchParamsForHistory);
-          }
+          let arrayFromCategory = allFilters.category.split(',');
+          let filtredArrayOfCategory = arrayFromCategory.filter((element) => {
+            console.log(element, input.id);
+            return element !== input.id && element !== '';
+          });
+          allFilters.category = filtredArrayOfCategory.toString();
+          console.log(filtredArrayOfCategory);
+          syncURL(allFilters);
+          localStorage.setItem('category', allFilters.category);
         }
       });
     });
