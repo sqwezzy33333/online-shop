@@ -15,27 +15,34 @@ class App {
     this.filter = new Filter();
     this.mainPage = new MainPage();
   }
-
   async start() {
     const data = await this.loader.load();
     await this.mainPage.draw(data);
     await this.filter.start(data);
-    await this.filter.filter();
+    this.filter.filter();
   }
-  async render() {
+  async render(): Promise<void> {
     const data = await this.loader.load();
-    window.addEventListener('hashchange', () => {
-      let queryParam: string = window.location.hash.substring(1);
-      const filtredData: IProduct[] = data.filter((item: IProduct) => {
-        return item.category == queryParam;
-      });
-      this.mainPage.draw(filtredData);
+    window.addEventListener('popstate', (event) => {
+      console.log(`Данные навигации: ${JSON.stringify(event.state)}`)
     });
+      /* let url: string = window.location.href;
+      let arrayOfURL: string[] = url.split('=');
+      let paramsString: string = arrayOfURL[1]; */
+      //let arrayOfParams: string[] = paramsString.split(",")
+  }
+  async init() {
+    await this.start();
+    await this.render();
   }
 }
 const app = new App();
+<<<<<<< HEAD
 app.start();
 <<<<<<< HEAD
 =======
 app.render();
 >>>>>>> 93660f4 (feat: add filter by category)
+=======
+app.init();
+>>>>>>> f06dba2 (feat: add filter by category in filterCategory.ts)

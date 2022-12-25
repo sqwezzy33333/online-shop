@@ -9,7 +9,7 @@ export class Filter {
   async start(data: [IProduct]) {
     this.filterCategory.drawFilter(data);
   }
-  async filter() {
+   filter() {
     this.filterCategory.checkFilter();
   }
 }
