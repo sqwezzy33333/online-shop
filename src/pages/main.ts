@@ -1,10 +1,10 @@
 import { IProduct } from '../components/types/types';
+import { Sort } from '../components/sort/sort';
 
 export class MainPage {
   async draw(data: IProduct[]) {
-    const catalog = document.querySelector('.main__catalog') as HTMLElement;
-    catalog.innerHTML = '';
-    let products: IProduct[] = data;
+    const listCardProducts: Array<Element> = [];
+    const products: IProduct[] = data;
     for (let i = 0; i < products.length; i++) {
       const product: IProduct = products[i];
       const div = document.createElement('div') as HTMLElement;
@@ -37,7 +37,10 @@ export class MainPage {
             <button class="product__add">Add to cart</button>
             </div>`;
       div.innerHTML = cart;
-      catalog.appendChild(div);
+      listCardProducts.push(div);
     }
+    const startSort: Sort = new Sort();
+    const startTypeSort: string = 'rating';
+    await startSort.sort(startTypeSort, listCardProducts);
   }
 }

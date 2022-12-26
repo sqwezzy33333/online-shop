@@ -95,12 +95,4 @@ class App {
   }
 }
 const app = new App();
-<<<<<<< HEAD
 app.start();
-<<<<<<< HEAD
-=======
-app.render();
->>>>>>> 93660f4 (feat: add filter by category)
-=======
-app.init();
->>>>>>> f06dba2 (feat: add filter by category in filterCategory.ts)
