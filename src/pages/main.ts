@@ -40,7 +40,7 @@ export class MainPage {
       listCardProducts.push(div);
     }
     const startSort: Sort = new Sort();
-    const startTypeSort: string = 'rating';
+    const startTypeSort: string = 'By popularity(Ascending)';
     await startSort.sort(startTypeSort, listCardProducts);
   }
 }
