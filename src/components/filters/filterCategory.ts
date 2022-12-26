@@ -41,6 +41,7 @@ export class FilterCategory {
     filter.append(form);
 
     categoryArray.forEach((category) => {
+<<<<<<< HEAD
       let counter: number = 0;
       const inputRow = document.createElement('div') as HTMLElement;
       inputRow.className = 'filters__input-row';
@@ -55,6 +56,11 @@ export class FilterCategory {
           }
         });
       }
+=======
+      const inputRow = document.createElement('div') as HTMLElement;
+      inputRow.className = 'filters__input-row';
+      const countOfProducts = productsArray.filter((item) => item.category === category);
+>>>>>>> 8ac8359 (feat: add popup menu for sort)
       inputRow.innerHTML = `
                             <input type="checkbox" id="${category}" name='category'>
                             <label for="${category}">${category}
