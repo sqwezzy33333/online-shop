@@ -40,6 +40,7 @@ export class FilterCategory {
     filter.append(form);
 
     categoryArray.forEach((category) => {
+<<<<<<< HEAD
       let counter: number = 0;
       let inputRow = document.createElement('div') as HTMLElement;
       inputRow.className = 'filters__input-row';
@@ -54,6 +55,11 @@ export class FilterCategory {
           }
         });
       }
+=======
+      const inputRow = document.createElement('div') as HTMLElement;
+      inputRow.className = 'filters__input-row';
+      const countOfProducts = productsArray.filter((item) => item.category === category);
+>>>>>>> 8ac8359 (feat: add popup menu for sort)
       inputRow.innerHTML = `
                             <input type="checkbox" id="${category}" name='category'>
                             <label for="${category}">${category}
@@ -85,7 +91,7 @@ export class FilterCategory {
       const input = item.children[0] as HTMLInputElement;
       input.addEventListener('change', function () {
         if (input.checked) {
-          let localStorageCategory = localStorage.getItem('category');
+          const localStorageCategory = localStorage.getItem('category');
           if (localStorageCategory) {
             allFilters.category = localStorageCategory;
           }
@@ -94,8 +100,8 @@ export class FilterCategory {
           syncURL(allFilters);
           item.children[1].classList.toggle('cheked');
         } else {
-          let arrayFromCategory = allFilters.category.split(',');
-          let filtredArrayOfCategory = arrayFromCategory.filter((element) => {
+          const arrayFromCategory = allFilters.category.split(',');
+          const filtredArrayOfCategory = arrayFromCategory.filter((element) => {
             return element !== input.id && element !== '';
           });
           allFilters.category = filtredArrayOfCategory.toString();
