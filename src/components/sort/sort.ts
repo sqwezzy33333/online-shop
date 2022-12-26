@@ -3,6 +3,7 @@ import { Filters } from '../types/types'
 
 export class Sort {
     sortBlock: HTMLSelectElement;
+    
     constructor(){
         this.sortBlock = document.querySelector('.catalog__search') as HTMLSelectElement;
     }
