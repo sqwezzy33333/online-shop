@@ -5,22 +5,26 @@ import { Loader } from './components/loader/loader';
 import { MainPage } from './pages/main';
 import { Filter } from './components/filters/filter';
 import { IProduct } from './components/types/types';
+import { Sort } from './components/sort/sort';
 
 class App {
   mainPage: MainPage;
   loader: Loader;
   filter: Filter;
   filtredData: IProduct[];
+  sort: Sort;
   constructor() {
     this.loader = new Loader('assets/data/data.json');
     this.filter = new Filter();
     this.mainPage = new MainPage();
     this.filtredData = [];
+    this.sort = new Sort();
   }
   async start(): Promise<void> {
     const data = await this.loader.load();
     await this.mainPage.draw(data);
     await this.filter.start(data, this.filtredData);
+    await this.sort.addSortEventListeners();
     this.filter.filter();
   }
   async render(): Promise<void> {
