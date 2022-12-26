@@ -24,21 +24,7 @@ export class Sort {
             item.addEventListener('click', function (e) {
                 if (e.target instanceof Element) { 
                     if(item.getElementsByTagName('input')[0].checked){
-                        allFilters.type = item.getElementsByTagName('input')[0].getAttribute('id') as string;
-                        const href = new URL(document.URL);
-                        let resPath = '';
-                        if(location.href.match(/(\?|&)type($|&|=)/)){
-                            href.searchParams.set('type', allFilters.type);
-                            resPath = href.toString();
-                        }
-                        else{
-                            href.searchParams.append('type', allFilters.type);
-                            resPath = href.toString();
-                        }
-                        window.history.pushState(allFilters, '', resPath);
-                        window.history.pushState(allFilters, '', resPath);
-                        history.back();
-                        const updateSort = new Sort();
+                        const updateSort = new Sort()
                         updateSort.sort(item.getElementsByTagName('label')[0].innerHTML);
                         (document.querySelector('.search__text') as HTMLElement).innerHTML = item.getElementsByTagName('label')[0].innerHTML;
                     }
