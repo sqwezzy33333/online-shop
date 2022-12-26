@@ -39,8 +39,26 @@
           <div class="main__catalog catalog">
             <div class="catalog__search search">
               <button class="search__button">
-                <p class="search__text">By popularity</p>
+                <p class="search__text">By popularity(Ascending)</p>
               </button>
+              <div class="search__chooseList chooseList">
+                <div class="chooseList__typeSort">
+                  <input type="checkbox" id="popularityUp" name="sortList">
+                  <label for="popularityUp">By popularity(Ascending)</label>
+                </div>
+                <div class="chooseList__typeSort">
+                  <input type="checkbox" id="popularityLow" name="sortList">
+                  <label for="popularityLow">By popularity(Descending)</label>
+                </div>
+                <div class="chooseList__typeSort">
+                  <input type="checkbox" id="priceUp" name="sortList">
+                  <label for="priceUp">By price(Ascending)</label>
+                </div>
+                <div class="chooseList__typeSort">
+                  <input type="checkbox" id="priceLow" name="sortList">
+                  <label for="priceLow">By price(Descending)</label>
+                </div>
+              </div>
             </div>
             <div class="catalog__products"></div>
           </div>

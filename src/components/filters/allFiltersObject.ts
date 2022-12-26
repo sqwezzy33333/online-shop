@@ -1,6 +1,6 @@
 import { Filters } from '../types/types';
 
-export let allFilters: Filters = {
+export const allFilters: Filters = {
   category: '',
   brand: '',
   price: 0,
