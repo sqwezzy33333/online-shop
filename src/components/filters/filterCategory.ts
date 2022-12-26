@@ -41,6 +41,7 @@ export class FilterCategory {
 
     categoryArray.forEach((category) => {
 <<<<<<< HEAD
+<<<<<<< HEAD
       let counter: number = 0;
       let inputRow = document.createElement('div') as HTMLElement;
       inputRow.className = 'filters__input-row';
@@ -55,6 +56,11 @@ export class FilterCategory {
           }
         });
       }
+=======
+      const inputRow = document.createElement('div') as HTMLElement;
+      inputRow.className = 'filters__input-row';
+      const countOfProducts = productsArray.filter((item) => item.category === category);
+>>>>>>> 8ac8359 (feat: add popup menu for sort)
 =======
       const inputRow = document.createElement('div') as HTMLElement;
       inputRow.className = 'filters__input-row';
