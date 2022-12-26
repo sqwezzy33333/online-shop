@@ -1,8 +1,22 @@
 export class Sort {
     sortBlock: HTMLSelectElement;
-    
+
     constructor(){
-        this.sortBlock = document.querySelector('.search__button') as HTMLSelectElement;
+        this.sortBlock = document.querySelector('.catalog__search') as HTMLSelectElement;
+    }
+
+    async addSortEventListeners(){
+        const chooseList = document.querySelector('.search__chooseList') as HTMLElement;
+        this.sortBlock.addEventListener('click', (event) => {
+            chooseList.style.display = 'block';
+        });
+        document.addEventListener('click', function(e) {
+            if (e.target instanceof Element) { 
+                if (!(document.querySelector('.catalog__search')as HTMLSelectElement).contains(e.target)) {
+                    chooseList.style.display = 'none';
+                }
+            }
+        });
     }
 
     async sort(sortType: string, arrayProducts?: Element[]){
