@@ -7,15 +7,26 @@ export class Sort {
 
     async addSortEventListeners(){
         const chooseList = document.querySelector('.search__chooseList') as HTMLElement;
+        const chooseOption = document.querySelectorAll('.chooseList__typeSort') as NodeListOf<Element>;
         this.sortBlock.addEventListener('click', (event) => {
             chooseList.style.display = 'block';
         });
         document.addEventListener('click', function(e) {
             if (e.target instanceof Element) { 
-                if (!(document.querySelector('.catalog__search')as HTMLSelectElement).contains(e.target)) {
+                if (!(document.querySelector('.catalog__search') as HTMLSelectElement).contains(e.target)) {
                     chooseList.style.display = 'none';
                 }
             }
+        });
+        chooseOption.forEach((item) => {
+            item.addEventListener('click', function (e) {
+                if (e.target instanceof Element) { 
+                    if(item.getElementsByTagName('input')[0].checked){
+                        chooseList.style.display = 'none';
+                        console.log(chooseList)
+                    }
+                }
+            });
         });
     }
 

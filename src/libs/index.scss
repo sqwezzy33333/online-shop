@@ -165,26 +165,27 @@ body {
         position: absolute;
         z-index: 50;
         top: 0;
+        right: 0;
         background: #fff;
-        padding: 16px;
+        padding: 20px;
         border-radius: 10px;
         box-shadow: 0 -2px 4px 0 rgb(35 31 32 / 5%), 0 4px 8px 0 rgb(35 31 32 / 10%);
       }
+    }
 
-      .chooseList {
+    .chooseList {
         
-        &__typeSort {
-          font-family: 'DM Sans', sans-serif;
-          font-size: 15px;
-          padding: 3px;
-          display: flex;
-          justify-content: flex-start;
-          gap: 10px;
-          margin-bottom: 3px;
-          label{
-            cursor: pointer;
-            display: inline-block;
-          }
+      &__typeSort {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 15px;
+        padding: 3px;
+        display: flex;
+        justify-content: flex-start;
+        gap: 10px;
+        margin-bottom: 3px;
+        label{
+          cursor: pointer;
+          display: inline-block;
         }
       }
     }
