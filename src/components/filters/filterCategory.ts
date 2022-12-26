@@ -2,8 +2,8 @@ import { IProduct } from '../types/types';
 import { allFilters } from './allFiltersObject';
 
 export class FilterCategory {
-  async drawFilter(data: [IProduct]): Promise<void> {
-    let productsArray: [IProduct] = data;
+  async drawFilter(data: IProduct[]): Promise<void> {
+    let productsArray: IProduct[] = data;
     let categoryArray: string[] = productsArray.map((item) => item.category);
     categoryArray = categoryArray.filter((element, index) => {
       return categoryArray.indexOf(element) === index;
@@ -57,9 +57,10 @@ export class FilterCategory {
           if (localStorageCategory) {
             allFilters.category = localStorageCategory;
           }
-          allFilters.category += `${input.id},`;
+          allFilters.category += `,${input.id}`;
           localStorage.setItem('category', allFilters.category);
           syncURL(allFilters);
+          item.children[1].classList.toggle('cheked');
         } else {
           let arrayFromCategory = allFilters.category.split(',');
           let filtredArrayOfCategory = arrayFromCategory.filter((element) => {
@@ -68,6 +69,7 @@ export class FilterCategory {
           allFilters.category = filtredArrayOfCategory.toString();
           syncURL(allFilters);
           localStorage.setItem('category', allFilters.category);
+          item.children[1].classList.toggle('cheked');
         }
       });
     });

@@ -6,7 +6,7 @@ export class Filter {
   constructor() {
     this.filterCategory = new FilterCategory();
   }
-  async start(data: [IProduct]) {
+  async start(data: IProduct[]) {
     this.filterCategory.drawFilter(data);
   }
    filter() {
