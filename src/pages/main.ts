@@ -61,5 +61,8 @@ export class MainPage {
     else {
       await startSort.sort(startTypeSort, listCardProducts);
     }
+    const startSort: Sort = new Sort();
+    const startTypeSort: string = 'rating';
+    await startSort.sort(startTypeSort, listCardProducts);
   }
 }

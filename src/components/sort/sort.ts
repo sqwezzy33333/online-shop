@@ -3,7 +3,6 @@ import { Filters } from '../types/types'
 
 export class Sort {
     sortBlock: HTMLSelectElement;
-
     constructor(){
         this.sortBlock = document.querySelector('.catalog__search') as HTMLSelectElement;
     }
@@ -49,6 +48,7 @@ export class Sort {
     }
 
     async sort(sortType: string, arrayProducts?: Element[]){
+<<<<<<< HEAD
         let productsList: Element[];
         if(arrayProducts === undefined){
             productsList = [...document.querySelectorAll('.catalog__product')];
@@ -57,6 +57,16 @@ export class Sort {
             productsList = arrayProducts;
         }
         if(sortType === 'By popularity(Ascending)' || sortType === 'popularityUp'){
+=======
+        if(sortType == 'rating'){
+            let productsList: Element[];
+            if(arrayProducts === undefined){
+                productsList = [...document.querySelectorAll('.catalog__product')];
+            }
+            else {
+                productsList = arrayProducts;
+            }
+>>>>>>> c9a77ce (feat: add start sort of products)
             productsList = productsList.sort((i, j) => {
                 const firstIem = parseFloat(i.querySelector('.product__rating')?.innerHTML.slice(1) as string)
                 const secondItem = parseFloat(j.querySelector('.product__rating')?.innerHTML.slice(1) as string)
@@ -74,6 +84,7 @@ export class Sort {
                 catalog.appendChild(item);
             });
         }
+<<<<<<< HEAD
         else if(sortType === 'By popularity(Descending)' || sortType === 'popularityLow') {
             productsList = productsList.sort((i, j) => {
                 const firstIem = parseFloat(i.querySelector('.product__rating')?.innerHTML.slice(1) as string)
@@ -128,5 +139,7 @@ export class Sort {
                 catalog.appendChild(item);
             });
         }
+=======
+>>>>>>> c9a77ce (feat: add start sort of products)
     }
 }
