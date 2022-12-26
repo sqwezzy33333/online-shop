@@ -31,7 +31,6 @@ export class Sort {
     }
 
     async sort(sortType: string, arrayProducts?: Element[]){
-<<<<<<< HEAD
         let productsList: Element[];
         if(arrayProducts === undefined){
             productsList = [...document.querySelectorAll('.catalog__product')];
@@ -40,16 +39,6 @@ export class Sort {
             productsList = arrayProducts;
         }
         if(sortType === 'By popularity(Ascending)'){
-=======
-        if(sortType == 'rating'){
-            let productsList: Element[];
-            if(arrayProducts === undefined){
-                productsList = [...document.querySelectorAll('.catalog__product')];
-            }
-            else {
-                productsList = arrayProducts;
-            }
->>>>>>> 72525fe (feat: add start sort of products)
             productsList = productsList.sort((i, j) => {
                 const firstIem = parseFloat(i.querySelector('.product__rating')?.innerHTML.slice(1) as string)
                 const secondItem = parseFloat(j.querySelector('.product__rating')?.innerHTML.slice(1) as string)
@@ -67,7 +56,6 @@ export class Sort {
                 catalog.appendChild(item);
             });
         }
-<<<<<<< HEAD
         else if(sortType === 'By popularity(Descending)') {
             productsList = productsList.sort((i, j) => {
                 const firstIem = parseFloat(i.querySelector('.product__rating')?.innerHTML.slice(1) as string)
@@ -122,7 +110,5 @@ export class Sort {
                 catalog.appendChild(item);
             });
         }
-=======
->>>>>>> 72525fe (feat: add start sort of products)
     }
 }
