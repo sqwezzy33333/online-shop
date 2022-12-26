@@ -130,6 +130,7 @@ body {
   }
 
   &__catalog{
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -156,6 +157,34 @@ body {
           content: "\21C5";
           font-size: 20px;
           margin-right: 5px;
+        }
+      }
+
+      &__chooseList {
+        display: none;
+        position: absolute;
+        z-index: 50;
+        top: 0;
+        background: #fff;
+        padding: 16px;
+        border-radius: 10px;
+        box-shadow: 0 -2px 4px 0 rgb(35 31 32 / 5%), 0 4px 8px 0 rgb(35 31 32 / 10%);
+      }
+
+      .chooseList {
+        
+        &__typeSort {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 15px;
+          padding: 3px;
+          display: flex;
+          justify-content: flex-start;
+          gap: 10px;
+          margin-bottom: 3px;
+          label{
+            cursor: pointer;
+            display: inline-block;
+          }
         }
       }
     }
