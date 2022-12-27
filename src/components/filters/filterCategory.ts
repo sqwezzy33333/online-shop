@@ -1,5 +1,6 @@
 import { IProduct } from '../types/types';
-import { allFilters } from './allFilters';
+import { allFilters } from '../forQueryParam/objOfQueryParam';
+import { Filters } from '../types/types';
 
 export class FilterCategory {
   uploadFilter(): void {
@@ -72,7 +73,7 @@ export class FilterCategory {
 
   checkFilter(): void {
     const filterRow = document.querySelectorAll('.filters__input-row');
-    function transformToURLParams(filters: Object) {
+    function transformToURLParams(filters: Filters) {
       const query = Object.entries(filters)
         .map(([key, value]) => {
           return `${key}=${value}`;
@@ -80,10 +81,10 @@ export class FilterCategory {
         .join('&');
       return `?${query}`;
     }
-    function syncURL(filters: Object) {
+    function syncURL(filters: Filters) {
       const path = document.location.pathname;
       const query = transformToURLParams(filters);
-
+      console.log(query)
       window.history.pushState(filters, '', `${path}${query}`);
       window.history.pushState(filters, '', `${path}${query}`);
       history.back();

@@ -1,4 +1,4 @@
-import { IProduct } from '../components/types/types';
+import { IProduct, ITypeOfSort } from '../components/types/types';
 import { Sort } from '../components/sort/sort';
 
 export class MainPage {
@@ -41,6 +41,25 @@ export class MainPage {
     }
     const startSort: Sort = new Sort();
     const startTypeSort: string = 'By popularity(Ascending)';
-    await startSort.sort(startTypeSort, listCardProducts);
+    if (
+      window.location.href !== 'http://localhost:4200/' &&
+      window.location.href !== 'http://localhost:4200/index.html'
+    ) {
+      const searchClear = location.search.split('');
+      searchClear.shift();
+      const queryParamsString = searchClear.join('').toString();
+      const paramsObject: ITypeOfSort = JSON.parse(
+        '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
+      );
+      if(paramsObject.type === undefined){
+        await startSort.sort(startTypeSort, listCardProducts);
+      }
+      else{
+        await startSort.sort(paramsObject.type, listCardProducts);
+      }
+    }
+    else {
+      await startSort.sort(startTypeSort, listCardProducts);
+    }
   }
 }
