@@ -31,10 +31,10 @@ class App {
     const data: IProduct[] = await this.loader.load();
     let filtredData: IProduct[];
     window.addEventListener('popstate', (event) => {
-      let filterByCategoryArr: string[] = event.state.category.split(',').filter((el: string) => {
+      const filterByCategoryArr: string[] = event.state.category.split(',').filter((el: string) => {
         return el !== '';
       });
-      let filtredArrayOfProd = data.filter((item) => {
+      const filtredArrayOfProd = data.filter((item) => {
         let haveItemCategory: boolean = false;
         for (let i = 0; i < filterByCategoryArr.length; i++) {
           if (item.category === filterByCategoryArr[i]) {
