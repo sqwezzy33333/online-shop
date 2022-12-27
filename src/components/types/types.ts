@@ -20,4 +20,6 @@ export type Filters = {
   search: string;
 };
 
- 
+export type ITypeOfSort = {
+  type: string;
+}

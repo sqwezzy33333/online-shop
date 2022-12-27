@@ -1,3 +1,6 @@
+import { allTypeSort } from '../forQueryParam/objOfQueryParam';
+import { ITypeOfSort } from '../types/types'
+
 export class Sort {
     sortBlock: HTMLSelectElement;
 
@@ -5,7 +8,7 @@ export class Sort {
         this.sortBlock = document.querySelector('.catalog__search') as HTMLSelectElement;
     }
 
-    async addSortEventListeners(){
+    async addSortEventListeners(): Promise<void>{
         const chooseList = document.querySelector('.search__chooseList') as HTMLElement;
         const chooseOption = document.querySelectorAll('.chooseList__typeSort') as NodeListOf<Element>;
         this.sortBlock.addEventListener('click', (event) => {
@@ -22,7 +25,13 @@ export class Sort {
             item.addEventListener('click', function (e) {
                 if (e.target instanceof Element) { 
                     if(item.getElementsByTagName('input')[0].checked){
-                        const updateSort = new Sort()
+                        allTypeSort.type = item.getElementsByTagName('input')[0].getAttribute('id') as string;
+                        const path = document.location.pathname;
+                        const query = transformToURLTypeSort(allTypeSort);
+                        window.history.pushState(allTypeSort, '', `${path}${query}`);
+                        window.history.pushState(allTypeSort, '', `${path}${query}`);
+                        history.back();
+                        const updateSort = new Sort();
                         updateSort.sort(item.getElementsByTagName('label')[0].innerHTML);
                         (document.querySelector('.search__text') as HTMLElement).innerHTML = item.getElementsByTagName('label')[0].innerHTML;
                     }
@@ -39,7 +48,7 @@ export class Sort {
         else {
             productsList = arrayProducts;
         }
-        if(sortType === 'By popularity(Ascending)'){
+        if(sortType === 'By popularity(Ascending)' || sortType === 'popularityUp'){
             productsList = productsList.sort((i, j) => {
                 const firstIem = parseFloat(i.querySelector('.product__rating')?.innerHTML.slice(1) as string)
                 const secondItem = parseFloat(j.querySelector('.product__rating')?.innerHTML.slice(1) as string)
@@ -57,7 +66,7 @@ export class Sort {
                 catalog.appendChild(item);
             });
         }
-        else if(sortType === 'By popularity(Descending)') {
+        else if(sortType === 'By popularity(Descending)' || sortType === 'popularityLow') {
             productsList = productsList.sort((i, j) => {
                 const firstIem = parseFloat(i.querySelector('.product__rating')?.innerHTML.slice(1) as string)
                 const secondItem = parseFloat(j.querySelector('.product__rating')?.innerHTML.slice(1) as string)
@@ -75,7 +84,7 @@ export class Sort {
                 catalog.appendChild(item);
             });
         }
-        else if(sortType === 'By price(Ascending)'){
+        else if(sortType === 'By price(Ascending)' || sortType === 'priceUp'){
             productsList = productsList.sort((i, j) => {
                 const firstIem = parseFloat(i.querySelector('.product__price')?.innerHTML.replace(/<(.|\n)*?>/g, '') as string)
                 const secondItem = parseFloat(j.querySelector('.product__price')?.innerHTML.replace(/<(.|\n)*?>/g, '') as string)
@@ -93,7 +102,7 @@ export class Sort {
                 catalog.appendChild(item);
             });
         }
-        else if(sortType === 'By price(Descending)'){
+        else if(sortType === 'By price(Descending)' || sortType === 'priceLow'){
             productsList = productsList.sort((i, j) => {
                 const firstIem = parseFloat(i.querySelector('.product__price')?.innerHTML.replace(/<(.|\n)*?>/g, '') as string)
                 const secondItem = parseFloat(j.querySelector('.product__price')?.innerHTML.replace(/<(.|\n)*?>/g, '') as string)
@@ -112,4 +121,13 @@ export class Sort {
             });
         }
     }
+}
+
+function transformToURLTypeSort(typeOfSort: ITypeOfSort) {
+    const query = Object.entries(typeOfSort)
+        .map(([key, value]) => {
+        return `${key}=${value}`;
+        })
+        .join('&');
+    return `?${query}`;    
 }

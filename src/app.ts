@@ -31,28 +31,30 @@ class App {
     const data: IProduct[] = await this.loader.load();
     let filtredData: IProduct[];
     window.addEventListener('popstate', (event) => {
-      const filterByCategoryArr: string[] = event.state.category.split(',').filter((el: string) => {
-        return el !== '';
-      });
-      const filtredArrayOfProd = data.filter((item) => {
-        let haveItemCategory: boolean = false;
-        for (let i = 0; i < filterByCategoryArr.length; i++) {
-          if (item.category === filterByCategoryArr[i]) {
-            haveItemCategory = true;
+      if(event.state.category !== undefined){
+        const filterByCategoryArr: string[] = event.state.category.split(',').filter((el: string) => {
+          return el !== '';
+        });
+        const filtredArrayOfProd = data.filter((item) => {
+          let haveItemCategory: boolean = false;
+          for (let i = 0; i < filterByCategoryArr.length; i++) {
+            if (item.category === filterByCategoryArr[i]) {
+              haveItemCategory = true;
+            }
           }
+          if (haveItemCategory) return true;
+        });
+        if (filtredArrayOfProd.length !== 0) {
+          filtredData = filtredArrayOfProd;
+          this.filtredData = filtredData;
+          this.mainPage.draw(filtredData);
+          this.filter.start(data, this.filtredData);
+          this.filter.filter();
+        } else {
+          this.mainPage.draw(data);
+          this.filter.start(data);
+          this.filter.filter();
         }
-        if (haveItemCategory) return true;
-      });
-      if (filtredArrayOfProd.length !== 0) {
-        filtredData = filtredArrayOfProd;
-        this.filtredData = filtredData;
-        this.mainPage.draw(filtredData);
-        this.filter.start(data, this.filtredData);
-        this.filter.filter();
-      } else {
-        this.mainPage.draw(data);
-        this.filter.start(data);
-        this.filter.filter();
       }
     });
   }
@@ -70,23 +72,25 @@ class App {
         const paramsObject = JSON.parse(
           '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
         );
-        // отрисовка по фильру category
-        const filterByParamsObject: string[] = paramsObject.category.split(',').filter((el: string) => {
-          return el !== '';
-        });
-        const filtredArrayOfProd = data.filter((item) => {
-          let haveItemCategory: boolean = false;
-          for (let i = 0; i < filterByParamsObject.length; i++) {
-            if (item.category === filterByParamsObject[i]) {
-              haveItemCategory = true;
+        if(paramsObject.category !== undefined){
+          // отрисовка по фильру category
+          const filterByParamsObject: string[] = paramsObject.category.split(',').filter((el: string) => {
+            return el !== '';
+          });
+          const filtredArrayOfProd = data.filter((item) => {
+            let haveItemCategory: boolean = false;
+            for (let i = 0; i < filterByParamsObject.length; i++) {
+              if (item.category === filterByParamsObject[i]) {
+                haveItemCategory = true;
+              }
             }
-          }
-          if (haveItemCategory) return true;
-        });
-        if (filtredArrayOfProd.length !== 0) {
-          filtredData = filtredArrayOfProd;
-          this.mainPage.draw(filtredData);
-        } else this.mainPage.draw(data);
+            if (haveItemCategory) return true;
+          });
+          if (filtredArrayOfProd.length !== 0) {
+            filtredData = filtredArrayOfProd;
+            this.mainPage.draw(filtredData);
+          } else this.mainPage.draw(data);
+        }
       }
     });
   }
