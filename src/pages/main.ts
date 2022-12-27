@@ -1,4 +1,4 @@
-import { IProduct } from '../components/types/types';
+import { IProduct, ITypeOfSort } from '../components/types/types';
 import { Sort } from '../components/sort/sort';
 
 export class MainPage {

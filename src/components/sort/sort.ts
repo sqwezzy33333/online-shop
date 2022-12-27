@@ -25,7 +25,13 @@ export class Sort {
             item.addEventListener('click', function (e) {
                 if (e.target instanceof Element) { 
                     if(item.getElementsByTagName('input')[0].checked){
-                        const updateSort = new Sort()
+                        allTypeSort.type = item.getElementsByTagName('input')[0].getAttribute('id') as string;
+                        const path = document.location.pathname;
+                        const query = transformToURLTypeSort(allTypeSort);
+                        window.history.pushState(allTypeSort, '', `${path}${query}`);
+                        window.history.pushState(allTypeSort, '', `${path}${query}`);
+                        history.back();
+                        const updateSort = new Sort();
                         updateSort.sort(item.getElementsByTagName('label')[0].innerHTML);
                         (document.querySelector('.search__text') as HTMLElement).innerHTML = item.getElementsByTagName('label')[0].innerHTML;
                     }
@@ -115,4 +121,13 @@ export class Sort {
             });
         }
     }
+}
+
+function transformToURLTypeSort(typeOfSort: ITypeOfSort) {
+    const query = Object.entries(typeOfSort)
+        .map(([key, value]) => {
+        return `${key}=${value}`;
+        })
+        .join('&');
+    return `?${query}`;    
 }
