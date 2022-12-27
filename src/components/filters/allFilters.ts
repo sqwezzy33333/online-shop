@@ -5,4 +5,5 @@ export let allFilters: Filters = {
   brand: '',
   price: 0,
   stock: 0,
+  search: '',
 };

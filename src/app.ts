@@ -5,21 +5,22 @@ import { Loader } from './components/loader/loader';
 import { MainPage } from './pages/main';
 import { Filter } from './components/filters/filter';
 import { IProduct } from './components/types/types';
-import { Filters } from './components/types/types';
 
 class App {
   mainPage: MainPage;
   loader: Loader;
   filter: Filter;
+  filtredData: IProduct[];
   constructor() {
     this.loader = new Loader('assets/data/data.json');
     this.filter = new Filter();
     this.mainPage = new MainPage();
+    this.filtredData = [];
   }
-  async start() {
+  async start(): Promise<void> {
     const data = await this.loader.load();
     await this.mainPage.draw(data);
-    await this.filter.start(data);
+    await this.filter.start(data, this.filtredData);
     this.filter.filter();
   }
   async render(): Promise<void> {
@@ -40,10 +41,21 @@ class App {
       });
       if (filtredArrayOfProd.length !== 0) {
         filtredData = filtredArrayOfProd;
+        this.filtredData = filtredData;
         this.mainPage.draw(filtredData);
-      } else this.mainPage.draw(data);
+        this.filter.start(data, this.filtredData);
+        this.filter.filter();
+      } else {
+        this.mainPage.draw(data);
+        this.filter.start(data);
+        this.filter.filter();
+      }
     });
+  }
+  async onload(): Promise<void> {
+    const data: IProduct[] = await this.loader.load();
     window.addEventListener('load', () => {
+      let filtredData: IProduct[];
       if (
         window.location.href !== 'http://localhost:4200/' &&
         window.location.href !== 'http://localhost:4200/index.html'
@@ -77,6 +89,11 @@ class App {
   async init() {
     await this.start();
     await this.render();
+    await this.onload();
+    const btn = document.querySelector('.logo__home');
+    btn?.addEventListener('click', () => {
+      localStorage.clear();
+    });
   }
 }
 const app = new App();
