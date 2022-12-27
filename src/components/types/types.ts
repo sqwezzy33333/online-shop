@@ -17,4 +17,7 @@ export type Filters = {
   brand: string;
   price: number;
   stock: number;
+  search: string;
 };
+
+ 
