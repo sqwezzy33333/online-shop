@@ -54,37 +54,35 @@ class App {
   }
   async onload(): Promise<void> {
     const data: IProduct[] = await this.loader.load();
-    window.addEventListener('load', () => {
-      let filtredData: IProduct[];
-      if (
-        window.location.href !== 'http://localhost:4200/' &&
-        window.location.href !== 'http://localhost:4200/index.html'
-      ) {
-        let searchClear = location.search.split('');
-        searchClear.shift();
-        let queryParamsString = searchClear.join('').toString();
-        let paramsObject = JSON.parse(
-          '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
-        );
-        // отрисовка по фильру category
-        let filterByParamsObject: string[] = paramsObject.category.split(',').filter((el: string) => {
-          return el !== '';
-        });
-        let filtredArrayOfProd = data.filter((item) => {
-          let haveItemCategory: boolean = false;
-          for (let i = 0; i < filterByParamsObject.length; i++) {
-            if (item.category === filterByParamsObject[i]) {
-              haveItemCategory = true;
-            }
+    let filtredData: IProduct[];
+    if (
+      window.location.href !== 'http://localhost:4200/' &&
+      window.location.href !== 'http://localhost:4200/index.html'
+    ) {
+      let searchClear = location.search.split('');
+      searchClear.shift();
+      let queryParamsString = searchClear.join('').toString();
+      let paramsObject = JSON.parse(
+        '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
+      );
+      // отрисовка по фильру category
+      let filterByParamsObject: string[] = paramsObject.category.split(',').filter((el: string) => {
+        return el !== '';
+      });
+      let filtredArrayOfProd = data.filter((item) => {
+        let haveItemCategory: boolean = false;
+        for (let i = 0; i < filterByParamsObject.length; i++) {
+          if (item.category === filterByParamsObject[i]) {
+            haveItemCategory = true;
           }
-          if (haveItemCategory) return true;
-        });
-        if (filtredArrayOfProd.length !== 0) {
-          filtredData = filtredArrayOfProd;
-          this.mainPage.draw(filtredData);
-        } else this.mainPage.draw(data);
-      }
-    });
+        }
+        if (haveItemCategory) return true;
+      });
+      if (filtredArrayOfProd.length !== 0) {
+        filtredData = filtredArrayOfProd;
+        this.mainPage.draw(filtredData);
+      } else this.mainPage.draw(data);
+    }
   }
   async init() {
     await this.start();
