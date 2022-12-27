@@ -40,10 +40,8 @@ export class FilterCategory {
     filter.append(form);
 
     categoryArray.forEach((category) => {
-<<<<<<< HEAD
-<<<<<<< HEAD
       let counter: number = 0;
-      let inputRow = document.createElement('div') as HTMLElement;
+      const inputRow = document.createElement('div') as HTMLElement;
       inputRow.className = 'filters__input-row';
       if (filtredData !== undefined && filtredData.length < 1) {
         counter = 5;
@@ -56,16 +54,6 @@ export class FilterCategory {
           }
         });
       }
-=======
-      const inputRow = document.createElement('div') as HTMLElement;
-      inputRow.className = 'filters__input-row';
-      const countOfProducts = productsArray.filter((item) => item.category === category);
->>>>>>> 8ac8359 (feat: add popup menu for sort)
-=======
-      const inputRow = document.createElement('div') as HTMLElement;
-      inputRow.className = 'filters__input-row';
-      const countOfProducts = productsArray.filter((item) => item.category === category);
->>>>>>> 3d4ac8f93e722ed6478a023a2e03f8cb466eab9a
       inputRow.innerHTML = `
                             <input type="checkbox" id="${category}" name='category'>
                             <label for="${category}">${category}
@@ -121,8 +109,8 @@ export class FilterCategory {
 
   drawChekedInput(): void {
     const filterRow = document.querySelectorAll('.filters__input-row');
-    let arrayFromCategory = allFilters.category.split(',');
-    let filtredArrayOfCategory = arrayFromCategory.filter((element) => {
+    const arrayFromCategory = allFilters.category.split(',');
+    const filtredArrayOfCategory = arrayFromCategory.filter((element) => {
       return element !== '';
     });
     filterRow.forEach((item) => {
