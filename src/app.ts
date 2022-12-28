@@ -22,8 +22,8 @@ class App {
   }
   async start(): Promise<void> {
     const data = await this.loader.load();
-    await this.mainPage.draw(data);
     await this.filter.start(data, this.filtredData);
+    await this.mainPage.draw(data);
     await this.sort.addSortEventListeners();
     this.filter.filter();
   }
@@ -61,6 +61,7 @@ class App {
   async onload(): Promise<void> {
     const data: IProduct[] = await this.loader.load();
     window.addEventListener('load', () => {
+      console.log('qwe')
       let filtredData: IProduct[];
       if (
         window.location.href !== 'http://localhost:4200/' &&

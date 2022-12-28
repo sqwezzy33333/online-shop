@@ -1,5 +1,5 @@
-import { allTypeSort } from '../forQueryParam/objOfQueryParam';
-import { ITypeOfSort } from '../types/types'
+import { allFilters } from '../forQueryParam/objOfQueryParam';
+import { Filters } from '../types/types'
 
 export class Sort {
     sortBlock: HTMLSelectElement;
@@ -25,11 +25,19 @@ export class Sort {
             item.addEventListener('click', function (e) {
                 if (e.target instanceof Element) { 
                     if(item.getElementsByTagName('input')[0].checked){
-                        allTypeSort.type = item.getElementsByTagName('input')[0].getAttribute('id') as string;
-                        const path = document.location.pathname;
-                        const query = transformToURLTypeSort(allTypeSort);
-                        window.history.pushState(allTypeSort, '', `${path}${query}`);
-                        window.history.pushState(allTypeSort, '', `${path}${query}`);
+                        allFilters.type = item.getElementsByTagName('input')[0].getAttribute('id') as string;
+                        const href = new URL(document.URL);
+                        let resPath = '';
+                        if(location.href.match(/(\?|&)type($|&|=)/)){
+                            href.searchParams.set('type', allFilters.type);
+                            resPath = href.toString();
+                        }
+                        else{
+                            href.searchParams.append('type', allFilters.type);
+                            resPath = href.toString();
+                        }
+                        window.history.pushState(allFilters, '', resPath);
+                        window.history.pushState(allFilters, '', resPath);
                         history.back();
                         const updateSort = new Sort();
                         updateSort.sort(item.getElementsByTagName('label')[0].innerHTML);
@@ -121,13 +129,4 @@ export class Sort {
             });
         }
     }
-}
-
-function transformToURLTypeSort(typeOfSort: ITypeOfSort) {
-    const query = Object.entries(typeOfSort)
-        .map(([key, value]) => {
-        return `${key}=${value}`;
-        })
-        .join('&');
-    return `?${query}`;    
 }
