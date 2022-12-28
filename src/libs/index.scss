@@ -130,15 +130,104 @@ body {
   }
 
   &__catalog{
-    display: grid;
+    position: relative;
+    display: flex;
+    flex-direction: column;
     gap: 20px;
-    grid-template-columns: 1fr 1fr 1fr;
-    flex: 1 0 75%;
     padding: 20px 30px;
     box-shadow: 0 2px 4px 0 rgb(0 0 0 / 10%);
   }
 
   .catalog {
+    
+    .search {
+      align-self: flex-end;
+      &__button {
+        color: #231f20;
+        border: 1px solid #231f20;
+        display: flex;
+        border-radius: 10px;
+        background-color: transparent;
+      }
+
+      &__text {
+        @extend %tpclfontsize;
+        font-size: 16px;
+        &:before {
+          content: "\21C5";
+          font-size: 20px;
+          margin-right: 5px;
+        }
+      }
+
+      &__chooseList {
+        display: none;
+        position: absolute;
+        z-index: 50;
+        top: 0;
+        right: 0;
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 -2px 4px 0 rgb(35 31 32 / 5%), 0 4px 8px 0 rgb(35 31 32 / 10%);
+      }
+    }
+
+    .chooseList {
+        
+      &__typeSort {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 15px;
+        padding: 3px;
+        display: flex;
+        justify-content: flex-start;
+        gap: 10px;
+        margin-bottom: 3px;
+        label{
+          cursor: pointer;
+          display: inline-block;
+        }
+      }
+    }
+
+    &__products {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: 1fr 1fr 1fr;
+      flex: 1 0 75%;
+      @media screen and (max-width: 910px) {
+        grid-template-columns: 1fr 1fr;
+      }
+      @media screen and (max-width: 650px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    &__products {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: 1fr 1fr 1fr;
+      flex: 1 0 75%;
+      @media screen and (max-width: 910px) {
+        grid-template-columns: 1fr 1fr;
+      }
+      @media screen and (max-width: 650px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    &__products {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: 1fr 1fr 1fr;
+      flex: 1 0 75%;
+      @media screen and (max-width: 910px) {
+        grid-template-columns: 1fr 1fr;
+      }
+      @media screen and (max-width: 650px) {
+        grid-template-columns: 1fr;
+      }
+    }
 
     &__product {
       display: flex;

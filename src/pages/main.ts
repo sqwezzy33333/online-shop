@@ -1,10 +1,10 @@
 import { IProduct } from '../components/types/types';
+import { Sort } from '../components/sort/sort';
 
 export class MainPage {
   async draw(data: IProduct[]) {
-    const catalog = document.querySelector('.main__catalog') as HTMLElement;
-    catalog.innerHTML = '';
-    let products: IProduct[] = data;
+    const listCardProducts: Array<Element> = [];
+    const products: IProduct[] = data;
     for (let i = 0; i < products.length; i++) {
       const product: IProduct = products[i];
       const div = document.createElement('div') as HTMLElement;
@@ -37,7 +37,30 @@ export class MainPage {
             <button class="product__add">Add to cart</button>
             </div>`;
       div.innerHTML = cart;
-      catalog.appendChild(div);
+      listCardProducts.push(div);
+    }
+    const startSort: Sort = new Sort();
+    const startTypeSort: string = 'By popularity(Ascending)';
+    if (
+      window.location.href !== 'http://localhost:4200/' &&
+      window.location.href !== 'http://localhost:4200/index.html'
+    ) {
+      const searchClear = location.search.split('');
+      searchClear.shift();
+      const queryParamsString = searchClear.join('').toString();
+      const paramsObject = JSON.parse(
+        '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
+      );
+      console.log(paramsObject)
+      if(paramsObject.type === ''){
+        await startSort.sort(startTypeSort, listCardProducts);
+      }
+      else{
+        await startSort.sort(paramsObject.type, listCardProducts);
+      }
+    }
+    else {
+      await startSort.sort(startTypeSort, listCardProducts);
     }
   }
 }

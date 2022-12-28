@@ -1,5 +1,6 @@
 import { IProduct } from '../types/types';
-import { allFilters } from './allFilters';
+import { allFilters } from '../forQueryParam/objOfQueryParam';
+import { Filters } from '../types/types';
 
 export class FilterCategory {
   uploadFilter(): void {
@@ -41,7 +42,7 @@ export class FilterCategory {
 
     categoryArray.forEach((category) => {
       let counter: number = 0;
-      let inputRow = document.createElement('div') as HTMLElement;
+      const inputRow = document.createElement('div') as HTMLElement;
       inputRow.className = 'filters__input-row';
       if (filtredData !== undefined && filtredData.length < 1) {
         counter = 5;
@@ -65,7 +66,7 @@ export class FilterCategory {
 
   checkFilter(): void {
     const filterRow = document.querySelectorAll('.filters__input-row');
-    function transformToURLParams(filters: Object) {
+    function transformToURLParams(filters: Filters) {
       const query = Object.entries(filters)
         .map(([key, value]) => {
           return `${key}=${value}`;
@@ -73,10 +74,9 @@ export class FilterCategory {
         .join('&');
       return `?${query}`;
     }
-    function syncURL(filters: Object) {
+    function syncURL(filters: Filters) {
       const path = document.location.pathname;
       const query = transformToURLParams(filters);
-
       window.history.pushState(filters, '', `${path}${query}`);
       window.history.pushState(filters, '', `${path}${query}`);
       history.back();
@@ -85,7 +85,7 @@ export class FilterCategory {
       const input = item.children[0] as HTMLInputElement;
       input.addEventListener('change', function () {
         if (input.checked) {
-          let localStorageCategory = localStorage.getItem('category');
+          const localStorageCategory = localStorage.getItem('category');
           if (localStorageCategory) {
             allFilters.category = localStorageCategory;
           }
@@ -94,8 +94,8 @@ export class FilterCategory {
           syncURL(allFilters);
           item.children[1].classList.toggle('cheked');
         } else {
-          let arrayFromCategory = allFilters.category.split(',');
-          let filtredArrayOfCategory = arrayFromCategory.filter((element) => {
+          const arrayFromCategory = allFilters.category.split(',');
+          const filtredArrayOfCategory = arrayFromCategory.filter((element) => {
             return element !== input.id && element !== '';
           });
           allFilters.category = filtredArrayOfCategory.toString();
@@ -109,8 +109,8 @@ export class FilterCategory {
 
   drawChekedInput(): void {
     const filterRow = document.querySelectorAll('.filters__input-row');
-    let arrayFromCategory = allFilters.category.split(',');
-    let filtredArrayOfCategory = arrayFromCategory.filter((element) => {
+    const arrayFromCategory = allFilters.category.split(',');
+    const filtredArrayOfCategory = arrayFromCategory.filter((element) => {
       return element !== '';
     });
     filterRow.forEach((item) => {
