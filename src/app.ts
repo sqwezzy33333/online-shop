@@ -22,8 +22,8 @@ class App {
   }
   async start(): Promise<void> {
     const data = await this.loader.load();
-    await this.mainPage.draw(data);
     await this.filter.start(data, this.filtredData);
+    await this.mainPage.draw(data);
     await this.sort.addSortEventListeners();
     this.filter.filter();
   }

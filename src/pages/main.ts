@@ -1,4 +1,4 @@
-import { IProduct, ITypeOfSort } from '../components/types/types';
+import { IProduct } from '../components/types/types';
 import { Sort } from '../components/sort/sort';
 
 export class MainPage {
@@ -48,10 +48,10 @@ export class MainPage {
       const searchClear = location.search.split('');
       searchClear.shift();
       const queryParamsString = searchClear.join('').toString();
-      const paramsObject: ITypeOfSort = JSON.parse(
+      const paramsObject = JSON.parse(
         '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
       );
-      if(paramsObject.type === undefined){
+      if(paramsObject.type === ''){
         await startSort.sort(startTypeSort, listCardProducts);
       }
       else{
