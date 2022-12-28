@@ -18,8 +18,5 @@ export type Filters = {
   price: number;
   stock: number;
   search: string;
-};
-
-export type ITypeOfSort = {
   type: string;
-}
+};

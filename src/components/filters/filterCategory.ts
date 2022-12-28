@@ -84,7 +84,7 @@ export class FilterCategory {
     function syncURL(filters: Filters) {
       const path = document.location.pathname;
       const query = transformToURLParams(filters);
-      console.log(query)
+
       window.history.pushState(filters, '', `${path}${query}`);
       window.history.pushState(filters, '', `${path}${query}`);
       history.back();
