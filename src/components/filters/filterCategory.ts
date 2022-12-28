@@ -55,13 +55,6 @@ export class FilterCategory {
           }
         });
       }
-=======
-      const inputRow = document.createElement('div') as HTMLElement;
-      inputRow.className = 'filters__input-row';
-      const countOfProducts = productsArray.filter((item) => item.category === category);
->>>>>>> 8ac8359 (feat: add popup menu for sort)
-=======
->>>>>>> 812773c (refactor: replace let by const)
       inputRow.innerHTML = `
                             <input type="checkbox" id="${category}" name='category'>
                             <label for="${category}">${category}
