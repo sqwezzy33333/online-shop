@@ -89,16 +89,19 @@ export class FilterCategory {
           if (localStorageCategory) {
             allFilters.category = localStorageCategory;
           }
-          allFilters.category += `,${input.id}`;
+          if(allFilters.category.indexOf(input.id) === - 1){
+            allFilters.category += `%2C${input.id}`;
+          }
           localStorage.setItem('category', allFilters.category);
           syncURL(allFilters);
           item.children[1].classList.toggle('cheked');
         } else {
-          const arrayFromCategory = allFilters.category.split(',');
+          const arrayFromCategory = allFilters.category.split('%2C');
           const filtredArrayOfCategory = arrayFromCategory.filter((element) => {
             return element !== input.id && element !== '';
           });
-          allFilters.category = filtredArrayOfCategory.toString();
+          allFilters.category = '%2C' + filtredArrayOfCategory.toString().replace(/,/g, '%2C');
+          if(allFilters.category === '%2C') allFilters.category = '';
           syncURL(allFilters);
           localStorage.setItem('category', allFilters.category);
           item.children[1].classList.toggle('cheked');
@@ -109,7 +112,7 @@ export class FilterCategory {
 
   drawChekedInput(): void {
     const filterRow = document.querySelectorAll('.filters__input-row');
-    const arrayFromCategory = allFilters.category.split(',');
+    const arrayFromCategory = allFilters.category.split('%2C');
     const filtredArrayOfCategory = arrayFromCategory.filter((element) => {
       return element !== '';
     });

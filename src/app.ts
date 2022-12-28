@@ -32,7 +32,7 @@ class App {
     let filtredData: IProduct[];
     window.addEventListener('popstate', (event) => {
       if(event.state.category !== undefined){
-        const filterByCategoryArr: string[] = event.state.category.split(',').filter((el: string) => {
+        const filterByCategoryArr: string[] = event.state.category.split('%2C').filter((el: string) => {
           return el !== '';
         });
         const filtredArrayOfProd = data.filter((item) => {

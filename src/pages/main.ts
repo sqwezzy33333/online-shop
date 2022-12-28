@@ -51,7 +51,6 @@ export class MainPage {
       const paramsObject = JSON.parse(
         '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
       );
-      console.log(paramsObject)
       if(paramsObject.type === ''){
         await startSort.sort(startTypeSort, listCardProducts);
       }
