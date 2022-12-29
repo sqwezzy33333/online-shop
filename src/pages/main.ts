@@ -3,8 +3,31 @@ import { Sort } from '../components/sort/sort';
 
 export class MainPage {
   async draw(data: IProduct[]) {
-    const listCardProducts: Array<Element> = [];
-    const products: IProduct[] = data;
+    let products: IProduct[] = data;
+    const startSort: Sort = new Sort();
+    const startTypeSort: string = 'By popularity(Ascending)';
+    if (
+      window.location.href !== 'http://localhost:4200/' &&
+      window.location.href !== 'http://localhost:4200/index.html'
+    ) {
+      const searchClear = location.search.split('');
+      searchClear.shift();
+      const queryParamsString = searchClear.join('').toString();
+      const paramsObject = JSON.parse(
+        '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
+      );
+      if(paramsObject.type === ''){
+        products = await startSort.sort(startTypeSort, products) as IProduct[];
+      }
+      else{
+        products = await startSort.sort(paramsObject.type, products) as IProduct[];
+      }
+    }
+    else {
+      products = await startSort.sort(startTypeSort, products) as IProduct[];
+    }
+    const catalog = document.querySelector('.catalog__products') as HTMLElement;
+    catalog.innerHTML = '';
     for (let i = 0; i < products.length; i++) {
       const product: IProduct = products[i];
       const div = document.createElement('div') as HTMLElement;
@@ -37,29 +60,7 @@ export class MainPage {
             <button class="product__add">Add to cart</button>
             </div>`;
       div.innerHTML = cart;
-      listCardProducts.push(div);
-    }
-    const startSort: Sort = new Sort();
-    const startTypeSort: string = 'By popularity(Ascending)';
-    if (
-      window.location.href !== 'http://localhost:4200/' &&
-      window.location.href !== 'http://localhost:4200/index.html'
-    ) {
-      const searchClear = location.search.split('');
-      searchClear.shift();
-      const queryParamsString = searchClear.join('').toString();
-      const paramsObject = JSON.parse(
-        '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
-      );
-      if(paramsObject.type === ''){
-        await startSort.sort(startTypeSort, listCardProducts);
-      }
-      else{
-        await startSort.sort(paramsObject.type, listCardProducts);
-      }
-    }
-    else {
-      await startSort.sort(startTypeSort, listCardProducts);
+      catalog.appendChild(div);
     }
   }
 }
