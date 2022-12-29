@@ -64,11 +64,24 @@ class App {
           this.filter.filter();
         }
       }
+      filtredData = filterByCategory(data, event.state.category);
+
+      if (filtredData !== undefined && filtredData.length !== 0) {
+        filtredData = filtredData;
+        this.filtredData = filtredData;
+        this.mainPage.draw(filtredData);
+        this.filter.start(data, this.filtredData);
+        this.filter.filter();
+      } else {
+        this.mainPage.draw(data);
+        this.filter.start(data);
+        this.filter.filter();
+      }
     });
   }
   async onload(): Promise<void> {
     const data: IProduct[] = await this.loader.load();
-    let filtredData: IProduct[];
+    let filtredData: IProduct[] | undefined;
     if (
       window.location.href !== 'http://localhost:4200/' &&
       window.location.href !== 'http://localhost:4200/index.html'
@@ -79,16 +92,19 @@ class App {
       const paramsObject = JSON.parse(
         '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
       );
-      if(paramsObject.category !== undefined){ 
-        // отрисовка по фильру category
-        const filterByParamsObject: string[] = paramsObject.category.split('%2C').filter((el: string) => {
-          return el !== '';
-        });
-        const filtredArrayOfProd = data.filter((item) => {
-          let haveItemCategory: boolean = false;
-          for (let i = 0; i < filterByParamsObject.length; i++) {
-            if (item.category === filterByParamsObject[i]) {
-              haveItemCategory = true;
+      
+      function filterByCategory(category: string, data: IProduct[]) {
+        if (category !== undefined) {
+          // отрисовка по фильру category
+          const filterByParamsObject: string[] = paramsObject.category.split('%2C').filter((el: string) => {
+            return el !== '';
+          });
+          const filtredArrayOfProd = data.filter((item) => {
+            let haveItemCategory: boolean = false;
+            for (let i = 0; i < filterByParamsObject.length; i++) {
+              if (item.category === filterByParamsObject[i]) {
+                haveItemCategory = true;
+              }
             }
           }
           if (haveItemCategory) return true;
@@ -105,6 +121,12 @@ class App {
           this.mainPage.draw(filtredData);
         } else this.mainPage.draw(data);
       }
+
+      filtredData = filterByCategory(paramsObject.category, data);
+
+      if (filtredData !== undefined && filtredData.length !== 0) {
+        this.mainPage.draw(filtredData);
+      } else this.mainPage.draw(data);
     }
   }
   async init() {
