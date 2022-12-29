@@ -12,7 +12,7 @@ export interface IProduct {
   images: string[];
 }
 
-export type Filters = {
+export type AllFiltersType = {
   category: string;
   brand: string;
   price: number;

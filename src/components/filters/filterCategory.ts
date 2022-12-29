@@ -1,6 +1,6 @@
 import { IProduct } from '../types/types';
 import { allFilters } from '../forQueryParam/objOfQueryParam';
-import { Filters } from '../types/types';
+import { AllFiltersType } from '../types/types';
 
 export class FilterCategory {
   uploadFilter(): void {
@@ -64,9 +64,9 @@ export class FilterCategory {
     filters?.append(filter);
   }
 
-  checkFilter(): void {
+  checkFilter(allFiltersOnload?: AllFiltersType): void {
     const filterRow = document.querySelectorAll('.filters__input-row');
-    function transformToURLParams(filters: Filters) {
+    function transformToURLParams(filters: AllFiltersType) {
       const query = Object.entries(filters)
         .map(([key, value]) => {
           return `${key}=${value}`;
@@ -74,7 +74,7 @@ export class FilterCategory {
         .join('&');
       return `?${query}`;
     }
-    function syncURL(filters: Filters) {
+    function syncURL(filters: AllFiltersType) {
       const path = document.location.pathname;
       const query = transformToURLParams(filters);
       window.history.pushState(filters, '', `${path}${query}`);
@@ -89,11 +89,16 @@ export class FilterCategory {
           if (localStorageCategory) {
             allFilters.category = localStorageCategory;
           }
-          if(allFilters.category.indexOf(input.id) === - 1){
+          if (allFilters.category.indexOf(input.id) === -1) {
             allFilters.category += `%2C${input.id}`;
           }
           localStorage.setItem('category', allFilters.category);
           syncURL(allFilters);
+          if (allFiltersOnload !== undefined) {
+            allFilters.category = allFiltersOnload.category + `%2C${input.id}`;
+            syncURL(allFilters);
+          }
+
           item.children[1].classList.toggle('cheked');
         } else {
           const arrayFromCategory = allFilters.category.split('%2C');
@@ -101,7 +106,7 @@ export class FilterCategory {
             return element !== input.id && element !== '';
           });
           allFilters.category = '%2C' + filtredArrayOfCategory.toString().replace(/,/g, '%2C');
-          if(allFilters.category === '%2C') allFilters.category = '';
+          if (allFilters.category === '%2C') allFilters.category = '';
           syncURL(allFilters);
           localStorage.setItem('category', allFilters.category);
           item.children[1].classList.toggle('cheked');
@@ -110,12 +115,16 @@ export class FilterCategory {
     });
   }
 
-  drawChekedInput(): void {
+  drawChekedInput(allFiltersOnload?: AllFiltersType): void {
     const filterRow = document.querySelectorAll('.filters__input-row');
-    const arrayFromCategory = allFilters.category.split('%2C');
+    let arrayFromCategory = allFilters.category.split('%2C');
+    if (allFiltersOnload !== undefined) {
+      arrayFromCategory = allFiltersOnload.category.split('%2C');
+    }
     const filtredArrayOfCategory = arrayFromCategory.filter((element) => {
       return element !== '';
     });
+
     filterRow.forEach((item) => {
       const input = item.children[0] as HTMLInputElement;
       filtredArrayOfCategory.forEach((el) => {
