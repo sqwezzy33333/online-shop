@@ -1,5 +1,4 @@
 import { allFilters } from '../forQueryParam/objOfQueryParam';
-import { Filters } from '../types/types'
 
 export class Sort {
     sortBlock: HTMLSelectElement;
