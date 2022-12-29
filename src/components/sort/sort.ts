@@ -11,6 +11,7 @@ export class Sort {
     async addSortEventListeners(): Promise<void>{
         const chooseList = document.querySelector('.search__chooseList') as HTMLElement;
         const chooseOption = document.querySelectorAll('.chooseList__typeSort') as NodeListOf<Element>;
+        this.updateNameSort();
         this.sortBlock.addEventListener('click', (event) => {
             chooseList.style.display = 'block';
         });
@@ -39,12 +40,40 @@ export class Sort {
                         window.history.pushState(allFilters, '', resPath);
                         window.history.pushState(allFilters, '', resPath);
                         history.back();
-                        const updateSort = new Sort();
                         (document.querySelector('.search__text') as HTMLElement).innerHTML = item.getElementsByTagName('label')[0].innerHTML;
                     }
                 }
             });
         });
+    }
+
+    updateNameSort(){
+        const searchClear = location.search.split('');
+        searchClear.shift();
+        const queryParamsString = searchClear.join('').toString();
+        let paramsObject;
+        if(queryParamsString !== '') {
+            paramsObject = JSON.parse(
+                '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
+              );
+        }
+        else {
+            paramsObject = { type: 'popularityUp'}
+        }
+        if(paramsObject.type !== ''){
+            if(paramsObject.type === 'popularityUp'){
+                (document.querySelector('.search__text') as HTMLElement).innerHTML = 'By popularity(Ascending)';
+            }
+            else if(paramsObject.type === 'popularityLow'){
+                (document.querySelector('.search__text') as HTMLElement).innerHTML = 'By popularity(Descending)';
+            }
+            else if(paramsObject.type === 'priceUp'){
+                (document.querySelector('.search__text') as HTMLElement).innerHTML = 'By price(Ascending)';
+            }
+            else if(paramsObject.type === 'priceLow'){
+                (document.querySelector('.search__text') as HTMLElement).innerHTML = 'By price(Descending)';
+            }
+        }
     }
 
     async sort(sortType: string, arrayProducts: IProduct[]){
