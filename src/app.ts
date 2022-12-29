@@ -30,7 +30,7 @@ class App {
   async render(): Promise<void> {
     const data: IProduct[] = await this.loader.load();
     let filtredData: IProduct[];
-    window.addEventListener('popstate', (event) => {
+    window.addEventListener('popstate', async (event) => {
       if(event.state.category !== undefined){
         const filterByCategoryArr: string[] = event.state.category.split('%2C').filter((el: string) => {
           return el !== '';
@@ -46,6 +46,14 @@ class App {
         });
         if (filtredArrayOfProd.length !== 0) {
           filtredData = filtredArrayOfProd;
+          if(event.state.type !== ''){
+            console.log(filtredData)
+            filtredData = await this.sort.sort(event.state.type, filtredData) as IProduct[];
+          }
+          else {
+            const startTypeSort: string = 'By popularity(Ascending)';
+            filtredData = await this.sort.sort(startTypeSort, filtredData) as IProduct[];
+          }
           this.filtredData = filtredData;
           this.mainPage.draw(filtredData);
           this.filter.start(data, this.filtredData);
@@ -87,6 +95,13 @@ class App {
         });
         if (filtredArrayOfProd.length !== 0) {
           filtredData = filtredArrayOfProd;
+          if(paramsObject.type !== ''){
+            filtredData = await this.sort.sort(paramsObject.type, filtredData) as IProduct[];
+          }
+          else {
+            const startTypeSort: string = 'By popularity(Ascending)';
+            filtredData = await this.sort.sort(startTypeSort, filtredData) as IProduct[];
+          }
           this.mainPage.draw(filtredData);
         } else this.mainPage.draw(data);
       }
