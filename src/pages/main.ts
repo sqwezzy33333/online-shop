@@ -4,28 +4,6 @@ import { Sort } from '../components/sort/sort';
 export class MainPage {
   async draw(data: IProduct[]) {
     let products: IProduct[] = data;
-    const startSort: Sort = new Sort();
-    const startTypeSort: string = 'By popularity(Ascending)';
-    if (
-      window.location.href !== 'http://localhost:4200/' &&
-      window.location.href !== 'http://localhost:4200/index.html'
-    ) {
-      const searchClear = location.search.split('');
-      searchClear.shift();
-      const queryParamsString = searchClear.join('').toString();
-      const paramsObject = JSON.parse(
-        '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
-      );
-      if(paramsObject.type === ''){
-        products = await startSort.sort(startTypeSort, products) as IProduct[];
-      }
-      else{
-        products = await startSort.sort(paramsObject.type, products) as IProduct[];
-      }
-    }
-    else {
-      products = await startSort.sort(startTypeSort, products) as IProduct[];
-    }
     const catalog = document.querySelector('.catalog__products') as HTMLElement;
     catalog.innerHTML = '';
     for (let i = 0; i < products.length; i++) {
