@@ -16,4 +16,22 @@ export class Filter {
     this.filterCategory.checkFilter(allFiltersOnload);
     this.filterCategory.openAllFilters();
   }
+  filterArrayByCategory(data: IProduct[], eventStateCategory: string): IProduct[] {
+    if (eventStateCategory !== undefined) {
+      const filterByCategoryArr: string[] = eventStateCategory.split('%2C').filter((el: string) => {
+        return el !== '';
+      });
+      const filtredArrayOfProd = data.filter((item) => {
+        let haveItemCategory: boolean = false;
+        for (let i = 0; i < filterByCategoryArr.length; i++) {
+          if (item.category === filterByCategoryArr[i]) {
+            haveItemCategory = true;
+          }
+        }
+        if (haveItemCategory) return true;
+      });
+      return filtredArrayOfProd;
+    }
+    return data;
+  }
 }

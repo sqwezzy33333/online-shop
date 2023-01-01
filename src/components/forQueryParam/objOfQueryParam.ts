@@ -8,3 +8,7 @@ export const allFilters: AllFiltersType = {
   search: '',
   type: '',
 };
+let category = localStorage.getItem('category');
+if(category !== null){
+  allFilters.category = category;
+}

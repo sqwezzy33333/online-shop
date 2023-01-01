@@ -16,7 +16,8 @@ class App {
   filtredData: IProduct[];
   allFilters: AllFiltersType;
   sort: Sort;
-  
+  data: IProduct[];
+
   constructor() {
     this.loader = new Loader('assets/data/data.json');
     this.filter = new Filter();
@@ -24,6 +25,7 @@ class App {
     this.filtredData = [];
     this.sort = new Sort();
     this.allFilters = allFilters;
+    this.data = [];
   }
 
   async start(): Promise<void> {
@@ -48,50 +50,32 @@ class App {
 
   async render(): Promise<void> {
     const data: IProduct[] = await this.loader.load();
-    let filtredData: IProduct[] | undefined;
+    let filtredData: IProduct[] = data;
     window.addEventListener('popstate', async (event) => {
-      function filterByCategory(data: IProduct[], eventStateCategory: string): IProduct[] | undefined {
-        if (eventStateCategory !== undefined) {
-          const filterByCategoryArr: string[] = eventStateCategory.split('%2C').filter((el: string) => {
-            return el !== '';
-          });
-          const filtredArrayOfProd = data.filter((item) => {
-            let haveItemCategory: boolean = false;
-            for (let i = 0; i < filterByCategoryArr.length; i++) {
-              if (item.category === filterByCategoryArr[i]) {
-                haveItemCategory = true;
-              }
-            }
-            if (haveItemCategory) return true;
-          });
-          return filtredArrayOfProd;
-        }
-      }
-      filtredData = filterByCategory(data, event.state.category);
+      if (event.state.category !== '') {
+        filtredData = this.filter.filterArrayByCategory(data, event.state.category);
+      } else filtredData = data;
+      
+      if (event.state.type === '') {
+        filtredData = this.sort.sort('By popularity(Ascending)', filtredData);
+      } else filtredData = this.sort.sort(event.state.type, filtredData);
 
-      if (filtredData !== undefined && filtredData.length !== 0) {
-        // if(event.state.type !== ''){
-        //   filtredData = await this.sort.sort(event.state.type, filtredData) as IProduct[];
-        // }
-        // else {
-        //   const startTypeSort: string = 'By popularity(Ascending)';
-        //   filtredData = await this.sort.sort(startTypeSort, filtredData) as IProduct[];
-        // }
-        this.filtredData = filtredData;
-        this.mainPage.draw(filtredData);
-        this.filter.start(data, this.filtredData);
-        this.filter.filter();
-      } else {
-        this.mainPage.draw(data);
-        this.filter.start(data);
-        this.filter.filter();
+      if (event.state.type !== '' && this.filtredData.length > 0) {
+        event.state.category = localStorage.getItem('category');
+        filtredData = this.filter.filterArrayByCategory(this.data, event.state.category);
+        filtredData = this.sort.sort(event.state.type, filtredData);
       }
+      if (event.state.type !== '' && filtredData.length === 0) filtredData = data;
+      this.mainPage.draw(filtredData);
+      this.filter.start(this.data, filtredData, event.state);
+      this.filter.filter(event.state);
     });
   }
 
   async onload(): Promise<void> {
     const data: IProduct[] = await this.loader.load();
-    let filtredData: IProduct[] | undefined;
+    this.data = data;
+    let filtredData: IProduct[];
     if (
       window.location.href !== 'http://localhost:4200/' &&
       window.location.href !== 'http://localhost:4200/index.html'
@@ -102,7 +86,12 @@ class App {
       const paramsObject = JSON.parse(
         '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
       );
+      localStorage.setItem('category', paramsObject.category);
       filtredData = this.filterByCategory(paramsObject.category, data, paramsObject);
+      if (paramsObject.type) {
+        filtredData = this.sort.sort(paramsObject.type, filtredData);
+      }
+      this.filtredData = filtredData;
       if (filtredData !== undefined && filtredData.length !== 0) {
         // if(paramsObject.type !== ''){
         //   filtredData = await this.sort.sort(paramsObject.type, filtredData) as IProduct[];
@@ -128,7 +117,7 @@ class App {
     });
   }
 
-  filterByCategory(category: string, data: IProduct[], paramsObject: AllFiltersType) {
+  filterByCategory(category: string, data: IProduct[], paramsObject: AllFiltersType): IProduct[] {
     if (category !== undefined) {
       let categorySerch: string[] = location.search.split('&br');
       categorySerch = categorySerch[0].split('ory=');
@@ -147,7 +136,8 @@ class App {
       });
       return filtredArrayOfProd;
     }
+    return data;
   }
 }
 const app = new App();
-app.init(); 
+app.init();

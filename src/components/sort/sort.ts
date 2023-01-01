@@ -1,6 +1,5 @@
 import { allFilters } from '../forQueryParam/objOfQueryParam';
-import { IProduct } from '../types/types';
-
+import { AllFiltersType, IProduct } from '../types/types';
 export class Sort {
     sortBlock: HTMLSelectElement;
 
@@ -22,11 +21,27 @@ export class Sort {
                 }
             }
         });
+        function transformToURLParams(filters: AllFiltersType) {
+          const query = Object.entries(filters)
+            .map(([key, value]) => {
+              return `${key}=${value}`;
+            })
+            .join('&');
+          return `?${query}`;
+        }
+        function syncURL(filters: AllFiltersType) {
+          const path = document.location.pathname;
+          const query = transformToURLParams(filters);
+          window.history.pushState(filters, '', `${path}${query}`);
+          window.history.pushState(filters, '', `${path}${query}`);
+          history.back();
+        }
         chooseOption.forEach((item) => {
             item.addEventListener('click', function (e) {
                 if (e.target instanceof Element) { 
                     if(item.getElementsByTagName('input')[0].checked){
                         allFilters.type = item.getElementsByTagName('input')[0].getAttribute('id') as string;
+                        
                         const href = new URL(document.URL);
                         let resPath = '';
                         if(location.href.match(/(\?|&)type($|&|=)/)){
@@ -34,6 +49,7 @@ export class Sort {
                             resPath = href.toString();
                         }
                         else{
+                          
                             href.searchParams.append('type', allFilters.type);
                             resPath = href.toString();
                         }
@@ -76,7 +92,7 @@ export class Sort {
         }
     }
 
-    async sort(sortType: string, arrayProducts: IProduct[]){
+     sort(sortType: string, arrayProducts: IProduct[]): IProduct[]{
         let productsList: IProduct[];
         productsList = arrayProducts;
         if(sortType === 'By popularity(Ascending)' || sortType === 'popularityUp'){
@@ -135,5 +151,6 @@ export class Sort {
             });
             return productsList;
         }
+        return arrayProducts;
     }
 }
