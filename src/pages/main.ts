@@ -1,9 +1,8 @@
-import { IProduct } from '../components/types/types';
-import { Sort } from '../components/sort/sort';
+import { IProduct } from '../types/types';
 
 export class MainPage {
   async draw(data: IProduct[]) {
-    let products: IProduct[] = data;
+    const products: IProduct[] = data;
     const catalog = document.querySelector('.catalog__products') as HTMLElement;
     catalog.innerHTML = '';
     for (let i = 0; i < products.length; i++) {

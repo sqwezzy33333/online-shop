@@ -4,9 +4,9 @@ import './libs/index.scss';
 import { Loader } from './components/loader/loader';
 import { MainPage } from './pages/main';
 import { Filter } from './components/filters/filter';
-import { IProduct } from './components/types/types';
+import { IProduct } from './types/types';
 import { Sort } from './components/sort/sort';
-import { AllFiltersType } from './components/types/types';
+import { AllFiltersType } from './types/types';
 import { allFilters } from './components/forQueryParam/objOfQueryParam';
 
 class App {
