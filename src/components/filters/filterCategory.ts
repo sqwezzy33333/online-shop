@@ -1,6 +1,5 @@
-import { IProduct } from '../types/types';
+import { IProduct, AllFiltersType } from '../../types/types';
 import { allFilters } from '../forQueryParam/objOfQueryParam';
-import { AllFiltersType } from '../types/types';
 
 export class FilterCategory {
   uploadFilter(): void {

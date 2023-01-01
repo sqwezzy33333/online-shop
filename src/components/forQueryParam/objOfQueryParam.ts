@@ -1,4 +1,4 @@
-import { AllFiltersType } from '../types/types';
+import { AllFiltersType } from '../../types/types';
 
 export const allFilters: AllFiltersType = {
   category: '',
@@ -8,7 +8,7 @@ export const allFilters: AllFiltersType = {
   search: '',
   type: '',
 };
-let category = localStorage.getItem('category');
+const category = localStorage.getItem('category');
 if(category !== null){
   allFilters.category = category;
 }

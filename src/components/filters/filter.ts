@@ -1,6 +1,5 @@
 import { FilterCategory } from './filterCategory';
-import { IProduct } from '../types/types';
-import { AllFiltersType } from '../types/types';
+import { IProduct, AllFiltersType } from '../../types/types';
 
 export class Filter {
   filterCategory: FilterCategory;
