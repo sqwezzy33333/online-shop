@@ -96,14 +96,12 @@ export class FilterCategory {
           if (allFiltersOnload !== undefined) {
             allFilters.category = allFiltersOnload.category + `%2C${input.id}`;
             syncURL(allFilters);
-            
           }
           item.children[1].classList.toggle('cheked');
         } else {
           let arrayFromCategory = allFilters.category.split('%2C');
           if (allFiltersOnload !== undefined) {
             arrayFromCategory = allFiltersOnload.category.split('%2C');
-            
           }
           const filtredArrayOfCategory = arrayFromCategory.filter((element) => {
             return element !== input.id && element !== '';

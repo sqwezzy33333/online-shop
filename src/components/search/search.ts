@@ -1,4 +1,4 @@
-import { IProduct } from '../../types/types';
+import { AllFiltersType, IProduct } from '../../types/types';
 import { allFilters } from '../forQueryParam/objOfQueryParam';
 
 export class Search {
@@ -8,39 +8,19 @@ export class Search {
     }
 
     async addSearchEventListeners(): Promise<void>{ 
+        this.updateSearch();
         this.searchInput.addEventListener('input', ()=>{
             allFilters.search = this.searchInput.value;
-            const href = new URL(document.URL);
-            let resPath = '';
-            if(location.href.match(/(\?|&)search($|&|=)/)){
-                href.searchParams.set('search', allFilters.search);
-                resPath = href.toString();
-            }
-            else{
-                href.searchParams.append('search', allFilters.search);
-                resPath = href.toString();
-            }
-            window.history.pushState(allFilters, '', resPath);
-            window.history.pushState(allFilters, '', resPath);
-            history.back();
+            syncURL(allFilters);
         })
+    }
+
+    updateSearch(){
+        syncURL(allFilters);
     }
 
     searchProducts (data: IProduct[]){
         const searchData: IProduct[] = [];
-        // const searchClear = location.search.split('');
-        // searchClear.shift();
-        // const queryParamsString = searchClear.join('').toString();
-        // let paramsObject;
-        // if(queryParamsString !== '') {
-        //     paramsObject = JSON.parse(
-        //         '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
-        //       );
-        // }
-        // else {
-        //     paramsObject = { search: ''}
-        // }
-        // allFilters.search = paramsObject.search;
         if(allFilters.search === ''){
             return data;
         }
@@ -67,19 +47,22 @@ export class Search {
                 searchData.push(item)
             }
         });
-        // const href = new URL(document.URL);
-        // let resPath = '';
-        // if(location.href.match(/(\?|&)search($|&|=)/)){
-        //     href.searchParams.set('search', allFilters.search);
-        //     resPath = href.toString();
-        // }
-        // else{
-        //     href.searchParams.append('search', allFilters.search);
-        //     resPath = href.toString();
-        // }
-        // window.history.pushState(allFilters, '', resPath);
-        // window.history.pushState(allFilters, '', resPath);
-        // history.back();
         return searchData;
     }
+}
+
+function transformToURLParams(filters: AllFiltersType) {
+    const query = Object.entries(filters)
+        .map(([key, value]) => {
+        return `${key}=${value}`;
+        })
+        .join('&');
+    return `?${query}`;
+}
+function syncURL(filters: AllFiltersType) {
+    const path = document.location.pathname;
+    const query = transformToURLParams(filters);
+    window.history.pushState(filters, '', `${path}${query}`);
+    window.history.pushState(filters, '', `${path}${query}`);
+    history.back();
 }
