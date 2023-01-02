@@ -68,8 +68,8 @@ class App {
         filtredData = this.filter.filterArrayByCategory(this.data, event.state.category);
         filtredData = this.sort.sort(event.state.type, filtredData);
       }
-      if (event.state.type !== '' && filtredData.length === 0) filtredData = data;
       if(event.state.search !== '') filtredData = this.search.searchProducts(filtredData);
+      if (event.state.type !== '' && filtredData.length === 0) filtredData = data;
       this.mainPage.draw(filtredData);
       this.filter.start(this.data, filtredData, event.state);
       this.filter.filter(event.state);
@@ -90,22 +90,23 @@ class App {
       const paramsObject = JSON.parse(
         '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
       );
-      if(paramsObject.category !== undefined){
-        localStorage.setItem('category', paramsObject.category);
+      localStorage.setItem('category', paramsObject.category);
+      filtredData = data;
+      if (paramsObject.category !== '') {
         filtredData = this.filterByCategory(paramsObject.category, data, paramsObject);
-        if (paramsObject.type) {
-          filtredData = this.sort.sort(paramsObject.type, filtredData);
-        }
-        if(paramsObject.search){
-          filtredData = this.search.searchProducts(filtredData);
-        }
-        this.filtredData = filtredData;
-        if (filtredData !== undefined && filtredData.length !== 0) {
-          this.mainPage.draw(filtredData);
-          this.filter.start(data, filtredData, this.allFilters);
-          this.filter.filter(this.allFilters);
-        } else this.mainPage.draw(data);
       }
+      if (paramsObject.type !== '') {
+        filtredData = this.sort.sort(paramsObject.type, filtredData);
+      }
+      if(paramsObject.search !== ''){
+        filtredData = this.search.searchProducts(filtredData);
+      }
+      this.filtredData = filtredData;
+      if (filtredData !== undefined && filtredData.length !== 0) {
+        this.mainPage.draw(filtredData);
+        this.filter.start(data, filtredData, this.allFilters);
+        this.filter.filter(this.allFilters);
+      } else this.mainPage.draw(data);
     }
   }
 
