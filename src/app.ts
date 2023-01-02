@@ -87,17 +87,19 @@ class App {
       const paramsObject = JSON.parse(
         '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
       );
-      localStorage.setItem('category', paramsObject.category);
-      filtredData = this.filterByCategory(paramsObject.category, data, paramsObject);
-      if (paramsObject.type) {
-        filtredData = this.sort.sort(paramsObject.type, filtredData);
+      if(paramsObject.category !== undefined){
+        localStorage.setItem('category', paramsObject.category);
+        filtredData = this.filterByCategory(paramsObject.category, data, paramsObject);
+        if (paramsObject.type) {
+          filtredData = this.sort.sort(paramsObject.type, filtredData);
+        }
+        this.filtredData = filtredData;
+        if (filtredData !== undefined && filtredData.length !== 0) {
+          this.mainPage.draw(filtredData);
+          this.filter.start(data, filtredData, this.allFilters);
+          this.filter.filter(this.allFilters);
+        } else this.mainPage.draw(data);
       }
-      this.filtredData = filtredData;
-      if (filtredData !== undefined && filtredData.length !== 0) {
-        this.mainPage.draw(filtredData);
-        this.filter.start(data, filtredData, this.allFilters);
-        this.filter.filter(this.allFilters);
-      } else this.mainPage.draw(data);
     }
   }
 

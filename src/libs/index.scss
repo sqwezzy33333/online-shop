@@ -139,6 +139,12 @@ body {
   }
 
   .catalog {
+
+    &__panel {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
     
     .sort {
       align-self: flex-end;
@@ -172,6 +178,10 @@ body {
         box-shadow: 0 -2px 4px 0 rgb(35 31 32 / 5%), 0 4px 8px 0 rgb(35 31 32 / 10%);
       }
     }
+
+    // .search {
+      
+    // }
 
     .chooseList {
         
