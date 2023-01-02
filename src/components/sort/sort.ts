@@ -25,9 +25,23 @@ export class Sort {
             item.addEventListener('click', function (e) {
                 if (e.target instanceof Element) { 
                     if(item.getElementsByTagName('input')[0].checked){
-                        allFilters.type = item.getElementsByTagName('input')[0].getAttribute('id') as string;
-                        syncURL(allFilters);
-                        (document.querySelector('.sort__text') as HTMLElement).innerHTML = item.getElementsByTagName('label')[0].innerHTML;
+                        const searchClear = location.search.split('');
+                        searchClear.shift();
+                        const queryParamsString = searchClear.join('').toString();
+                        console.log(queryParamsString)
+                        let paramsObject;
+                        if(queryParamsString !== '') {
+                            paramsObject = JSON.parse(
+                                '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
+                            );
+                        }
+                        if(paramsObject !== undefined){
+                            if(paramsObject.type !== undefined){
+                                (document.querySelector('.sort__text') as HTMLElement).innerHTML = item.getElementsByTagName('label')[0].innerHTML;
+                                paramsObject.type = item.getElementsByTagName('input')[0].getAttribute('id') as string;
+                                syncURL(paramsObject);
+                            }
+                        }
                     }
                 }
             });
@@ -38,31 +52,33 @@ export class Sort {
         const searchClear = location.search.split('');
         searchClear.shift();
         const queryParamsString = searchClear.join('').toString();
+        console.log(queryParamsString)
         let paramsObject;
         if(queryParamsString !== '') {
             paramsObject = JSON.parse(
                 '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
               );
         }
+        if(paramsObject !== undefined){
+            if(paramsObject.type !== undefined){
+                if(paramsObject.type === 'popularityUp'){
+                    (document.querySelector('.sort__text') as HTMLElement).innerHTML = 'By popularity(Ascending)';
+                }
+                else if(paramsObject.type === 'popularityLow'){
+                    (document.querySelector('.sort__text') as HTMLElement).innerHTML = 'By popularity(Descending)';
+                }
+                else if(paramsObject.type === 'priceUp'){
+                    (document.querySelector('.sort__text') as HTMLElement).innerHTML = 'By price(Ascending)';
+                }
+                else if(paramsObject.type === 'priceLow'){
+                    (document.querySelector('.sort__text') as HTMLElement).innerHTML = 'By price(Descending)';
+                }
+                syncURL(paramsObject);
+            }
+        }
         else {
-            paramsObject = { type: ''}
+            syncURL(allFilters);
         }
-        if(paramsObject.type !== ''){
-            if(paramsObject.type === 'popularityUp'){
-                (document.querySelector('.sort__text') as HTMLElement).innerHTML = 'By popularity(Ascending)';
-            }
-            else if(paramsObject.type === 'popularityLow'){
-                (document.querySelector('.sort__text') as HTMLElement).innerHTML = 'By popularity(Descending)';
-            }
-            else if(paramsObject.type === 'priceUp'){
-                (document.querySelector('.sort__text') as HTMLElement).innerHTML = 'By price(Ascending)';
-            }
-            else if(paramsObject.type === 'priceLow'){
-                (document.querySelector('.sort__text') as HTMLElement).innerHTML = 'By price(Descending)';
-            }
-        }
-        allFilters.type = paramsObject.type;
-        syncURL(allFilters);
     }
 
      sort(sortType: string, arrayProducts: IProduct[]): IProduct[]{
