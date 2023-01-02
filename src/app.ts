@@ -51,7 +51,8 @@ class App {
   async render(): Promise<void> {
     const data: IProduct[] = await this.loader.load();
     let filtredData: IProduct[] = data;
-    window.addEventListener('popstate', async (event) => {
+    window.addEventListener('popstate', (event) => {
+      console.log(event.state)
       if (event.state.category !== '') {
         filtredData = this.filter.filterArrayByCategory(data, event.state.category);
       } else filtredData = data;

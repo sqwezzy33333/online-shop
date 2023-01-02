@@ -120,23 +120,25 @@ export class FilterCategory {
 
   drawChekedInput(allFiltersOnload?: AllFiltersType): void {
     const filterRow = document.querySelectorAll('.filters__input-row');
-    let arrayFromCategory = allFilters.category.split('%2C');
-    if (allFiltersOnload !== undefined) {
-      arrayFromCategory = allFiltersOnload.category.split('%2C');
-    }
-    const filtredArrayOfCategory = arrayFromCategory.filter((element) => {
-      return element !== '';
-    });
-
-    filterRow.forEach((item) => {
-      const input = item.children[0] as HTMLInputElement;
-      filtredArrayOfCategory.forEach((el) => {
-        if (el === input.id) {
-          item.children[1].classList.toggle('cheked');
-          input.checked = true;
-        }
+    let arrayFromCategory;
+    if(allFilters.category !== ''){
+      arrayFromCategory = allFilters.category.split('%2C');
+      if (allFiltersOnload !== undefined) {
+        arrayFromCategory = allFiltersOnload.category.split('%2C');
+      }
+      const filtredArrayOfCategory = arrayFromCategory.filter((element) => {
+        return element !== '';
       });
-    });
+      filterRow.forEach((item) => {
+        const input = item.children[0] as HTMLInputElement;
+        filtredArrayOfCategory.forEach((el) => {
+          if (el === input.id) {
+            item.children[1].classList.toggle('cheked');
+            input.checked = true;
+          }
+        });
+      });
+    }
   }
 
   openAllFilters() {
