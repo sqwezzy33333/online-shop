@@ -93,13 +93,6 @@ class App {
       }
       this.filtredData = filtredData;
       if (filtredData !== undefined && filtredData.length !== 0) {
-        // if(paramsObject.type !== ''){
-        //   filtredData = await this.sort.sort(paramsObject.type, filtredData) as IProduct[];
-        // }
-        // else {
-        //   const startTypeSort: string = 'By popularity(Ascending)';
-        //   filtredData = await this.sort.sort(startTypeSort, filtredData) as IProduct[];
-        // }
         this.mainPage.draw(filtredData);
         this.filter.start(data, filtredData, this.allFilters);
         this.filter.filter(this.allFilters);
