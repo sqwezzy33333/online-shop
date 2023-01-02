@@ -91,7 +91,6 @@ export class FilterCategory {
           if (allFilters.category.indexOf(input.id) === -1) {
             allFilters.category += `%2C${input.id}`;
           }
-          console.log(allFilters.category)
           localStorage.setItem('category', allFilters.category);
           syncURL(allFilters);
           if (allFiltersOnload !== undefined) {
