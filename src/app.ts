@@ -8,6 +8,7 @@ import { IProduct } from './types/types';
 import { Sort } from './components/sort/sort';
 import { AllFiltersType } from './types/types';
 import { allFilters } from './components/forQueryParam/objOfQueryParam';
+import { Search } from './components/search/search';
 
 class App {
   mainPage: MainPage;
@@ -17,6 +18,7 @@ class App {
   allFilters: AllFiltersType;
   sort: Sort;
   data: IProduct[];
+  search: Search;
 
   constructor() {
     this.loader = new Loader('assets/data/data.json');
@@ -24,6 +26,7 @@ class App {
     this.mainPage = new MainPage();
     this.filtredData = [];
     this.sort = new Sort();
+    this.search = new Search();
     this.allFilters = allFilters;
     this.data = [];
   }
@@ -45,6 +48,7 @@ class App {
     await this.filter.start(data, this.filtredData);
     await this.mainPage.draw(data);
     await this.sort.addSortEventListeners();
+    await this.search.addSearchEventListeners();
     this.filter.filter();
   }
 
@@ -52,11 +56,9 @@ class App {
     const data: IProduct[] = await this.loader.load();
     let filtredData: IProduct[] = data;
     window.addEventListener('popstate', (event) => {
-      console.log(event.state)
       if (event.state.category !== '') {
         filtredData = this.filter.filterArrayByCategory(data, event.state.category);
       } else filtredData = data;
-      
       if (event.state.type === '') {
         filtredData = this.sort.sort('By popularity(Ascending)', filtredData);
       } else filtredData = this.sort.sort(event.state.type, filtredData);
@@ -67,6 +69,7 @@ class App {
         filtredData = this.sort.sort(event.state.type, filtredData);
       }
       if (event.state.type !== '' && filtredData.length === 0) filtredData = data;
+      if(event.state.search !== '') filtredData = this.search.searchProducts(filtredData);
       this.mainPage.draw(filtredData);
       this.filter.start(this.data, filtredData, event.state);
       this.filter.filter(event.state);
@@ -92,6 +95,9 @@ class App {
         filtredData = this.filterByCategory(paramsObject.category, data, paramsObject);
         if (paramsObject.type) {
           filtredData = this.sort.sort(paramsObject.type, filtredData);
+        }
+        if(paramsObject.search){
+          filtredData = this.search.searchProducts(filtredData);
         }
         this.filtredData = filtredData;
         if (filtredData !== undefined && filtredData.length !== 0) {
