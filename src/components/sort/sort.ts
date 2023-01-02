@@ -28,7 +28,6 @@ export class Sort {
                         const searchClear = location.search.split('');
                         searchClear.shift();
                         const queryParamsString = searchClear.join('').toString();
-                        console.log(queryParamsString)
                         let paramsObject;
                         if(queryParamsString !== '') {
                             paramsObject = JSON.parse(
@@ -52,7 +51,6 @@ export class Sort {
         const searchClear = location.search.split('');
         searchClear.shift();
         const queryParamsString = searchClear.join('').toString();
-        console.log(queryParamsString)
         let paramsObject;
         if(queryParamsString !== '') {
             paramsObject = JSON.parse(

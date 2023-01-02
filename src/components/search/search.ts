@@ -33,7 +33,6 @@ export class Search {
         searchClear.shift();
         const queryParamsString = searchClear.join('').toString();
         let paramsObject;
-        console.log(queryParamsString)
         if(queryParamsString !== '') {
             paramsObject = JSON.parse(
                 '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
