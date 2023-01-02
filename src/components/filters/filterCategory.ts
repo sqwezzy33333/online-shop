@@ -85,51 +85,67 @@ export class FilterCategory {
       input.addEventListener('change', function () {
         if (input.checked) {
           const localStorageCategory = localStorage.getItem('category');
-          if (localStorageCategory) {
-            allFilters.category = localStorageCategory;
+          const searchClear = location.search.split('');
+          searchClear.shift();
+          const queryParamsString = searchClear.join('').toString();
+          let paramsObject;
+          if(queryParamsString !== '') {
+              paramsObject = JSON.parse(
+                  '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
+                );
           }
-          if (allFilters.category.indexOf(input.id) === -1) {
-            allFilters.category += `%2C${input.id}`;
+          if(paramsObject !== undefined){
+            if (localStorageCategory) {
+              paramsObject.category = localStorageCategory;
+            }
+            if (paramsObject.category.indexOf(input.id) === -1) {
+              paramsObject.category += `%2C${input.id}`;
+            }
+            localStorage.setItem('category', paramsObject.category);
+            syncURL(paramsObject);
+            item.children[1].classList.toggle('cheked');
           }
-          localStorage.setItem('category', allFilters.category);
-          syncURL(allFilters);
-          if (allFiltersOnload !== undefined) {
-            allFilters.category = allFiltersOnload.category + `%2C${input.id}`;
-            syncURL(allFilters);
-          }
-          item.children[1].classList.toggle('cheked');
         } else {
-          let arrayFromCategory = allFilters.category.split('%2C');
-          if (allFiltersOnload !== undefined) {
-            arrayFromCategory = allFiltersOnload.category.split('%2C');
+          const searchClear = location.search.split('');
+          searchClear.shift();
+          const queryParamsString = searchClear.join('').toString();
+          let paramsObject;
+          if(queryParamsString !== '') {
+              paramsObject = JSON.parse(
+                  '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
+                );
           }
-          const filtredArrayOfCategory = arrayFromCategory.filter((element) => {
-            return element !== input.id && element !== '';
-          });
-          allFilters.category = '%2C' + filtredArrayOfCategory.toString().replace(/,/g, '%2C');
-          if (allFilters.category === '%2C') allFilters.category = '';
-          syncURL(allFilters);
-          localStorage.setItem('category', allFilters.category);
-          item.children[1].classList.toggle('cheked');
+          if(paramsObject !== undefined){ 
+            let arrayFromCategory = paramsObject.category.split('%2C');
+            if (allFiltersOnload !== undefined) {
+              arrayFromCategory = allFiltersOnload.category.split('%2C');
+            }
+            const filtredArrayOfCategory = arrayFromCategory.filter((element: string) => {
+              return element !== input.id && element !== '';
+            });
+            paramsObject.category = '%2C' + filtredArrayOfCategory.toString().replace(/,/g, '%2C');
+            if (paramsObject.category === '%2C') paramsObject.category = '';
+            syncURL(paramsObject);
+            localStorage.setItem('category', paramsObject.category);
+            item.children[1].classList.toggle('cheked');
+          }
         }
       });
     });
   }
 
   drawChekedInput(allFiltersOnload?: AllFiltersType): void {
+    console.log(allFiltersOnload)
     const filterRow = document.querySelectorAll('.filters__input-row');
     let arrayFromCategory;
-    if(allFilters.category !== ''){
-      arrayFromCategory = allFilters.category.split('%2C');
-      if (allFiltersOnload !== undefined) {
-        arrayFromCategory = allFiltersOnload.category.split('%2C');
-      }
-      const filtredArrayOfCategory = arrayFromCategory.filter((element) => {
+    if(allFiltersOnload?.category !== ''){
+      arrayFromCategory = allFiltersOnload?.category.split('%2C');
+      const filtredArrayOfCategory = arrayFromCategory?.filter((element) => {
         return element !== '';
       });
       filterRow.forEach((item) => {
         const input = item.children[0] as HTMLInputElement;
-        filtredArrayOfCategory.forEach((el) => {
+        filtredArrayOfCategory?.forEach((el) => {
           if (el === input.id) {
             item.children[1].classList.toggle('cheked');
             input.checked = true;
