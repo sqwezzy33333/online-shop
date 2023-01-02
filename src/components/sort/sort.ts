@@ -34,14 +34,13 @@ export class Sort {
                             resPath = href.toString();
                         }
                         else{
-                          
                             href.searchParams.append('type', allFilters.type);
                             resPath = href.toString();
                         }
                         window.history.pushState(allFilters, '', resPath);
                         window.history.pushState(allFilters, '', resPath);
                         history.back();
-                        (document.querySelector('.sort_text') as HTMLElement).innerHTML = item.getElementsByTagName('label')[0].innerHTML;
+                        (document.querySelector('.sort__text') as HTMLElement).innerHTML = item.getElementsByTagName('label')[0].innerHTML;
                     }
                 }
             });
@@ -59,7 +58,7 @@ export class Sort {
               );
         }
         else {
-            paramsObject = { type: 'popularityUp'}
+            paramsObject = { type: ''}
         }
         if(paramsObject.type !== ''){
             if(paramsObject.type === 'popularityUp'){
@@ -75,6 +74,20 @@ export class Sort {
                 (document.querySelector('.sort__text') as HTMLElement).innerHTML = 'By price(Descending)';
             }
         }
+        allFilters.type = paramsObject.type;
+        const href = new URL(document.URL);
+        let resPath = '';
+        if(location.href.match(/(\?|&)type($|&|=)/)){
+            href.searchParams.set('type', allFilters.type);
+            resPath = href.toString();
+        }
+        else{
+            href.searchParams.append('type', allFilters.type);
+            resPath = href.toString();
+        }
+        window.history.pushState(allFilters, '', resPath);
+        window.history.pushState(allFilters, '', resPath);
+        history.back();
     }
 
      sort(sortType: string, arrayProducts: IProduct[]): IProduct[]{
