@@ -4,11 +4,11 @@ export class Sort {
     sortBlock: HTMLSelectElement;
 
     constructor(){
-        this.sortBlock = document.querySelector('.catalog__search') as HTMLSelectElement;
+        this.sortBlock = document.querySelector('.catalog__sort') as HTMLSelectElement;
     }
 
     async addSortEventListeners(): Promise<void>{
-        const chooseList = document.querySelector('.search__chooseList') as HTMLElement;
+        const chooseList = document.querySelector('.sort__chooseList') as HTMLElement;
         const chooseOption = document.querySelectorAll('.chooseList__typeSort') as NodeListOf<Element>;
         this.updateNameSort();
         this.sortBlock.addEventListener('click', (event) => {
@@ -16,7 +16,7 @@ export class Sort {
         });
         document.addEventListener('click', function(e) {
             if (e.target instanceof Element) { 
-                if (!(document.querySelector('.catalog__search') as HTMLSelectElement).contains(e.target)) {
+                if (!(document.querySelector('.catalog__sort') as HTMLSelectElement).contains(e.target)) {
                     chooseList.style.display = 'none';
                 }
             }
@@ -41,7 +41,7 @@ export class Sort {
                         window.history.pushState(allFilters, '', resPath);
                         window.history.pushState(allFilters, '', resPath);
                         history.back();
-                        (document.querySelector('.search__text') as HTMLElement).innerHTML = item.getElementsByTagName('label')[0].innerHTML;
+                        (document.querySelector('.sort_text') as HTMLElement).innerHTML = item.getElementsByTagName('label')[0].innerHTML;
                     }
                 }
             });
@@ -63,16 +63,16 @@ export class Sort {
         }
         if(paramsObject.type !== ''){
             if(paramsObject.type === 'popularityUp'){
-                (document.querySelector('.search__text') as HTMLElement).innerHTML = 'By popularity(Ascending)';
+                (document.querySelector('.sort__text') as HTMLElement).innerHTML = 'By popularity(Ascending)';
             }
             else if(paramsObject.type === 'popularityLow'){
-                (document.querySelector('.search__text') as HTMLElement).innerHTML = 'By popularity(Descending)';
+                (document.querySelector('.sort__text') as HTMLElement).innerHTML = 'By popularity(Descending)';
             }
             else if(paramsObject.type === 'priceUp'){
-                (document.querySelector('.search__text') as HTMLElement).innerHTML = 'By price(Ascending)';
+                (document.querySelector('.sort__text') as HTMLElement).innerHTML = 'By price(Ascending)';
             }
             else if(paramsObject.type === 'priceLow'){
-                (document.querySelector('.search__text') as HTMLElement).innerHTML = 'By price(Descending)';
+                (document.querySelector('.sort__text') as HTMLElement).innerHTML = 'By price(Descending)';
             }
         }
     }
