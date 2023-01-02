@@ -36,31 +36,37 @@
             </div>
           </div>
           <div class="main__catalog catalog">
-            <div class=""></div>
-            <div class="catalog__sort sort">
-              <button class="sort__button">
-                <p class="sort__text">Choose Sort</p>
-              </button>
-            </div>
-            <div class="sort__chooseList chooseList">
-              <form class="chooseList__form">
-                <div class="chooseList__typeSort">
-                  <input type="radio" id="popularityUp" name="sortList">
-                  <label for="popularityUp">By popularity(Ascending)</label>
-                </div>
-                <div class="chooseList__typeSort">
-                  <input type="radio" id="popularityLow" name="sortList">
-                  <label for="popularityLow">By popularity(Descending)</label>
-                </div>
-                <div class="chooseList__typeSort">
-                  <input type="radio" id="priceUp" name="sortList">
-                  <label for="priceUp">By price(Ascending)</label>
-                </div>
-                <div class="chooseList__typeSort">
-                  <input type="radio" id="priceLow" name="sortList">
-                  <label for="priceLow">By price(Descending)</label>
-                </div>
-              </form>
+            <div class="catalog__panel">
+              <div class="catalog__search search">
+                <form class="search__form">
+                  <input type="search" placeholder="Search product" class="search__input">
+                </form>
+              </div>
+              <div class="catalog__sort sort">
+                <button class="sort__button">
+                  <p class="sort__text">Choose Sort</p>
+                </button>
+              </div>
+              <div class="sort__chooseList chooseList">
+                <form class="chooseList__form">
+                  <div class="chooseList__typeSort">
+                    <input type="radio" id="popularityUp" name="sortList">
+                    <label for="popularityUp">By popularity(Ascending)</label>
+                  </div>
+                  <div class="chooseList__typeSort">
+                    <input type="radio" id="popularityLow" name="sortList">
+                    <label for="popularityLow">By popularity(Descending)</label>
+                  </div>
+                  <div class="chooseList__typeSort">
+                    <input type="radio" id="priceUp" name="sortList">
+                    <label for="priceUp">By price(Ascending)</label>
+                  </div>
+                  <div class="chooseList__typeSort">
+                    <input type="radio" id="priceLow" name="sortList">
+                    <label for="priceLow">By price(Descending)</label>
+                  </div>
+                </form>
+              </div>
             </div>
             <div class="catalog__products"></div>
           </div>
