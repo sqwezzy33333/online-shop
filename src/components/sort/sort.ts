@@ -21,21 +21,6 @@ export class Sort {
                 }
             }
         });
-        function transformToURLParams(filters: AllFiltersType) {
-          const query = Object.entries(filters)
-            .map(([key, value]) => {
-              return `${key}=${value}`;
-            })
-            .join('&');
-          return `?${query}`;
-        }
-        function syncURL(filters: AllFiltersType) {
-          const path = document.location.pathname;
-          const query = transformToURLParams(filters);
-          window.history.pushState(filters, '', `${path}${query}`);
-          window.history.pushState(filters, '', `${path}${query}`);
-          history.back();
-        }
         chooseOption.forEach((item) => {
             item.addEventListener('click', function (e) {
                 if (e.target instanceof Element) { 
