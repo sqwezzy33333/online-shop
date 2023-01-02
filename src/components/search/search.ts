@@ -10,40 +10,71 @@ export class Search {
     async addSearchEventListeners(): Promise<void>{ 
         this.updateSearch();
         this.searchInput.addEventListener('input', ()=>{
-            allFilters.search = this.searchInput.value;
-            syncURL(allFilters);
+            const searchClear = location.search.split('');
+            searchClear.shift();
+            const queryParamsString = searchClear.join('').toString();
+            let paramsObject;
+            if(queryParamsString !== '') {
+                paramsObject = JSON.parse(
+                    '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
+                  );
+            }
+            if(paramsObject !== undefined){
+                if(paramsObject.search !== undefined){
+                    paramsObject.search = this.searchInput.value;
+                    syncURL(paramsObject);
+                }
+            }
         })
     }
 
     updateSearch(){
-        syncURL(allFilters);
+        const searchClear = location.search.split('');
+        searchClear.shift();
+        const queryParamsString = searchClear.join('').toString();
+        let paramsObject;
+        console.log(queryParamsString)
+        if(queryParamsString !== '') {
+            paramsObject = JSON.parse(
+                '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
+              );
+        }
+        if(paramsObject !== undefined){
+            if(paramsObject.search !== undefined){
+                this.searchInput.value = paramsObject.search;
+                syncURL(paramsObject);
+            }
+        }
+        else {
+            syncURL(allFilters);
+        }
     }
 
-    searchProducts (data: IProduct[]){
+    searchProducts (data: IProduct[], searchText: string){
         const searchData: IProduct[] = [];
-        if(allFilters.search === ''){
+        if(searchText === ''){
             return data;
         }
         data.forEach((item) => {
-            if(item.title.toLowerCase().indexOf(allFilters.search.toLowerCase()) >= 0){
+            if(item.title.toLowerCase().indexOf(searchText.toLowerCase()) >= 0){
                 searchData.push(item)
             }
-            else if(item.description.toLowerCase().indexOf(allFilters.search.toLowerCase()) >= 0){
+            else if(item.description.toLowerCase().indexOf(searchText.toLowerCase()) >= 0){
                 searchData.push(item)
             }
-            else if(item.price.toString().indexOf(allFilters.search.toLowerCase()) >= 0){
+            else if(item.price.toString().indexOf(searchText.toLowerCase()) >= 0){
                 searchData.push(item)
             }
-            else if(item.rating.toString().indexOf(allFilters.search.toLowerCase()) >= 0){
+            else if(item.rating.toString().indexOf(searchText.toLowerCase()) >= 0){
                 searchData.push(item)
             }
-            else if(item.stock.toString().indexOf(allFilters.search.toLowerCase()) >= 0){
+            else if(item.stock.toString().indexOf(searchText.toLowerCase()) >= 0){
                 searchData.push(item)
             }
-            else if(item.brand.toLowerCase().indexOf(allFilters.search.toLowerCase()) >= 0){
+            else if(item.brand.toLowerCase().indexOf(searchText.toLowerCase()) >= 0){
                 searchData.push(item)
             }
-            else if(item.category.toLowerCase().indexOf(allFilters.search.toLowerCase()) >= 0){
+            else if(item.category.toLowerCase().indexOf(searchText.toLowerCase()) >= 0){
                 searchData.push(item)
             }
         });

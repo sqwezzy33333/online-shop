@@ -62,14 +62,13 @@ class App {
       if (event.state.type === '') {
         filtredData = this.sort.sort('By popularity(Ascending)', filtredData);
       } else filtredData = this.sort.sort(event.state.type, filtredData);
-
-      if (event.state.type !== '' && this.filtredData.length > 0) {
+      if (event.state.type !== '' && this.filtredData.length > 0 && event.state.category !== '') {
         event.state.category = localStorage.getItem('category');
         filtredData = this.filter.filterArrayByCategory(this.data, event.state.category);
         filtredData = this.sort.sort(event.state.type, filtredData);
       }
-      if(event.state.search !== '') filtredData = this.search.searchProducts(filtredData);
-      if (event.state.type !== '' && filtredData.length === 0) filtredData = data;
+      if(event.state.search !== '') filtredData = this.search.searchProducts(filtredData, event.state.search);
+      if (filtredData.length === 0 && event.state.search === '') filtredData = data;
       this.mainPage.draw(filtredData);
       this.filter.start(this.data, filtredData, event.state);
       this.filter.filter(event.state);
@@ -99,10 +98,10 @@ class App {
         filtredData = this.sort.sort(paramsObject.type, filtredData);
       }
       if(paramsObject.search !== ''){
-        filtredData = this.search.searchProducts(filtredData);
+        filtredData = this.search.searchProducts(filtredData, paramsObject.search);
       }
       this.filtredData = filtredData;
-      if (filtredData !== undefined && filtredData.length !== 0) {
+      if (filtredData !== undefined) {
         this.mainPage.draw(filtredData);
         this.filter.start(data, filtredData, this.allFilters);
         this.filter.filter(this.allFilters);
