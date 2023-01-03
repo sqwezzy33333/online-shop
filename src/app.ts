@@ -9,6 +9,7 @@ import { Sort } from './components/sort/sort';
 import { AllFiltersType } from './types/types';
 import { allFilters } from './components/forQueryParam/objOfQueryParam';
 import { Search } from './components/search/search';
+import { copyLink } from './components/copyLink/copyLink';
 
 class App {
   mainPage: MainPage;
@@ -19,6 +20,7 @@ class App {
   sort: Sort;
   data: IProduct[];
   search: Search;
+  copyLink: copyLink;
 
   constructor() {
     this.loader = new Loader('assets/data/data.json');
@@ -27,6 +29,7 @@ class App {
     this.filtredData = [];
     this.sort = new Sort();
     this.search = new Search();
+    this.copyLink = new copyLink();
     this.allFilters = allFilters;
     this.data = [];
   }
@@ -49,6 +52,7 @@ class App {
     await this.mainPage.draw(data);
     await this.sort.addSortEventListeners();
     await this.search.addSearchEventListeners();
+    await this.copyLink.addEventListenerToCopyBtn();
     this.filter.filter();
   }
 
