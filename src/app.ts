@@ -8,6 +8,8 @@ import { IProduct } from './types/types';
 import { Sort } from './components/sort/sort';
 import { AllFiltersType } from './types/types';
 import { allFilters } from './components/forQueryParam/objOfQueryParam';
+import { Search } from './components/search/search';
+import { copyLink } from './components/copyLink/copyLink';
 
 class App {
   mainPage: MainPage;
@@ -17,6 +19,8 @@ class App {
   allFilters: AllFiltersType;
   sort: Sort;
   data: IProduct[];
+  search: Search;
+  copyLink: copyLink;
 
   constructor() {
     this.loader = new Loader('assets/data/data.json');
@@ -24,6 +28,8 @@ class App {
     this.mainPage = new MainPage();
     this.filtredData = [];
     this.sort = new Sort();
+    this.search = new Search();
+    this.copyLink = new copyLink();
     this.allFilters = allFilters;
     this.data = [];
   }
@@ -45,27 +51,28 @@ class App {
     await this.filter.start(data, this.filtredData);
     await this.mainPage.draw(data);
     await this.sort.addSortEventListeners();
+    await this.search.addSearchEventListeners();
+    await this.copyLink.addEventListenerToCopyBtn();
     this.filter.filter();
   }
 
   async render(): Promise<void> {
     const data: IProduct[] = await this.loader.load();
     let filtredData: IProduct[] = data;
-    window.addEventListener('popstate', async (event) => {
+    window.addEventListener('popstate', (event) => {
       if (event.state.category !== '') {
         filtredData = this.filter.filterArrayByCategory(data, event.state.category);
       } else filtredData = data;
-      
       if (event.state.type === '') {
         filtredData = this.sort.sort('By popularity(Ascending)', filtredData);
       } else filtredData = this.sort.sort(event.state.type, filtredData);
-
-      if (event.state.type !== '' && this.filtredData.length > 0) {
+      if (event.state.type !== '' && this.filtredData.length > 0 && event.state.category !== '') {
         event.state.category = localStorage.getItem('category');
         filtredData = this.filter.filterArrayByCategory(this.data, event.state.category);
         filtredData = this.sort.sort(event.state.type, filtredData);
       }
-      if (event.state.type !== '' && filtredData.length === 0) filtredData = data;
+      if(event.state.search !== '') filtredData = this.search.searchProducts(filtredData, event.state.search);
+      if (filtredData.length === 0 && event.state.search === '') filtredData = data;
       this.mainPage.draw(filtredData);
       this.filter.start(this.data, filtredData, event.state);
       this.filter.filter(event.state);
@@ -87,19 +94,18 @@ class App {
         '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
       );
       localStorage.setItem('category', paramsObject.category);
-      filtredData = this.filterByCategory(paramsObject.category, data, paramsObject);
-      if (paramsObject.type) {
+      filtredData = data;
+      if (paramsObject.category !== '') {
+        filtredData = this.filterByCategory(paramsObject.category, data, paramsObject);
+      }
+      if (paramsObject.type !== '') {
         filtredData = this.sort.sort(paramsObject.type, filtredData);
       }
+      if(paramsObject.search !== ''){
+        filtredData = this.search.searchProducts(filtredData, paramsObject.search);
+      }
       this.filtredData = filtredData;
-      if (filtredData !== undefined && filtredData.length !== 0) {
-        // if(paramsObject.type !== ''){
-        //   filtredData = await this.sort.sort(paramsObject.type, filtredData) as IProduct[];
-        // }
-        // else {
-        //   const startTypeSort: string = 'By popularity(Ascending)';
-        //   filtredData = await this.sort.sort(startTypeSort, filtredData) as IProduct[];
-        // }
+      if (filtredData !== undefined) {
         this.mainPage.draw(filtredData);
         this.filter.start(data, filtredData, this.allFilters);
         this.filter.filter(this.allFilters);
