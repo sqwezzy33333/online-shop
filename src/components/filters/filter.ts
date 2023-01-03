@@ -1,18 +1,23 @@
 import { FilterCategory } from './filterCategory';
 import { IProduct, AllFiltersType } from '../../types/types';
+import { FilterBrand } from '../filters/filterByBrand';
 
 export class Filter {
   filterCategory: FilterCategory;
+  filterBrand: FilterBrand;
   constructor() {
     this.filterCategory = new FilterCategory();
+    this.filterBrand = new FilterBrand();
   }
   async start(data: IProduct[], filtredData?: IProduct[], allFilters?:AllFiltersType) {
     this.filterCategory.drawFilter(data, filtredData);
+    this.filterBrand.drawFilter(data, filtredData);
     this.filterCategory.drawChekedInput(allFilters);
-    
+    this.filterBrand.drawChekedInput(allFilters);
   }
   filter(allFiltersOnload?: AllFiltersType) {
     this.filterCategory.checkFilter(allFiltersOnload);
+    this.filterBrand.checkFilter(allFiltersOnload)
     this.filterCategory.openAllFilters();
   }
   filterArrayByCategory(data: IProduct[], eventStateCategory: string): IProduct[] {
@@ -32,5 +37,24 @@ export class Filter {
       return filtredArrayOfProd;
     }
     return data;
+  }
+  filterArrayByBrand(data: IProduct[], eventStateBrand: string): IProduct[] {
+    if (eventStateBrand !== '') {
+      const filterBrandArr: string[] = eventStateBrand.split('%2C').filter((el: string) => {
+        return el !== '';
+      });
+      console.log(filterBrandArr)
+      const filtredArrayOfProd = data.filter((item) => {
+        let haveItemBrand: boolean = false;
+        for (let i = 0; i < filterBrandArr.length; i++) {
+          if (item.brand === filterBrandArr[i]) {
+            haveItemBrand = true;
+          }
+        }
+        if (haveItemBrand) return true;
+      });
+      return filtredArrayOfProd;
+    } else return data;
+    
   }
 }
