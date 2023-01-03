@@ -46,7 +46,6 @@ export class FilterCategory {
       const inputRow = document.createElement('div') as HTMLElement;
       inputRow.className = 'filters__input-row';
       inputRow.classList.add('filters__input-row-category');
-
       if (filtredData !== undefined && filtredData.length < 1) {
         counter = 5;
       } else if (localStorage.getItem('category') === '') {
@@ -73,7 +72,6 @@ export class FilterCategory {
           }
         });
       }
-
       inputRow.innerHTML = `
                             <input type="checkbox" id="${category}" name='category'>
                             <label for="${category}">${category}
@@ -188,5 +186,4 @@ export class FilterCategory {
       }
     });
   }
-  
 }

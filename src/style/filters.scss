@@ -13,6 +13,7 @@
     overflow: hidden;
     border-right: 2px solid #dc092e;
     padding-right: 5px;
+    margin-bottom: 25px;
   }
   &__title{
     background-color: #dc092e;
@@ -45,6 +46,7 @@
       cursor: pointer;
       display: inline-block;
       padding: 2px 6px;
+      font-weight: 500;
     }
   }
   &__counter{
@@ -64,4 +66,7 @@
 ._active{
   color: black;
   border: 2px solid black;
+}
+.row-null{
+  //background-color: aqua;
 }
