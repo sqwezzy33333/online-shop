@@ -62,16 +62,24 @@ class App {
     window.addEventListener('popstate', (event) => {
       if (event.state.category !== '') {
         filtredData = this.filter.filterArrayByCategory(data, event.state.category);
+        filtredData = this.filter.filterArrayByBrand(filtredData, event.state.brand);
       } else filtredData = data;
+      
+      if (event.state.brand !== '') {
+        filtredData = this.filter.filterArrayByBrand(data, event.state.brand);
+        filtredData = this.sort.sort(event.state.type, filtredData);
+      }
       if (event.state.type === '') {
         filtredData = this.sort.sort('By popularity(Ascending)', filtredData);
       } else filtredData = this.sort.sort(event.state.type, filtredData);
+
       if (event.state.type !== '' && this.filtredData.length > 0 && event.state.category !== '') {
         event.state.category = localStorage.getItem('category');
         filtredData = this.filter.filterArrayByCategory(this.data, event.state.category);
         filtredData = this.sort.sort(event.state.type, filtredData);
       }
-      if(event.state.search !== '') filtredData = this.search.searchProducts(filtredData, event.state.search);
+      
+      if (event.state.search !== '') filtredData = this.search.searchProducts(filtredData, event.state.search);
       if (filtredData.length === 0 && event.state.search === '') filtredData = data;
       this.mainPage.draw(filtredData);
       this.filter.start(this.data, filtredData, event.state);
@@ -96,12 +104,18 @@ class App {
       localStorage.setItem('category', paramsObject.category);
       filtredData = data;
       if (paramsObject.category !== '') {
-        filtredData = this.filterByCategory(paramsObject.category, data, paramsObject);
+        filtredData = this.filterByCategoryOnload(paramsObject.category, data, paramsObject);
+      }
+      if (paramsObject.brand !== '') {
+        filtredData = this.filter.filterArrayByBrand(data,paramsObject.brand);
+      }
+      if (paramsObject.category !== '') {
+        filtredData = this.filter.filterArrayByBrand(filtredData, paramsObject.brand);
       }
       if (paramsObject.type !== '') {
         filtredData = this.sort.sort(paramsObject.type, filtredData);
       }
-      if(paramsObject.search !== ''){
+      if (paramsObject.search !== '') {
         filtredData = this.search.searchProducts(filtredData, paramsObject.search);
       }
       this.filtredData = filtredData;
@@ -123,7 +137,7 @@ class App {
     });
   }
 
-  filterByCategory(category: string, data: IProduct[], paramsObject: AllFiltersType): IProduct[] {
+  filterByCategoryOnload(category: string, data: IProduct[], paramsObject: AllFiltersType): IProduct[] {
     if (category !== undefined) {
       let categorySerch: string[] = location.search.split('&br');
       categorySerch = categorySerch[0].split('ory=');
