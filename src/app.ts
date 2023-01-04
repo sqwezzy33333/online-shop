@@ -10,6 +10,7 @@ import { AllFiltersType } from './types/types';
 import { allFilters } from './components/forQueryParam/objOfQueryParam';
 import { Search } from './components/search/search';
 import { copyLink } from './components/copyLink/copyLink';
+import { typeOfView } from './components/typeOfView/typeOfView';
 
 class App {
   mainPage: MainPage;
@@ -21,6 +22,7 @@ class App {
   data: IProduct[];
   search: Search;
   copyLink: copyLink;
+  typeOfView: typeOfView;
 
   constructor() {
     this.loader = new Loader('assets/data/data.json');
@@ -30,6 +32,7 @@ class App {
     this.sort = new Sort();
     this.search = new Search();
     this.copyLink = new copyLink();
+    this.typeOfView = new typeOfView();
     this.allFilters = allFilters;
     this.data = [];
   }
@@ -53,6 +56,7 @@ class App {
     await this.sort.addSortEventListeners();
     await this.search.addSearchEventListeners();
     await this.copyLink.addEventListenerToCopyBtn();
+    await this.typeOfView.addEventListenerButtonView();
     this.filter.filter();
   }
 
