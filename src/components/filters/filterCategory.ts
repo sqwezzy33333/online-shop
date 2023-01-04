@@ -1,4 +1,5 @@
 import { IProduct, AllFiltersType } from '../../types/types';
+import { syncURL } from '../forQueryParam/forQueryParam';
 
 export class FilterCategory {
   uploadFilter(): void {
@@ -67,7 +68,6 @@ export class FilterCategory {
                             <label for="${category}">${category}
                             </label><span class="filters__counter">${counter}/5</span>`;
       if (counter === 0) {
-        console.log(inputRow);
         inputRow.classList.add('row-null');
       }
       form?.append(inputRow);
@@ -77,21 +77,6 @@ export class FilterCategory {
 
   checkFilter(allFiltersOnload?: AllFiltersType): void {
     const filterRow = document.querySelectorAll('.filters__input-row-category');
-    function transformToURLParams(filters: AllFiltersType) {
-      const query = Object.entries(filters)
-        .map(([key, value]) => {
-          return `${key}=${value}`;
-        })
-        .join('&');
-      return `?${query}`;
-    }
-    function syncURL(filters: AllFiltersType) {
-      const path = document.location.pathname;
-      const query = transformToURLParams(filters);
-      window.history.pushState(filters, '', `${path}${query}`);
-      window.history.pushState(filters, '', `${path}${query}`);
-      history.back();
-    }
     filterRow.forEach((item) => {
       const input = item.children[0] as HTMLInputElement;
       input.addEventListener('change', function () {

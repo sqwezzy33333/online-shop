@@ -19,4 +19,5 @@ export type AllFiltersType = {
   stock: number;
   search: string;
   type: string;
+  view: string;
 };
