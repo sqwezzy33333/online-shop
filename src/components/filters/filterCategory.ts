@@ -68,7 +68,6 @@ export class FilterCategory {
                             <label for="${category}">${category}
                             </label><span class="filters__counter">${counter}/5</span>`;
       if (counter === 0) {
-        console.log(inputRow);
         inputRow.classList.add('row-null');
       }
       form?.append(inputRow);
