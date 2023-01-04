@@ -1,5 +1,5 @@
-import { allFilters } from '../forQueryParam/objOfQueryParam';
-import { AllFiltersType, IProduct } from '../../types/types';
+import { allFilters, syncURL } from '../forQueryParam/forQueryParam';
+import { IProduct } from '../../types/types';
 export class Sort {
     sortBlock: HTMLSelectElement;
 
@@ -140,20 +140,4 @@ export class Sort {
         }
         return arrayProducts;
     }
-}
-
-function transformToURLParams(filters: AllFiltersType) {
-    const query = Object.entries(filters)
-        .map(([key, value]) => {
-        return `${key}=${value}`;
-        })
-        .join('&');
-    return `?${query}`;
-}
-function syncURL(filters: AllFiltersType) {
-    const path = document.location.pathname;
-    const query = transformToURLParams(filters);
-    window.history.pushState(filters, '', `${path}${query}`);
-    window.history.pushState(filters, '', `${path}${query}`);
-    history.back();
 }

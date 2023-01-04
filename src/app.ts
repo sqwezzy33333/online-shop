@@ -7,7 +7,7 @@ import { Filter } from './components/filters/filter';
 import { IProduct } from './types/types';
 import { Sort } from './components/sort/sort';
 import { AllFiltersType } from './types/types';
-import { allFilters } from './components/forQueryParam/objOfQueryParam';
+import { allFilters } from './components/forQueryParam/forQueryParam';
 import { Search } from './components/search/search';
 import { copyLink } from './components/copyLink/copyLink';
 import { typeOfView } from './components/typeOfView/typeOfView';
