@@ -7,6 +7,7 @@ export class typeOfView {
     }
 
     async addEventListenerButtonView(){
+        this.checkType();
         this.buttonView.addEventListener('click', function(e) {
             let typeView: string;
             const btn = (document.querySelector('.typeView__icon') as HTMLButtonElement);
@@ -37,5 +38,30 @@ export class typeOfView {
                 syncURL(allFilters);
             }
         });
+    }
+
+    checkType(){
+        const searchClear = location.search.split('');
+        searchClear.shift();
+        const queryParamsString = searchClear.join('').toString();
+        let paramsObject;
+        if(queryParamsString !== '') {
+            paramsObject = JSON.parse(
+                '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
+            );
+        }
+        if(paramsObject !== undefined){
+            if(paramsObject.view !== undefined){
+                if(paramsObject.view === 'lines'){
+                    this.buttonView.innerHTML = '⊞';
+                }
+                else {
+                    this.buttonView.innerHTML = '≡';
+                }
+            }
+        }
+        else {
+            this.buttonView.innerHTML = '≡';
+        }
     }
 }
