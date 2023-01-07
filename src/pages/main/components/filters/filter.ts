@@ -1,5 +1,5 @@
 import { FilterCategory } from './filterCategory';
-import { IProduct, AllFiltersType } from '../../types/types';
+import { IProduct, AllFiltersType } from '../../../types/types';
 import { FilterBrand } from '../filters/filterByBrand';
 import { FilterPrice } from './filterByPrice';
 import { FilterStock } from './filterByStock';
