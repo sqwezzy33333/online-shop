@@ -15,7 +15,7 @@ export class Filter {
     this.filterPrice = new FilterPrice();
     this.filterStock = new FilterStock();
   }
-  async start(data: IProduct[], filtredData?: IProduct[], allFilters?:AllFiltersType) {
+  async start(data: IProduct[], filtredData?: IProduct[], allFilters?: AllFiltersType) {
     this.filterCategory.drawFilter(data, filtredData);
     this.filterBrand.drawFilter(data, filtredData);
     this.filterPrice.drawFilter();
@@ -25,7 +25,9 @@ export class Filter {
   }
   filter(allFiltersOnload?: AllFiltersType) {
     this.filterCategory.checkFilter(allFiltersOnload);
-    this.filterBrand.checkFilter(allFiltersOnload)
+    this.filterBrand.checkFilter(allFiltersOnload);
+    this.filterStock.checkFilter();
+    this.filterPrice.checkFilter();
     this.filterCategory.openAllFilters();
   }
   filterArrayByCategory(data: IProduct[], eventStateCategory: string): IProduct[] {
@@ -51,18 +53,57 @@ export class Filter {
       const filterBrandArr: string[] = eventStateBrand.split('%2C').filter((el: string) => {
         return el !== '';
       });
-      console.log(filterBrandArr)
+      console.log(filterBrandArr);
       const filtredArrayOfProd = data.filter((item) => {
         let haveItemBrand: boolean = false;
         for (let i = 0; i < filterBrandArr.length; i++) {
-          if (item.brand === filterBrandArr[i]) {
-            haveItemBrand = true;
-          }
+          if (item.brand === filterBrandArr[i]) haveItemBrand = true;
         }
         if (haveItemBrand) return true;
       });
       return filtredArrayOfProd;
     } else return data;
-    
+  }
+  filterByPrice(data: IProduct[], eventStatePrice: string): IProduct[] {
+    if (eventStatePrice) {
+      const filterBrandArr: string[] = eventStatePrice
+        .split('%2C')
+        .toString()
+        .split(',')
+        .filter((el: string) => {
+          return el !== '';
+        });
+      const filtredArrayOfProd = data.filter((item) => {
+        let isItemTrue: boolean = false;
+        if (item.price > Number(filterBrandArr[0]) && item.price < Number(filterBrandArr[1])) isItemTrue = true;
+        if (isItemTrue) {
+          return true;
+        }
+      });
+      console.log(filtredArrayOfProd);
+      if (filterBrandArr.length) return filtredArrayOfProd;
+    }
+    return data;
+  }
+  filterByStock(data: IProduct[], eventStateStock: string): IProduct[] {
+    if (eventStateStock) {
+      const filterBrandArr: string[] = eventStateStock
+        .split('%2C')
+        .toString()
+        .split(',')
+        .filter((el: string) => {
+          return el !== '';
+        });
+      const filtredArrayOfProd = data.filter((item) => {
+        let isItemTrue: boolean = false;
+        if (item.stock > Number(filterBrandArr[0]) && item.stock < Number(filterBrandArr[1])) isItemTrue = true;
+        if (isItemTrue) {
+          return true;
+        }
+      });
+      console.log(filtredArrayOfProd)
+      if (filterBrandArr.length) return filtredArrayOfProd;
+    }
+    return data;
   }
 }

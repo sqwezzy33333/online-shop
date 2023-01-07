@@ -1,10 +1,12 @@
 import { AllFiltersType } from '../../types/types';
+import { allFilters, syncURL } from '../forQueryParam/forQueryParam';
 import 'nouislider/dist/nouislider.css';
 import '../../style/range.scss';
 const wNumb = require('wnumb');
 import * as noUiSlider from 'nouislider';
 
 export class FilterPrice {
+  priceSlider = document.querySelector('.filters__range-wrapper') as noUiSlider.target;
   drawFilter() {
     const filters = document.querySelector('.filters') as HTMLElement;
     const filter = document.createElement('div') as HTMLElement;
@@ -20,6 +22,7 @@ export class FilterPrice {
     <span class="range-counter" id="right-stock">${rightValue}$</span>`;
 
     const rangeWrapper = document.createElement('div') as noUiSlider.target;
+    this.priceSlider = rangeWrapper;
     rangeWrapper.className = 'filters__range-wrapper';
     if (rangeWrapper) {
       noUiSlider.create(rangeWrapper, {
@@ -55,5 +58,20 @@ export class FilterPrice {
     filter.append(rangeWrapper);
     filter.append(counters);
     filters.append(filter);
+  }
+  checkFilter(allFiltersOnload?: AllFiltersType) {
+    this.priceSlider?.noUiSlider?.on('set', () => {
+      const filterValues = [this.priceSlider.noUiSlider?.get()][0] as number[];
+      let leftCount: string | number = filterValues[0];
+      let rightCount: string | number = filterValues[1];
+      const searchClear = location.search.split('');
+      searchClear.shift();
+      const queryParamsString = searchClear.join('').toString();
+      let paramsObject = JSON.parse(
+        '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
+      );
+      paramsObject.price = `${leftCount},${rightCount}`;
+      syncURL(paramsObject);
+    });
   }
 }
