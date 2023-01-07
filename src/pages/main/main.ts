@@ -136,8 +136,8 @@ export class Main {
   async start(): Promise<void> {
     const data = await this.loader.load();
     if (
-      window.location.href !== 'http://localhost:4200/' &&
-      window.location.href !== 'http://localhost:4200/index.html'
+      window.location.href !== `http://localhost:4200/` &&
+      window.location.href !== `http://localhost:4200/index.html`
     ) {
       const searchClear = location.search.split('');
       searchClear.shift();
