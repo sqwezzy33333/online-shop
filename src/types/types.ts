@@ -15,8 +15,8 @@ export interface IProduct {
 export type AllFiltersType = {
   category: string;
   brand: string;
-  price: number;
-  stock: number;
+  price: string;
+  stock: string;
   search: string;
   type: string;
   view: string;
