@@ -47,6 +47,17 @@ class App {
       const hash = window.location.hash.slice(1);
       this.renderNewPage(hash);
     });
+class App {
+  mainPage : Main;
+  bodyPage: HTMLElement;
+  constructor(){
+    this.mainPage = new Main('main-page');
+    this.bodyPage = document.body;
+  }
+
+  run(){
+    this.bodyPage.innerHTML = '';
+    this.mainPage.init();
   }
 }
 
