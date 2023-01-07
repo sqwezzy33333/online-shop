@@ -1,6 +1,6 @@
-import { IProduct } from '../types/types';
+import { IProduct } from '../../../types/types';
 
-export class MainPage {
+export class DrawMain {
   async draw(data: IProduct[]) {
     const products: IProduct[] = data;
     let typeView = 'blocks';

@@ -1,15 +1,12 @@
-import { AllFiltersType, IProduct } from '../../types/types';
+import { IProduct } from '../../../types/types';
 import { allFilters, syncURL } from '../forQueryParam/forQueryParam';
 
 export class Search {
-    searchInput: HTMLSelectElement;
-    constructor(){
-        this.searchInput = document.querySelector('.search__input') as HTMLSelectElement;
-    }
 
     async addSearchEventListeners(): Promise<void>{ 
-        this.updateSearch();
-        this.searchInput.addEventListener('input', ()=>{
+        const searchInput = document.querySelector('.search__input') as HTMLSelectElement;
+        this.updateSearch(searchInput);
+        searchInput.addEventListener('input', ()=>{
             const searchClear = location.search.split('');
             searchClear.shift();
             const queryParamsString = searchClear.join('').toString();
@@ -21,14 +18,14 @@ export class Search {
             }
             if(paramsObject !== undefined){
                 if(paramsObject.search !== undefined){
-                    paramsObject.search = this.searchInput.value;
+                    paramsObject.search = searchInput.value;
                     syncURL(paramsObject);
                 }
             }
         })
     }
 
-    updateSearch(){
+    updateSearch(searchInput: HTMLSelectElement){
         const searchClear = location.search.split('');
         searchClear.shift();
         const queryParamsString = searchClear.join('').toString();
@@ -40,7 +37,7 @@ export class Search {
         }
         if(paramsObject !== undefined){
             if(paramsObject.search !== undefined){
-                this.searchInput.value = paramsObject.search;
+                searchInput.value = paramsObject.search;
                 syncURL(paramsObject);
             }
         }

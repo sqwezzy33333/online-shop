@@ -1,4 +1,4 @@
-import { IProduct, AllFiltersType } from '../../types/types';
+import { IProduct, AllFiltersType } from '../../../types/types';
 import { syncURL } from '../forQueryParam/forQueryParam';
 
 export class FilterCategory {

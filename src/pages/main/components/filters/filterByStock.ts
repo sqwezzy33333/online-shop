@@ -1,4 +1,4 @@
-import { AllFiltersType } from '../../types/types';
+import { AllFiltersType } from '../../../types/types';
 import { allFilters, syncURL } from '../forQueryParam/forQueryParam';
 import 'nouislider/dist/nouislider.css';
 import '../../style/range.scss';
@@ -41,8 +41,8 @@ export class FilterStock {
         }),
       });
       rangeWrapper.noUiSlider?.on('update', function (values) {
-        let leftValue: string | number = values[0];
-        let rightValue: string | number = values[1];
+        const leftValue: string | number = values[0];
+        const rightValue: string | number = values[1];
 
         localStorage.setItem('leftStockValue', leftValue.toString());
         localStorage.setItem('rightStockValue', rightValue.toString());

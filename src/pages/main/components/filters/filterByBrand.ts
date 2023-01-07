@@ -1,5 +1,5 @@
-import { IProduct } from '../../types/types';
-import { AllFiltersType } from '../../types/types';
+import { IProduct } from '../../../types/types';
+import { AllFiltersType } from '../../../types/types';
 import { syncURL } from '../forQueryParam/forQueryParam';
 
 export class FilterBrand {

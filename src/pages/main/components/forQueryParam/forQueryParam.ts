@@ -1,4 +1,4 @@
-import { AllFiltersType } from '../../types/types';
+import { AllFiltersType } from '../../../types/types';
 
 export const allFilters: AllFiltersType = {
   category: '',
