@@ -30,11 +30,13 @@ export class FilterCategory {
     form.className = 'form';
     btnShowAll.className = 'filters__btn';
     btnShowAll.innerHTML = 'Show all';
+
     if (localStorage.getItem('showAllCategories') === 'true') {
       filter.style.height = 'auto';
       btnShowAll.classList.toggle('_active');
       localStorage.setItem('showAllCategories', 'true');
     }
+
     filter.append(title);
     filter.append(btnShowAll);
     filter.append(form);
@@ -44,6 +46,7 @@ export class FilterCategory {
       const inputRow = document.createElement('div') as HTMLElement;
       inputRow.className = 'filters__input-row';
       inputRow.classList.add('filters__input-row-category');
+
       if (filtredData !== undefined && filtredData.length < 1) {
         counter = 5;
       } else if (localStorage.getItem('category') === '') {
@@ -55,7 +58,14 @@ export class FilterCategory {
           }
         });
       }
-      if (localStorage.getItem('brand') !== '') {
+
+      if (
+        localStorage.getItem('brand') ||
+        localStorage.getItem('rightPriceValue') !== '' ||
+        localStorage.getItem('leftPriceValue') !== '' ||
+        localStorage.getItem('leftStockValue') !== '' ||
+        localStorage.getItem('rightStockValue') !== ''
+      ) {
         counter = 0;
         filtredData?.forEach((el) => {
           if (el.category === category) {
@@ -63,12 +73,26 @@ export class FilterCategory {
           }
         });
       }
+
       inputRow.innerHTML = `
                             <input type="checkbox" id="${category}" name='category'>
                             <label for="${category}">${category}
                             </label><span class="filters__counter">${counter}/5</span>`;
       if (counter === 0) {
         inputRow.classList.add('row-null');
+      }
+
+      if (
+        localStorage.getItem('brand') !== '' &&
+        localStorage.getItem('brand') !== null &&
+        inputRow.classList.contains('row-null')
+      ) {
+        console.log(localStorage.getItem('brand') !== '' || localStorage.getItem('brand') !== null);
+        filtredData?.forEach((el) => {
+          if (el.category !== category) {
+            inputRow.classList.add('row-disable');
+          }
+        });
       }
       form?.append(inputRow);
     });

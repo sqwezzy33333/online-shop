@@ -67,10 +67,21 @@ export class FilterBrand {
           }
         });
       }
+
       inputRow.innerHTML = `
                             <input type="checkbox" id="${brand}" name='brand'>
                             <label for="${brand}">${brand}
                             </label><span class="filters__counter">${counter}/${allCount}</span>`;
+      if (counter === 0) {
+        inputRow.classList.add('row-null');
+      }
+      if (localStorage.getItem('category') !== '' && inputRow.classList.contains('row-null')) {
+        filtredData?.forEach((el) => {
+          if (el.brand !== brand) {
+            inputRow.classList.add('row-disable');
+          }
+        });
+      }
       form?.append(inputRow);
     });
     filter.append(form);
@@ -97,6 +108,7 @@ export class FilterBrand {
       });
     }
   }
+
   checkFilter(allFiltersOnload?: AllFiltersType): void {
     const filterRow = document.querySelectorAll('.filters__input-row-brand');
     filterRow.forEach((item) => {

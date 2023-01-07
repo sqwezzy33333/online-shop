@@ -18,7 +18,7 @@ export class FilterStock {
     if (localStorage.getItem('leftStockValue') !== null) leftValue = localStorage.getItem('leftStockValue');
     if (localStorage.getItem('rightStockValue') !== null) rightValue = localStorage.getItem('rightStockValue');
     counters.innerHTML = `<span class="range-counter" id="left-stock">${leftValue}</span>
-    <span class="range-counter" id="right-stock">{rightValue}$</span>`;
+    <span class="range-counter" id="right-stock">${rightValue}</span>`;
 
     const rangeWrapper = document.createElement('div') as noUiSlider.target;
     this.stockFilterSlider = rangeWrapper;
@@ -47,8 +47,8 @@ export class FilterStock {
         localStorage.setItem('leftStockValue', leftValue.toString());
         localStorage.setItem('rightStockValue', rightValue.toString());
 
-        counters.innerHTML = `<span class="range-counter" id="left-stock">${leftValue}$</span>
-                          <span class="range-counter" id="right-stock">${rightValue}$</span>`;
+        counters.innerHTML = `<span class="range-counter" id="left-stock">${leftValue}</span>
+                          <span class="range-counter" id="right-stock">${rightValue}</span>`;
       });
     }
     filter.className = 'filters__filter';
@@ -61,19 +61,22 @@ export class FilterStock {
     filters.append(filter);
   }
   checkFilter(allFiltersOnload?: AllFiltersType) {
+    const searchClear = location.search.split('');
+    searchClear.shift();
+    const queryParamsString = searchClear.join('').toString();
+    let paramsObject = JSON.parse(
+      '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
+    );
+    let minMaxPrice: string[] = paramsObject.stock.split(',');
+    localStorage.setItem('leftStockValue', minMaxPrice[0]);
+    localStorage.setItem('rightStockValue', minMaxPrice[1]);
+
     this.stockFilterSlider?.noUiSlider?.on('set', () => {
       const filterValues = [this.stockFilterSlider.noUiSlider?.get()][0] as number[];
       let leftCount: string | number = filterValues[0];
       let rightCount: string | number = filterValues[1];
-      const searchClear = location.search.split('');
-      searchClear.shift();
-      const queryParamsString = searchClear.join('').toString();
-      let paramsObject = JSON.parse(
-        '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
-      );
       paramsObject.stock = `${leftCount},${rightCount}`;
       syncURL(paramsObject);
-      console.log(paramsObject);
     });
   }
 }
