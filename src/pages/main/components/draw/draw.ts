@@ -64,6 +64,10 @@ export class DrawMain {
               </div>`;
         div.innerHTML = cart;
         catalog.appendChild(div);
+        div.addEventListener('click', ()=>{
+          location.hash = 'product-page';
+          console.log(location)
+        });
       }
     }
     else {

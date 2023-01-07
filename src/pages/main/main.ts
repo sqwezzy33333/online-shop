@@ -133,8 +133,8 @@ export class Main {
   async start(): Promise<void> {
     const data = await this.loader.load();
     if (
-      window.location.href !== 'http://localhost:4200/' &&
-      window.location.href !== 'http://localhost:4200/index.html'
+      window.location.href !== `http://localhost:4200/` &&
+      window.location.href !== `http://localhost:4200/index.html`
     ) {
       const searchClear = location.search.split('');
       searchClear.shift();
@@ -157,32 +157,34 @@ export class Main {
     const data: IProduct[] = await this.loader.load();
     let filtredData: IProduct[] = data;
     window.addEventListener('popstate', (event) => {
-      if (event.state.category) {
-        filtredData = this.filter.filterArrayByCategory(data, event.state.category);
-        filtredData = this.filter.filterArrayByBrand(filtredData, event.state.brand);
-      } else filtredData = data;
-
-      if (event.state.brand) {
-        filtredData = this.filter.filterArrayByBrand(data, event.state.brand);
-        filtredData = this.sort.sort(event.state.type, filtredData);
+      if(event.state !== null){
+        if (event.state.category) {
+          filtredData = this.filter.filterArrayByCategory(data, event.state.category);
+          filtredData = this.filter.filterArrayByBrand(filtredData, event.state.brand);
+        } else filtredData = data;
+  
+        if (event.state.brand) {
+          filtredData = this.filter.filterArrayByBrand(data, event.state.brand);
+          filtredData = this.sort.sort(event.state.type, filtredData);
+        }
+        if (event.state.type === '') {
+          filtredData = this.sort.sort('By popularity(Ascending)', filtredData);
+        } else filtredData = this.sort.sort(event.state.type, filtredData);
+  
+        if (event.state.price) filtredData = this.filter.filterByPrice(filtredData, event.state.price);
+        if (event.state.stock) filtredData = this.filter.filterByStock(filtredData, event.state.stock);
+        if (event.state.type && this.filtredData.length > 0 && event.state.category) {
+          event.state.category = localStorage.getItem('category');
+          filtredData = this.filter.filterArrayByCategory(this.data, event.state.category);
+          filtredData = this.sort.sort(event.state.type, filtredData);
+        }
+  
+        if (event.state.search) filtredData = this.search.searchProducts(filtredData, event.state.search);
+        if (filtredData.length === 0 && event.state.search === '') filtredData = data;
+        this.drawMain.draw(filtredData);
+        this.filter.start(this.data, filtredData, event.state);
+        this.filter.filter(event.state);
       }
-      if (event.state.type === '') {
-        filtredData = this.sort.sort('By popularity(Ascending)', filtredData);
-      } else filtredData = this.sort.sort(event.state.type, filtredData);
-
-      if (event.state.price) filtredData = this.filter.filterByPrice(filtredData, event.state.price);
-      if (event.state.stock) filtredData = this.filter.filterByStock(filtredData, event.state.stock);
-      if (event.state.type && this.filtredData.length > 0 && event.state.category) {
-        event.state.category = localStorage.getItem('category');
-        filtredData = this.filter.filterArrayByCategory(this.data, event.state.category);
-        filtredData = this.sort.sort(event.state.type, filtredData);
-      }
-
-      if (event.state.search) filtredData = this.search.searchProducts(filtredData, event.state.search);
-      if (filtredData.length === 0 && event.state.search === '') filtredData = data;
-      this.drawMain.draw(filtredData);
-      this.filter.start(this.data, filtredData, event.state);
-      this.filter.filter(event.state);
     });
   }
 
@@ -191,8 +193,8 @@ export class Main {
     this.data = data;
     let filtredData: IProduct[];
     if (
-      window.location.href !== 'http://localhost:4200/' &&
-      window.location.href !== 'http://localhost:4200/index.html'
+      window.location.href !== `http://localhost:4200/` &&
+      window.location.href !== `http://localhost:4200/index.html`
     ) {
       const searchClear = location.search.split('');
       searchClear.shift();
