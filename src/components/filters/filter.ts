@@ -1,17 +1,25 @@
 import { FilterCategory } from './filterCategory';
 import { IProduct, AllFiltersType } from '../../types/types';
 import { FilterBrand } from '../filters/filterByBrand';
+import { FilterPrice } from './filterByPrice';
+import { FilterStock } from './filterByStock';
 
 export class Filter {
   filterCategory: FilterCategory;
   filterBrand: FilterBrand;
+  filterPrice: FilterPrice;
+  filterStock: FilterStock;
   constructor() {
     this.filterCategory = new FilterCategory();
     this.filterBrand = new FilterBrand();
+    this.filterPrice = new FilterPrice();
+    this.filterStock = new FilterStock();
   }
   async start(data: IProduct[], filtredData?: IProduct[], allFilters?:AllFiltersType) {
     this.filterCategory.drawFilter(data, filtredData);
     this.filterBrand.drawFilter(data, filtredData);
+    this.filterPrice.drawFilter();
+    this.filterStock.drawFilter();
     this.filterCategory.drawChekedInput(allFilters);
     this.filterBrand.drawChekedInput(allFilters);
   }

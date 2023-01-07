@@ -21,7 +21,7 @@
     padding: 4px 8px;
     width: 90%;
     border-radius: 15px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
   }
   &__btn{
     font-size: 14px;
@@ -68,5 +68,33 @@
   border: 2px solid black;
 }
 .row-null{
-  //background-color: aqua;
+  color: rgb(156, 156, 156);
+}
+
+.counters{
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 8px 0px 0px;
+}
+.range-counter{
+  padding-top: 2px;
+  width: 50px;
+  height: 20px;
+  display: flex;
+  font-weight: 500;
+  font-size: 15px;
+  border: 1px solid #dc092e;
+  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+  color: #dc092e;
+  text-align: center;
+}
+
+.filters__price{
+  height: auto;
+}
+.filters__stock{
+  height: auto;
 }
