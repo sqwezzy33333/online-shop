@@ -73,8 +73,14 @@ export class FilterStock {
 
     this.stockFilterSlider?.noUiSlider?.on('set', () => {
       const filterValues = [this.stockFilterSlider.noUiSlider?.get()][0] as number[];
-      let leftCount: string | number = filterValues[0];
-      let rightCount: string | number = filterValues[1];
+      const leftCount: string | number = filterValues[0];
+      const rightCount: string | number = filterValues[1];
+      const searchClear = location.search.split('');
+      searchClear.shift();
+      const queryParamsString = searchClear.join('').toString();
+      const paramsObject = JSON.parse(
+        '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
+      );
       paramsObject.stock = `${leftCount},${rightCount}`;
       syncURL(paramsObject);
     });
