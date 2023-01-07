@@ -1,5 +1,5 @@
 import { FilterCategory } from './filterCategory';
-import { IProduct, AllFiltersType } from '../../types/types';
+import { IProduct, AllFiltersType } from '../../../types/types';
 import { FilterBrand } from '../filters/filterByBrand';
 import { FilterPrice } from './filterByPrice';
 import { FilterStock } from './filterByStock';
@@ -53,7 +53,6 @@ export class Filter {
       const filterBrandArr: string[] = eventStateBrand.split('%2C').filter((el: string) => {
         return el !== '';
       });
-      console.log(filterBrandArr);
       const filtredArrayOfProd = data.filter((item) => {
         let haveItemBrand: boolean = false;
         for (let i = 0; i < filterBrandArr.length; i++) {
@@ -80,7 +79,6 @@ export class Filter {
           return true;
         }
       });
-      console.log(filtredArrayOfProd);
       if (filterBrandArr.length) return filtredArrayOfProd;
     }
     return data;
@@ -101,7 +99,6 @@ export class Filter {
           return true;
         }
       });
-      console.log(filtredArrayOfProd)
       if (filterBrandArr.length) return filtredArrayOfProd;
     }
     return data;

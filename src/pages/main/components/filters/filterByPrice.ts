@@ -1,5 +1,5 @@
-import { AllFiltersType } from '../../types/types';
-import { allFilters, syncURL } from '../forQueryParam/forQueryParam';
+import { AllFiltersType } from '../../../types/types';
+import { syncURL } from '../forQueryParam/forQueryParam';
 import 'nouislider/dist/nouislider.css';
 import '../../style/range.scss';
 const wNumb = require('wnumb');
@@ -41,8 +41,8 @@ export class FilterPrice {
         }),
       });
       rangeWrapper.noUiSlider?.on('update', function (values) {
-        let leftValue: number | string = values[0];
-        let rightValue: number | string = values[1];
+        const leftValue: number | string = values[0];
+        const rightValue: number | string = values[1];
 
         localStorage.setItem('leftPriceValue', leftValue.toString());
         localStorage.setItem('rightPriceValue', rightValue.toString());
@@ -62,12 +62,12 @@ export class FilterPrice {
   checkFilter(allFiltersOnload?: AllFiltersType) {
     this.priceSlider?.noUiSlider?.on('set', () => {
       const filterValues = [this.priceSlider.noUiSlider?.get()][0] as number[];
-      let leftCount: string | number = filterValues[0];
-      let rightCount: string | number = filterValues[1];
+      const leftCount: string | number = filterValues[0];
+      const rightCount: string | number = filterValues[1];
       const searchClear = location.search.split('');
       searchClear.shift();
       const queryParamsString = searchClear.join('').toString();
-      let paramsObject = JSON.parse(
+      const paramsObject = JSON.parse(
         '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
       );
       paramsObject.price = `${leftCount},${rightCount}`;

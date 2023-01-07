@@ -1,8 +1,7 @@
-import { IProduct } from '../../types/types';
-import { AllFiltersType } from '../../types/types';
+import { IProduct, AllFiltersType } from '../../../types/types';
 import { syncURL } from '../forQueryParam/forQueryParam';
 
-export class FilterBrand {
+export class FilterCategory {
   uploadFilter(): void {
     const filters = document.querySelector('.filters') as HTMLElement;
     filters.innerHTML = '';
@@ -13,97 +12,76 @@ export class FilterBrand {
   }
 
   async drawFilter(data: IProduct[], filtredData?: IProduct[]): Promise<void> {
-    let brandsArray: string[] = data.map((item) => item.brand);
+    let categoryArray: string[] = data.map((item) => item.category);
     const filters = document.querySelector('.filters') as HTMLElement;
     const filter = document.createElement('div') as HTMLElement;
     const title = document.createElement('div') as HTMLElement;
     const btnShowAll = document.createElement('div') as HTMLElement;
     const form = document.createElement('form') as HTMLFormElement;
-    brandsArray = brandsArray.filter((element, index) => {
-      return brandsArray.indexOf(element) === index;
+    this.openAllFilters();
+    categoryArray = categoryArray.filter((element, index) => {
+      return categoryArray.indexOf(element) === index;
     });
+
+    this.uploadFilter();
+    filter.className = 'filters__filter';
     title.className = 'filters__title';
-    title.innerHTML = 'Brand';
+    title.innerHTML = 'Category';
     form.className = 'form';
     btnShowAll.className = 'filters__btn';
-    btnShowAll.classList.add('filters__btn-brand');
-    btnShowAll.id = 'brand-btn';
     btnShowAll.innerHTML = 'Show all';
-    if (localStorage.getItem('showAllBrands') === 'true') {
+    if (localStorage.getItem('showAllCategories') === 'true') {
       filter.style.height = 'auto';
       btnShowAll.classList.toggle('_active');
-      localStorage.setItem('showAllBrands', 'true');
+      localStorage.setItem('showAllCategories', 'true');
     }
-    filter.className = 'filters__filter';
-    filter.classList.add('filters__brand');
     filter.append(title);
     filter.append(btnShowAll);
+    filter.append(form);
 
-    brandsArray.forEach((brand) => {
+    categoryArray.forEach((category) => {
       let counter: number = 0;
-      let allCount: number = 0;
       const inputRow = document.createElement('div') as HTMLElement;
       inputRow.className = 'filters__input-row';
-      inputRow.classList.add('filters__input-row-brand');
-      data.forEach((el) => {
-        if (el.brand === brand) {
-          allCount++;
-        }
-      });
-
-      if (localStorage.getItem('brand') == null) counter = allCount;
-      if (localStorage.getItem('brand') !== null) {
+      inputRow.classList.add('filters__input-row-category');
+      if (filtredData !== undefined && filtredData.length < 1) {
+        counter = 5;
+      } else if (localStorage.getItem('category') === '') {
+        counter = 5;
+      } else if (localStorage.getItem('category') !== '') {
         filtredData?.forEach((el) => {
-          if (el.brand === brand) {
+          if (el.category === category) {
             counter++;
           }
         });
       }
-      if (localStorage.getItem('category') !== null) {
+      if (localStorage.getItem('brand') !== '') {
         counter = 0;
         filtredData?.forEach((el) => {
-          if (el.brand === brand) {
+          if (el.category === category) {
             counter++;
           }
         });
       }
       inputRow.innerHTML = `
-                            <input type="checkbox" id="${brand}" name='brand'>
-                            <label for="${brand}">${brand}
-                            </label><span class="filters__counter">${counter}/${allCount}</span>`;
+                            <input type="checkbox" id="${category}" name='category'>
+                            <label for="${category}">${category}
+                            </label><span class="filters__counter">${counter}/5</span>`;
+      if (counter === 0) {
+        inputRow.classList.add('row-null');
+      }
       form?.append(inputRow);
     });
-    filter.append(form);
-    filters.append(filter);
-    this.openAllFilters();
+    filters?.append(filter);
   }
 
-  drawChekedInput(allFiltersOnload?: AllFiltersType): void {
-    const filterRow = document.querySelectorAll('.filters__input-row-brand');
-    let arrayFromBrand;
-    if (allFiltersOnload?.brand !== '') {
-      arrayFromBrand = allFiltersOnload?.brand.split('%2C');
-      const filtredArrayOfBrand = arrayFromBrand?.filter((element) => {
-        return element !== '';
-      });
-      filterRow.forEach((item) => {
-        const input = item.children[0] as HTMLInputElement;
-        filtredArrayOfBrand?.forEach((el) => {
-          if (el === input.id) {
-            item.children[1].classList.toggle('cheked');
-            input.checked = true;
-          }
-        });
-      });
-    }
-  }
   checkFilter(allFiltersOnload?: AllFiltersType): void {
-    const filterRow = document.querySelectorAll('.filters__input-row-brand');
+    const filterRow = document.querySelectorAll('.filters__input-row-category');
     filterRow.forEach((item) => {
       const input = item.children[0] as HTMLInputElement;
       input.addEventListener('change', function () {
         if (input.checked) {
-          const localStorageBrand = localStorage.getItem('brand');
+          const localStorageCategory = localStorage.getItem('category');
           const searchClear = location.search.split('');
           searchClear.shift();
           const queryParamsString = searchClear.join('').toString();
@@ -114,13 +92,13 @@ export class FilterBrand {
             );
           }
           if (paramsObject !== undefined) {
-            if (localStorageBrand) {
-              paramsObject.brand = localStorageBrand;
+            if (localStorageCategory) {
+              paramsObject.category = localStorageCategory;
             }
-            if (paramsObject.brand.indexOf(input.id) === -1) {
-              paramsObject.brand += `%2C${input.id}`;
+            if (paramsObject.category.indexOf(input.id) === -1) {
+              paramsObject.category += `%2C${input.id}`;
             }
-            localStorage.setItem('brand', paramsObject.brand);
+            localStorage.setItem('category', paramsObject.category);
             syncURL(paramsObject);
             item.children[1].classList.toggle('cheked');
           }
@@ -135,17 +113,17 @@ export class FilterBrand {
             );
           }
           if (paramsObject !== undefined) {
-            let arrayFromBrand = paramsObject.brand.split('%2C');
+            let arrayFromCategory = paramsObject.category.split('%2C');
             if (allFiltersOnload !== undefined) {
-              arrayFromBrand = allFiltersOnload.brand.split('%2C');
+              arrayFromCategory = allFiltersOnload.category.split('%2C');
             }
-            const filtredArrayOfBrand = arrayFromBrand.filter((element: string) => {
+            const filtredArrayOfCategory = arrayFromCategory.filter((element: string) => {
               return element !== input.id && element !== '';
             });
-            paramsObject.brand = '%2C' + filtredArrayOfBrand.toString().replace(/,/g, '%2C');
-            if (paramsObject.brand === '%2C') paramsObject.brand = '';
+            paramsObject.category = '%2C' + filtredArrayOfCategory.toString().replace(/,/g, '%2C');
+            if (paramsObject.category === '%2C') paramsObject.category = '';
             syncURL(paramsObject);
-            localStorage.setItem('brand', paramsObject.brand);
+            localStorage.setItem('category', paramsObject.category);
             item.children[1].classList.toggle('cheked');
           }
         }
@@ -153,17 +131,37 @@ export class FilterBrand {
     });
   }
 
+  drawChekedInput(allFiltersOnload?: AllFiltersType): void {
+    const filterRow = document.querySelectorAll('.filters__input-row-category');
+    let arrayFromCategory;
+    if (allFiltersOnload?.category !== '') {
+      arrayFromCategory = allFiltersOnload?.category.split('%2C');
+      const filtredArrayOfCategory = arrayFromCategory?.filter((element) => {
+        return element !== '';
+      });
+      filterRow.forEach((item) => {
+        const input = item.children[0] as HTMLInputElement;
+        filtredArrayOfCategory?.forEach((el) => {
+          if (el === input.id) {
+            item.children[1].classList.toggle('cheked');
+            input.checked = true;
+          }
+        });
+      });
+    }
+  }
+
   openAllFilters() {
-    const btn = document.getElementById('brand-btn') as HTMLElement;
-    const filter = document.querySelector('.filters__brand') as HTMLElement;
+    const btn = document.querySelector('.filters__btn') as HTMLElement;
+    const filter = document.querySelector('.filters__filter') as HTMLElement;
     btn?.addEventListener('click', () => {
       btn.classList.toggle('_active');
       if (btn.classList.contains('_active')) {
         filter.style.height = 'auto';
-        localStorage.setItem('showAllBrands', 'true');
+        localStorage.setItem('showAllCategories', 'true');
       } else {
         filter.style.height = '180px';
-        localStorage.setItem('showAllBrands', 'false');
+        localStorage.setItem('showAllCategories', 'false');
       }
     });
   }
