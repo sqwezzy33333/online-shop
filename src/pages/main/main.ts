@@ -134,6 +134,7 @@ export class Main {
     const data = await this.loader.load();
     if (
 <<<<<<< HEAD
+<<<<<<< HEAD
       window.location.href !== `http://localhost:4200/` &&
       window.location.href !== `http://localhost:4200/index.html`
 =======
@@ -198,8 +199,8 @@ export class Main {
     this.data = data;
     let filtredData: IProduct[];
     if (
-      window.location.href !== 'http://localhost:4200/' &&
-      window.location.href !== 'http://localhost:4200/index.html'
+      window.location.href !== `http://localhost:4200/` &&
+      window.location.href !== `http://localhost:4200/index.html`
     ) {
       const searchClear = location.search.split('');
       searchClear.shift();
