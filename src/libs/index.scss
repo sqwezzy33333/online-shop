@@ -11,7 +11,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 body::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   background-color: #f9f9fd;
 }
@@ -30,7 +30,7 @@ body::-webkit-scrollbar-track {
 
 %tpclfontcart {
   margin: 0;
-  font-family: Helvetica,Arial,sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
   font-weight: 700;
   line-height: 20px;
 }
@@ -116,20 +116,20 @@ body {
   }
 }
 
-.main{
+.main {
   flex: 1 0 auto;
 
-  &__wrapper{
+  &__wrapper {
     display: flex;
     padding: 10px;
   }
 
-  &__aside{
-    flex: 0 1 25%;
+  &__aside {
+    flex: 0 0 25%;
     box-shadow: 0 2px 4px 0 rgb(0 0 0 / 10%);
   }
 
-  &__catalog{
+  &__catalog {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -139,14 +139,13 @@ body {
   }
 
   .catalog {
-
     &__panel {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
     }
-    
+
     .sort {
       align-self: flex-end;
       &__button {
@@ -155,13 +154,14 @@ body {
         display: flex;
         border-radius: 10px;
         background-color: transparent;
+        cursor: pointer;
       }
 
       &__text {
         @extend %tpclfontsize;
         font-size: 16px;
         &:before {
-          content: "\21C5";
+          content: '\21C5';
           font-size: 20px;
           margin-right: 5px;
         }
@@ -202,6 +202,7 @@ body {
         border-radius: 10px;
         padding: 20px;
         text-align: center;
+        cursor: pointer;
       }
     }
 
@@ -218,7 +219,6 @@ body {
     }
 
     .chooseList {
-        
       &__typeSort {
         font-family: 'DM Sans', sans-serif;
         font-size: 15px;
@@ -227,7 +227,7 @@ body {
         justify-content: flex-start;
         gap: 10px;
         margin-bottom: 3px;
-        label{
+        label {
           cursor: pointer;
           display: inline-block;
         }
@@ -285,8 +285,11 @@ body {
     }
 
     .product {
-
-      &__discount-wrap, &__rating-wrap, &__title-wrap, &__price-wrap, &__add-wrap{
+      &__discount-wrap,
+      &__rating-wrap,
+      &__title-wrap,
+      &__price-wrap,
+      &__add-wrap {
         align-self: flex-start;
       }
 
@@ -301,12 +304,12 @@ body {
         font-family: Helvetica, Arial, sans-serif;
       }
 
-      &__image img{
+      &__image img {
         width: 200px;
         height: 120px;
         object-fit: cover;
       }
-      
+
       &__rating {
         color: #ffb000;
         margin: 0px;
@@ -323,7 +326,6 @@ body {
       }
 
       .price {
-        
         &__old {
           @extend %tpclfontcart;
           font-size: 17px;
@@ -443,7 +445,6 @@ body {
         }
       }
     }
-
   }
 }
 
@@ -498,4 +499,21 @@ body {
       }
     }
   }
+}
+
+.clear-btn {
+  @extend %tpclfontsize;
+  font-size: 15px;
+  font-weight: 500;
+  border: 1px solid #111010;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+}
+._hover:hover{
+  color: red;
+  border-radius: 10px;
+  border: 1px  solid #d50438;
+  transition: all 0.4s ease;
 }

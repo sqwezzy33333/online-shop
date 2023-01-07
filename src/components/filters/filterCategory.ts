@@ -87,7 +87,6 @@ export class FilterCategory {
         localStorage.getItem('brand') !== null &&
         inputRow.classList.contains('row-null')
       ) {
-        console.log(localStorage.getItem('brand') !== '' || localStorage.getItem('brand') !== null);
         filtredData?.forEach((el) => {
           if (el.category !== category) {
             inputRow.classList.add('row-disable');
