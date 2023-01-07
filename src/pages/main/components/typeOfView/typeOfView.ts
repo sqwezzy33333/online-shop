@@ -1,14 +1,11 @@
 import { allFilters, syncURL } from "../forQueryParam/forQueryParam";
 
 export class typeOfView {
-    buttonView: HTMLSelectElement;
-    constructor(){
-        this.buttonView = document.querySelector('.typeView__icon') as HTMLSelectElement;
-    }
 
     async addEventListenerButtonView(){
-        this.checkType();
-        this.buttonView.addEventListener('click', function(e) {
+        const buttonView = document.querySelector('.typeView__icon') as HTMLSelectElement;
+        this.checkType(buttonView);
+        buttonView.addEventListener('click', function(e) {
             let typeView: string;
             const btn = (document.querySelector('.typeView__icon') as HTMLButtonElement);
             if(btn.innerHTML === '≡'){
@@ -40,7 +37,7 @@ export class typeOfView {
         });
     }
 
-    checkType(){
+    checkType(buttonView: HTMLSelectElement){
         const searchClear = location.search.split('');
         searchClear.shift();
         const queryParamsString = searchClear.join('').toString();
@@ -53,15 +50,15 @@ export class typeOfView {
         if(paramsObject !== undefined){
             if(paramsObject.view !== undefined){
                 if(paramsObject.view === 'lines'){
-                    this.buttonView.innerHTML = '⊞';
+                    buttonView.innerHTML = '⊞';
                 }
                 else {
-                    this.buttonView.innerHTML = '≡';
+                    buttonView.innerHTML = '≡';
                 }
             }
         }
         else {
-            this.buttonView.innerHTML = '≡';
+            buttonView.innerHTML = '≡';
         }
     }
 }
