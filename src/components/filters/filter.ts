@@ -53,7 +53,6 @@ export class Filter {
       const filterBrandArr: string[] = eventStateBrand.split('%2C').filter((el: string) => {
         return el !== '';
       });
-      console.log(filterBrandArr);
       const filtredArrayOfProd = data.filter((item) => {
         let haveItemBrand: boolean = false;
         for (let i = 0; i < filterBrandArr.length; i++) {
@@ -61,8 +60,9 @@ export class Filter {
         }
         if (haveItemBrand) return true;
       });
-      return filtredArrayOfProd;
-    } else return data;
+      if (this.filterArrayByBrand.length) return filtredArrayOfProd;
+    }
+    return data;
   }
   filterByPrice(data: IProduct[], eventStatePrice: string): IProduct[] {
     if (eventStatePrice) {
@@ -75,12 +75,11 @@ export class Filter {
         });
       const filtredArrayOfProd = data.filter((item) => {
         let isItemTrue: boolean = false;
-        if (item.price > Number(filterBrandArr[0]) && item.price < Number(filterBrandArr[1])) isItemTrue = true;
+        if (item.price >= Number(filterBrandArr[0]) && item.price <= Number(filterBrandArr[1])) isItemTrue = true;
         if (isItemTrue) {
           return true;
         }
       });
-      console.log(filtredArrayOfProd);
       if (filterBrandArr.length) return filtredArrayOfProd;
     }
     return data;
@@ -96,14 +95,27 @@ export class Filter {
         });
       const filtredArrayOfProd = data.filter((item) => {
         let isItemTrue: boolean = false;
-        if (item.stock > Number(filterBrandArr[0]) && item.stock < Number(filterBrandArr[1])) isItemTrue = true;
+        if (item.stock >= Number(filterBrandArr[0]) && item.stock <= Number(filterBrandArr[1])) isItemTrue = true;
         if (isItemTrue) {
           return true;
         }
       });
-      console.log(filtredArrayOfProd)
       if (filterBrandArr.length) return filtredArrayOfProd;
     }
     return data;
+  }
+  checkRangeFilters(array: IProduct[]):void{
+    let priceArray = array.map(x=>x.price);
+    let stockArray = array.map(x=>x.stock);
+
+    let maxPrice = Math.max(...priceArray);
+    let minPrice = Math.min(...priceArray);
+    let maxStock = Math.max(...stockArray);
+    let minStock = Math.min(...stockArray);
+
+    localStorage.setItem('leftPriceValue', minPrice.toString());
+    localStorage.setItem('rightPriceValue', maxPrice.toString());
+    localStorage.setItem('leftStockValue', minStock.toString());
+    localStorage.setItem('rightStockValue', maxStock.toString());
   }
 }

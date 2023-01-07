@@ -65,12 +65,13 @@ class App {
     let filtredData: IProduct[] = data;
     window.addEventListener('popstate', (event) => {
       if (event.state.category) {
+        console.log;
         filtredData = this.filter.filterArrayByCategory(data, event.state.category);
         filtredData = this.filter.filterArrayByBrand(filtredData, event.state.brand);
       } else filtredData = data;
 
       if (event.state.brand) {
-        filtredData = this.filter.filterArrayByBrand(data, event.state.brand);
+        filtredData = this.filter.filterArrayByBrand(filtredData, event.state.brand);
         filtredData = this.sort.sort(event.state.type, filtredData);
       }
       if (event.state.type === '') {
@@ -87,9 +88,11 @@ class App {
 
       if (event.state.search) filtredData = this.search.searchProducts(filtredData, event.state.search);
       if (filtredData.length === 0 && event.state.search === '') filtredData = data;
+      this.filter.checkRangeFilters(filtredData);
       this.mainPage.draw(filtredData);
       this.filter.start(this.data, filtredData, event.state);
       this.filter.filter(event.state);
+      
     });
   }
 
@@ -109,21 +112,13 @@ class App {
       );
       localStorage.setItem('category', paramsObject.category);
       filtredData = data;
-      if (paramsObject.category) {
-        filtredData = this.filterByCategoryOnload(paramsObject.category, data, paramsObject);
-      }
-      if (paramsObject.brand) {
-        filtredData = this.filter.filterArrayByBrand(data, paramsObject.brand);
-      }
-      if (paramsObject.category) {
-        filtredData = this.filter.filterArrayByBrand(filtredData, paramsObject.brand);
-      }
-      if (paramsObject.type) {
-        filtredData = this.sort.sort(paramsObject.type, filtredData);
-      }
-      if (paramsObject.search) {
-        filtredData = this.search.searchProducts(filtredData, paramsObject.search);
-      }
+      if (paramsObject.category) filtredData = this.filterByCategoryOnload(paramsObject.category, data, paramsObject);
+      if (paramsObject.brand) filtredData = this.filter.filterArrayByBrand(data, paramsObject.brand);
+      if (paramsObject.category) filtredData = this.filter.filterArrayByBrand(filtredData, paramsObject.brand);
+      if (paramsObject.type) filtredData = this.sort.sort(paramsObject.type, filtredData);
+      if (paramsObject.price) filtredData = this.filter.filterByPrice(filtredData, paramsObject.price);
+      if (paramsObject.stock) filtredData = this.filter.filterByStock(filtredData, paramsObject.stock);
+      if (paramsObject.search) filtredData = this.search.searchProducts(filtredData, paramsObject.search);
       this.filtredData = filtredData;
       if (filtredData !== undefined) {
         this.mainPage.draw(filtredData);
