@@ -137,7 +137,9 @@ export class Main {
     const data = await this.loader.load();
     if (
       window.location.href !== `http://localhost:4200/` &&
-      window.location.href !== `http://localhost:4200/index.html`
+      window.location.href !== `http://localhost:4200/index.html` &&
+      window.location.href !== `http://localhost:4200/?${window.location.hash}` &&
+      window.location.href !== `http://localhost:4200/index.html?${window.location.hash}`
     ) {
       const searchClear = location.search.split('');
       searchClear.shift();
