@@ -66,14 +66,12 @@ export class DrawMain {
         catalog.appendChild(div);
         div.addEventListener('click', ()=>{
           location.hash = 'product-page';
-          console.log(location)
         });
       }
     }
     else {
       productsSpace.style.display = 'flex';
       productsSpace.style.flexDirection = 'column';
-      console.log(productsSpace)
       for (let i = 0; i < products.length; i++) {
         const product: IProduct = products[i];
         const div = document.createElement('div') as HTMLElement;

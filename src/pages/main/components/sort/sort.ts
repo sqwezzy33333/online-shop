@@ -10,7 +10,7 @@ export class Sort {
         sortBlock.addEventListener('click', (event) => {
             chooseList.style.display = 'block';
         });
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function outDiv(e) {
             if (e.target instanceof Element) { 
                 if (!(document.querySelector('.catalog__sort') as HTMLSelectElement).contains(e.target)) {
                     chooseList.style.display = 'none';

@@ -64,10 +64,10 @@ export class FilterStock {
     const searchClear = location.search.split('');
     searchClear.shift();
     const queryParamsString = searchClear.join('').toString();
-    let paramsObject = JSON.parse(
+    const paramsObject = JSON.parse(
       '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
     );
-    let minMaxPrice: string[] = paramsObject.stock.split(',');
+    const minMaxPrice: string[] = paramsObject.stock.split(',');
     localStorage.setItem('leftStockValue', minMaxPrice[0]);
     localStorage.setItem('rightStockValue', minMaxPrice[1]);
 
@@ -75,12 +75,6 @@ export class FilterStock {
       const filterValues = [this.stockFilterSlider.noUiSlider?.get()][0] as number[];
       const leftCount: string | number = filterValues[0];
       const rightCount: string | number = filterValues[1];
-      const searchClear = location.search.split('');
-      searchClear.shift();
-      const queryParamsString = searchClear.join('').toString();
-      const paramsObject = JSON.parse(
-        '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
-      );
       paramsObject.stock = `${leftCount},${rightCount}`;
       syncURL(paramsObject);
     });
