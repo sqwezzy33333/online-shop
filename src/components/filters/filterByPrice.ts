@@ -7,6 +7,7 @@ import * as noUiSlider from 'nouislider';
 
 export class FilterPrice {
   priceSlider = document.querySelector('.filters__range-wrapper') as noUiSlider.target;
+
   drawFilter() {
     const filters = document.querySelector('.filters') as HTMLElement;
     const filter = document.createElement('div') as HTMLElement;
@@ -59,6 +60,7 @@ export class FilterPrice {
     filter.append(counters);
     filters.append(filter);
   }
+  
   checkFilter(allFiltersOnload?: AllFiltersType) {
     const searchClear = location.search.split('');
     searchClear.shift();

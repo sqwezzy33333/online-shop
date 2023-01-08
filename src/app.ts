@@ -38,7 +38,7 @@ class App {
   }
 
   async start(): Promise<void> {
-    const data = await this.loader.load();
+    let data = await this.loader.load();
     if (
       window.location.href !== 'http://localhost:4200/' &&
       window.location.href !== 'http://localhost:4200/index.html'
@@ -49,6 +49,7 @@ class App {
       const paramsObject: AllFiltersType = JSON.parse(
         '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
       );
+
       this.allFilters = paramsObject;
     }
     await this.filter.start(data, this.filtredData);
@@ -65,7 +66,6 @@ class App {
     let filtredData: IProduct[] = data;
     window.addEventListener('popstate', (event) => {
       if (event.state.category) {
-        console.log;
         filtredData = this.filter.filterArrayByCategory(data, event.state.category);
         filtredData = this.filter.filterArrayByBrand(filtredData, event.state.brand);
       } else filtredData = data;
@@ -74,9 +74,9 @@ class App {
         filtredData = this.filter.filterArrayByBrand(filtredData, event.state.brand);
         filtredData = this.sort.sort(event.state.type, filtredData);
       }
-      if (event.state.type === '') {
-        filtredData = this.sort.sort('By popularity(Ascending)', filtredData);
-      } else filtredData = this.sort.sort(event.state.type, filtredData);
+      if (event.state.type) {
+        filtredData = this.sort.sort(event.state.type, filtredData);
+      }
 
       if (event.state.price) filtredData = this.filter.filterByPrice(filtredData, event.state.price);
       if (event.state.stock) filtredData = this.filter.filterByStock(filtredData, event.state.stock);
@@ -92,7 +92,6 @@ class App {
       this.mainPage.draw(filtredData);
       this.filter.start(this.data, filtredData, event.state);
       this.filter.filter(event.state);
-      
     });
   }
 
@@ -100,6 +99,7 @@ class App {
     const data: IProduct[] = await this.loader.load();
     this.data = data;
     let filtredData: IProduct[];
+    localStorage.setItem('clearFilters', 'false');
     if (
       window.location.href !== 'http://localhost:4200/' &&
       window.location.href !== 'http://localhost:4200/index.html'
@@ -132,10 +132,6 @@ class App {
     await this.start();
     await this.onload();
     await this.render();
-    const btn = document.querySelector('.logo__home');
-    btn?.addEventListener('click', () => {
-      localStorage.clear();
-    });
   }
 
   filterByCategoryOnload(category: string, data: IProduct[], paramsObject: AllFiltersType): IProduct[] {

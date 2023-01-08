@@ -59,7 +59,13 @@ export class FilterBrand {
           }
         });
       }
-      if (localStorage.getItem('category') !== null) {
+      if (
+        localStorage.getItem('category') ||
+        localStorage.getItem('rightPriceValue') ||
+        localStorage.getItem('leftPriceValue') ||
+        localStorage.getItem('leftStockValue') ||
+        localStorage.getItem('rightStockValue')
+      ) {
         counter = 0;
         filtredData?.forEach((el) => {
           if (el.brand === brand) {
