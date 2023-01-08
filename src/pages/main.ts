@@ -60,7 +60,7 @@ export class MainPage {
               </p>
               </div>
               <div class="product__add-wrap">
-              <button class="product__add">Add to cart</button>
+              <button class="product__add" id="${products[i].id}">Add to cart</button>
               </div>`;
         div.innerHTML = cart;
         catalog.appendChild(div);

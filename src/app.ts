@@ -11,8 +11,12 @@ import { allFilters } from './components/forQueryParam/forQueryParam';
 import { Search } from './components/search/search';
 import { copyLink } from './components/copyLink/copyLink';
 import { typeOfView } from './components/typeOfView/typeOfView';
+import { Cart } from './components/cart/cart';
+import { Clear } from './components/clear/clear';
+import { HeaderInfo } from './components/headerInfo/headerInfo';
 
 class App {
+  buttonClear = document.querySelector('.clear-btn') as HTMLSelectElement;
   mainPage: MainPage;
   loader: Loader;
   filter: Filter;
@@ -23,6 +27,9 @@ class App {
   search: Search;
   copyLink: copyLink;
   typeOfView: typeOfView;
+  clear: Clear;
+  cart: Cart;
+  headerInfo: HeaderInfo;
 
   constructor() {
     this.loader = new Loader('assets/data/data.json');
@@ -35,6 +42,9 @@ class App {
     this.typeOfView = new typeOfView();
     this.allFilters = allFilters;
     this.data = [];
+    this.clear = new Clear();
+    this.cart = new Cart();
+    this.headerInfo = new HeaderInfo();
   }
 
   async start(): Promise<void> {
@@ -54,11 +64,23 @@ class App {
     }
     await this.filter.start(data, this.filtredData);
     await this.mainPage.draw(data);
+    this.headerInfo.showCount(data);
     await this.sort.addSortEventListeners();
     await this.search.addSearchEventListeners();
     await this.copyLink.addEventListenerToCopyBtn();
     await this.typeOfView.addEventListenerButtonView();
+    
     this.filter.filter();
+    this.buttonClear.addEventListener('click', () => {
+      this.clear.clearFilters();
+      this.filter.start(data, this.filtredData);
+      this.mainPage.draw(data);
+      this.sort.addSortEventListeners();
+      this.search.addSearchEventListeners();
+      this.copyLink.addEventListenerToCopyBtn();
+      this.typeOfView.addEventListenerButtonView();
+      this.filter.filter();
+    });
   }
 
   async render(): Promise<void> {
@@ -90,6 +112,7 @@ class App {
       if (filtredData.length === 0 && event.state.search === '') filtredData = data;
       this.filter.checkRangeFilters(filtredData);
       this.mainPage.draw(filtredData);
+      this.headerInfo.showCount(filtredData);
       this.filter.start(this.data, filtredData, event.state);
       this.filter.filter(event.state);
     });
@@ -121,6 +144,7 @@ class App {
       if (paramsObject.search) filtredData = this.search.searchProducts(filtredData, paramsObject.search);
       this.filtredData = filtredData;
       if (filtredData !== undefined) {
+        this.headerInfo.showCount(filtredData);
         this.mainPage.draw(filtredData);
         this.filter.start(data, filtredData, this.allFilters);
         this.filter.filter(this.allFilters);
@@ -132,6 +156,8 @@ class App {
     await this.start();
     await this.onload();
     await this.render();
+    this.cart.makeArrayOfProducts(this.data);
+    this.cart.drawCart();
   }
 
   filterByCategoryOnload(category: string, data: IProduct[], paramsObject: AllFiltersType): IProduct[] {

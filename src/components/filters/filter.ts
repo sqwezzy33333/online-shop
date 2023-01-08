@@ -3,20 +3,17 @@ import { IProduct, AllFiltersType } from '../../types/types';
 import { FilterBrand } from '../filters/filterByBrand';
 import { FilterPrice } from './filterByPrice';
 import { FilterStock } from './filterByStock';
-import { Clear } from './clear';
 
 export class Filter {
   filterCategory: FilterCategory;
   filterBrand: FilterBrand;
   filterPrice: FilterPrice;
   filterStock: FilterStock;
-  clear: Clear;
   constructor() {
     this.filterCategory = new FilterCategory();
     this.filterBrand = new FilterBrand();
     this.filterPrice = new FilterPrice();
     this.filterStock = new FilterStock();
-    this.clear = new Clear();
   }
   async start(data: IProduct[], filtredData?: IProduct[], allFilters?: AllFiltersType) {
     this.filterCategory.drawFilter(data, filtredData);
@@ -25,7 +22,6 @@ export class Filter {
     this.filterStock.drawFilter();
     this.filterCategory.drawChekedInput(allFilters);
     this.filterBrand.drawChekedInput(allFilters);
-    this.clear.clearFilters();
   }
   filter(allFiltersOnload?: AllFiltersType) {
     this.filterCategory.checkFilter(allFiltersOnload);
