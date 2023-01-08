@@ -67,6 +67,9 @@ export class Main {
                   <input maxlength="15" type="search" placeholder="Search product" value="" class="search__input">
                 </form>
               </div>
+              <div class="catalog__clear clear">
+                <div class="clear-btn _hover">Clear Filters</div>
+              </div>
               <div class="catalog__copy copy">
                 <button class="copy__btn">Copy Link</button>
               </div>

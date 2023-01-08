@@ -63,17 +63,17 @@ export class FilterPrice {
     const searchClear = location.search.split('');
     searchClear.shift();
     const queryParamsString = searchClear.join('').toString();
-    let paramsObject = JSON.parse(
+    const paramsObject = JSON.parse(
       '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
     );
-    let minMaxPrice: string[] = paramsObject.price.split(',');
+    const minMaxPrice: string[] = paramsObject.price.split(',');
     localStorage.setItem('leftPriceValue', minMaxPrice[0]);
     localStorage.setItem('rightPriceValue', minMaxPrice[1]);
 
     this.priceSlider?.noUiSlider?.on('set', () => {
       const filterValues = [this.priceSlider.noUiSlider?.get()][0] as number[];
-      let leftCount: string | number = filterValues[0];
-      let rightCount: string | number = filterValues[1];
+      const leftCount: string | number = filterValues[0];
+      const rightCount: string | number = filterValues[1];
       paramsObject.price = `${leftCount},${rightCount}`;
       syncURL(paramsObject);
     });
