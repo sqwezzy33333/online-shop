@@ -1,11 +1,11 @@
 export class ProductPage {
     productBlock: HTMLElement;
-    constructor(id: string){
+    constructor(){
         this.productBlock = document.body;
-        this.productBlock.id = id;
     }
 
-    createPage(){
+    createPage(id: string){
+        this.productBlock.id = id;
         this.productBlock.innerHTML = `Page`;
     }
 }

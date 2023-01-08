@@ -13,14 +13,14 @@ class App {
   productPage: ProductPage;
   bodyPage: HTMLElement;
   constructor(){
-    this.mainPage = new Main('main-page');
-    this.productPage = new ProductPage('product-page');
+    this.mainPage = new Main();
+    this.productPage = new ProductPage();
     this.bodyPage = document.body;
   }
 
   run(){
     this.bodyPage.innerHTML = '';
-    this.renderNewPage(PageIds.MainPage);
+    this.renderNewPage(window.location.hash.slice(1));
     this.enableRouteChange();
   }
 
@@ -28,19 +28,19 @@ class App {
     document.body.innerHTML = '';
     console.log(idPage)
     if(idPage === PageIds.MainPage){
-      console.log(1)
       this.mainPage.init();
     }
     else if(idPage === PageIds.ProductPage){
-      console.log(2)
-     this.productPage.createPage();
+      this.productPage.createPage('product-page');
+    }
+    else {
+      this.mainPage.init();
     }
   }
 
   enableRouteChange(){
     window.addEventListener('hashchange', () => {
       const hash = window.location.hash.slice(1);
-      console.log(location)
       this.renderNewPage(hash);
     });
   }
