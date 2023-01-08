@@ -65,10 +65,13 @@ class App {
 
   renderNewPage(idPage: string){
     document.body.innerHTML = '';
+    console.log(idPage)
     if(idPage === PageIds.MainPage){
+      console.log(1)
       this.mainPage.init();
     }
     else if(idPage === PageIds.ProductPage){
+      console.log(2)
      this.productPage.createPage();
     }
   }
@@ -76,6 +79,7 @@ class App {
   enableRouteChange(){
     window.addEventListener('hashchange', () => {
       const hash = window.location.hash.slice(1);
+      console.log(location)
       this.renderNewPage(hash);
     });
   }
