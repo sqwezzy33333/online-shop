@@ -17,6 +17,7 @@ import { HeaderInfo } from './components/headerInfo/headerInfo';
 
 class App {
   buttonClear = document.querySelector('.clear-btn') as HTMLSelectElement;
+  cartHeaderTotal = document.querySelector('.price-basket__name_count') as HTMLElement;
   mainPage: MainPage;
   loader: Loader;
   filter: Filter;
@@ -62,6 +63,8 @@ class App {
 
       this.allFilters = paramsObject;
     }
+    let totalHeader: string | null = localStorage.getItem('total-header');
+    if (totalHeader !== null) this.cartHeaderTotal.innerHTML = totalHeader;
     await this.filter.start(data, this.filtredData);
     await this.mainPage.draw(data);
     this.headerInfo.showCount(data);
@@ -69,7 +72,7 @@ class App {
     await this.search.addSearchEventListeners();
     await this.copyLink.addEventListenerToCopyBtn();
     await this.typeOfView.addEventListenerButtonView();
-    
+
     this.filter.filter();
     this.buttonClear.addEventListener('click', () => {
       this.clear.clearFilters();
@@ -115,6 +118,8 @@ class App {
       this.headerInfo.showCount(filtredData);
       this.filter.start(this.data, filtredData, event.state);
       this.filter.filter(event.state);
+      this.cart.makeArrayOfProducts(this.data);
+      this.cart.drawCart(this.data);
     });
   }
 
@@ -157,7 +162,7 @@ class App {
     await this.onload();
     await this.render();
     this.cart.makeArrayOfProducts(this.data);
-    this.cart.drawCart();
+    this.cart.drawCart(this.data);
   }
 
   filterByCategoryOnload(category: string, data: IProduct[], paramsObject: AllFiltersType): IProduct[] {
