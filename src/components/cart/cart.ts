@@ -1,4 +1,4 @@
-import { IProduct } from '../../types/types';
+import { IProduct, CartObject } from '../../types/types';
 
 export class Cart {
   mainWrapper = document.querySelector('.main__wrapper') as HTMLElement;
@@ -37,7 +37,7 @@ export class Cart {
 
   drawCart(arr: IProduct[]) {
     this.cartIcoBtn.addEventListener('click', () => {
-     const numberPage = document.getElementById('number-page-incart');
+      const numberPage = document.getElementById('number-page-incart');
 
       const inputItemOnePage = document.getElementById('count-prod-on-cart');
 
@@ -51,7 +51,7 @@ export class Cart {
 
       const sumOfOneProdInCart = document.getElementById('cart-price-one-prod');
       const countOfProdAll = document.getElementById('cart-prod');
-      const allPriceOfProductsInCart = document.getElementById('cart-total'); 
+      const allPriceOfProductsInCart = document.getElementById('cart-total');
 
       let currentPay: string | null = this.cartHeaderTotal.textContent;
 
@@ -110,10 +110,20 @@ export class Cart {
       </div>
     </div>
     `;
+      let arrayFromSorage: CartObject[] = [];
+      let stringProdFromLS: string | null = localStorage.getItem('storeBuyList');
       let wrapper = document.querySelector('.list-products');
       filtredArray.forEach((el) => {
+        if (stringProdFromLS) arrayFromSorage = JSON.parse(stringProdFromLS);
         let item = document.createElement('div');
         let index: number = filtredArray.findIndex((i) => i === el) + 1;
+        arrayFromSorage = arrayFromSorage.filter((itemFromLS) => {
+          return Number(itemFromLS.price) === Number(el.price);
+        });
+        console.log(arrayFromSorage);
+        let countOfCard: string = '1';
+
+        if (arrayFromSorage.length > 0) countOfCard = arrayFromSorage[0].count.toString();
         item.className = 'cart-item';
         item.innerHTML =
           /*html*/
@@ -131,10 +141,10 @@ export class Cart {
           </div>
         </div>
         <div class="cart-item__stock-and-price-block stock-and-price-block">
-          <div class="stock-and-price-block__stock stock-and-price-block__base">Stock: <span id="cart-stock">${el.stock}</span></div>
-          <div class="stock-and-price-block__count-of-prod">
+          <div  class="stock-and-price-block__stock stock-and-price-block__base">Stock: <span id="cart-stock">${el.stock}</span></div>
+          <div id="arr_${index}" class="stock-and-price-block__count-of-prod">
             <div class="stock-and-price-block__add stock-and-price-block__btn">+</div>
-            <span id="cart-count-of-prod">1</span>
+            <span id="cart-count-of-prod">${countOfCard}</span>
             <div class="stock-and-price-block__delete stock-and-price-block__btn">-</div>
           </div>
           <span id="cart-price-one-prod">${el.price}$</span>
@@ -143,11 +153,11 @@ export class Cart {
         wrapper?.append(item);
       });
       this.makeDiscount();
-      this.addMoreProd();
+      this.addMoreProd(filtredArray);
     });
   }
 
-  makeDiscount():void {
+  makeDiscount(): void {
     const formWrapper = document.querySelector('.summary__form') as HTMLElement;
     const totalPriceSpan = document.getElementById('cart-total') as HTMLElement;
     const totalWrapper = document.querySelector('.summary__total') as HTMLElement;
@@ -289,15 +299,81 @@ export class Cart {
     });
   }
 
-  addMoreProd(){
-    const g = document.querySelectorAll('.stock-and-price-block__count-of-prod');
-    g.forEach((el)=>{
+  addMoreProd(filtredArray: IProduct[]): void {
+    const collection = document.querySelectorAll('.stock-and-price-block__count-of-prod');
+    let cartTotal = document.getElementById('cart-total') as HTMLElement;
+    let arrayOfValues: CartObject[] = [];
+    let arrayFromSorage: CartObject[] = [];
+    let stringProdFromLS: string | null = localStorage.getItem('storeBuyList');
+    if (stringProdFromLS) {
+      arrayFromSorage = JSON.parse(stringProdFromLS);
+      arrayOfValues = arrayFromSorage;
+    }
+    collection.forEach((el) => {
       let addProdBtn = el.children[0] as HTMLElement;
-      let countOfProd = el.children[1] as HTMLElement;
+      let countOfProdBlock = el.children[1] as HTMLElement;
       let lessProdBtn = el.children[2] as HTMLElement;
-      lessProdBtn.addEventListener('click', ()=>{
-        console.log(el.previousSibling?.previousSibling?.textContent)
-      })
-    })
+      let countOfProd: number = 1;
+
+      lessProdBtn.addEventListener('click', () => {
+        let stockString: string | undefined = el.previousSibling?.previousSibling?.textContent?.split(' ')[1];
+        let id: string = el.id.split('_')[1];
+        countOfProd--;
+        let stockNumber: number = 0;
+        if (stockString) stockNumber = Number(stockString);
+        countOfProdBlock.innerHTML = `${countOfProd}`;
+        let infoObj: CartObject = {
+          id: id,
+          stock: stockString,
+          price: filtredArray[Number(id) - 1].price,
+          count: countOfProd,
+        };
+        arrayOfValues = arrayOfValues.filter((el) => {
+          return el.id !== infoObj.id;
+        });
+        this.cartHeaderTotal.innerText = (
+          Number(this.cartHeaderTotal.innerText) - filtredArray[Number(id) - 1].price
+        ).toString();
+        cartTotal.innerHTML = this.cartHeaderTotal.innerText;
+        arrayOfValues.push(infoObj);
+        localStorage.setItem('total-header', cartTotal.innerHTML);
+        localStorage.setItem('storeBuyList', JSON.stringify(arrayOfValues));
+      });
+
+      addProdBtn.addEventListener('click', () => {
+        let stockString: string | undefined = el.previousSibling?.previousSibling?.textContent?.split(' ')[1];
+        let id: string = el.id.split('_')[1];
+        let agg: number = Number(id);
+        console.log(arrayFromSorage)
+        console.log(id)
+        if (arrayFromSorage?.length > 0) countOfProd = Number(arrayFromSorage[Number(id) - 1].count);
+
+        
+
+        let stockNumber: number = 0;
+        console.log(countOfProd)
+        if (stockString) stockNumber = Number(stockString);
+        countOfProd++;
+        console.log(countOfProd)
+        countOfProdBlock.innerHTML = `${countOfProd}`;
+        console.log(countOfProd)
+        let infoObj: CartObject = {
+          id: id,
+          stock: stockString,
+          price: filtredArray[Number(id) - 1].price,
+          count: countOfProd,
+        };
+        arrayOfValues = arrayOfValues.filter((el) => {
+          return el.id !== infoObj.id;
+        });
+        this.cartHeaderTotal.innerText = (
+          Number(this.cartHeaderTotal.innerText) + filtredArray[Number(id) - 1].price
+        ).toString();
+        cartTotal.innerHTML = this.cartHeaderTotal.innerText;
+        localStorage.setItem('total-header', cartTotal.innerHTML);
+        arrayOfValues.push(infoObj);
+        localStorage.setItem('storeBuyList', JSON.stringify(arrayOfValues));
+      });
+    });
   }
 }
