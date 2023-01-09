@@ -136,10 +136,8 @@ export class Main {
   async start(): Promise<void> {
     const data = await this.loader.load();
     if (
-=======
       window.location.href !== 'http://localhost:4200/' &&
       window.location.href !== 'http://localhost:4200/index.html'
->>>>>>> d7e5436 (feat: add class of draw pages)
     ) {
       const searchClear = location.search.split('');
       searchClear.shift();
