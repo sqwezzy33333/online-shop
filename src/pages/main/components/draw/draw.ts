@@ -66,6 +66,7 @@ export class DrawMain {
         catalog.appendChild(div);
         div.addEventListener('click', ()=>{
           location.hash = 'product-page';
+          location.search = `/${product.id}/${product.title}`
         });
       }
     }
