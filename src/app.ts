@@ -65,7 +65,6 @@ class App {
 
   renderNewPage(idPage: string){
     document.body.innerHTML = '';
-    console.log(idPage)
     if(idPage === PageIds.MainPage){
       this.mainPage.init();
     }
