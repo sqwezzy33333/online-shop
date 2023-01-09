@@ -31,6 +31,7 @@ class App {
   renderNewPage(idPage: string){
     document.body.innerHTML = '';
     if(idPage === PageIds.MainPage || idPage === ''){
+      console.log(location.hash)
       this.mainPage.init();
     }
     else if(idPage === PageIds.ProductPage){
