@@ -54,6 +54,7 @@ class App {
   constructor(){
     this.mainPage = new Main();
     this.productPage = new ProductPage();
+    this.errorPage = new ErrorPage();
     this.bodyPage = document.body;
   }
 
@@ -65,14 +66,14 @@ class App {
 
   renderNewPage(idPage: string){
     document.body.innerHTML = '';
-    if(idPage === PageIds.MainPage){
+    if(idPage === PageIds.MainPage || idPage === ''){
       this.mainPage.init();
     }
     else if(idPage === PageIds.ProductPage){
-      this.productPage.createPage('product-page');
+      this.productPage.createPage(PageIds.ProductPage);
     }
     else {
-      this.mainPage.init();
+      this.errorPage.createPage(PageIds.ErrorPage);
     }
   }
 
