@@ -1,20 +1,19 @@
 import { allFilters, syncURL } from '../forQueryParam/forQueryParam';
-import { IProduct } from '../../types/types';
+import { IProduct } from '../../../types/types';
 export class Sort {
-    sortBlock: HTMLSelectElement;
-
-    constructor(){
-        this.sortBlock = document.querySelector('.catalog__sort') as HTMLSelectElement;
-    }
 
     async addSortEventListeners(): Promise<void>{
+        const sortBlock = document.querySelector('.catalog__sort') as HTMLElement;
         const chooseList = document.querySelector('.sort__chooseList') as HTMLElement;
         const chooseOption = document.querySelectorAll('.chooseList__typeSort') as NodeListOf<Element>;
         this.updateNameSort();
-        this.sortBlock.addEventListener('click', (event) => {
+        sortBlock.addEventListener('click', (event) => {
             chooseList.style.display = 'block';
         });
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function outDiv(e) {
+            if(location.hash !== '' && location.hash !== 'main-page'){
+                document.removeEventListener('click', outDiv);
+              }
             if (e.target instanceof Element) { 
                 if (!(document.querySelector('.catalog__sort') as HTMLSelectElement).contains(e.target)) {
                     chooseList.style.display = 'none';

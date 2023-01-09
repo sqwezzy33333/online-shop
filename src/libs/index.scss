@@ -1,5 +1,8 @@
 @import 'normalize.css';
-@import '../style/filters.scss';
+@import '../pages/main/style/filters.scss';
+@import '../pages/productPage/productPage.scss';
+@import '../pages/404/error.scss';
+
 body::-webkit-scrollbar {
   width: 10px;
   background-color: #f9f9fd;
@@ -239,31 +242,6 @@ body {
       display: grid;
       gap: 20px;
       grid-template-columns: 1fr 1fr 1fr;
-      @media screen and (max-width: 910px) {
-        grid-template-columns: 1fr 1fr;
-      }
-      @media screen and (max-width: 650px) {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    &__products {
-      display: grid;
-      gap: 20px;
-      grid-template-columns: 1fr 1fr 1fr;
-      flex: 1 0 75%;
-      @media screen and (max-width: 910px) {
-        grid-template-columns: 1fr 1fr;
-      }
-      @media screen and (max-width: 650px) {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    &__products {
-      display: grid;
-      gap: 20px;
-      grid-template-columns: 1fr 1fr 1fr;
       flex: 1 0 75%;
       @media screen and (max-width: 910px) {
         grid-template-columns: 1fr 1fr;
@@ -282,6 +260,7 @@ body {
       flex-direction: column;
       padding: 20px;
       box-shadow: 0 -2px 4px 0 rgb(35 31 32 / 5%), 0 4px 8px 0 rgb(35 31 32 / 10%);
+      cursor: pointer;
     }
 
     .product {

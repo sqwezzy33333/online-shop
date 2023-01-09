@@ -1,4 +1,4 @@
-import { AllFiltersType } from '../../types/types';
+import { AllFiltersType } from '../../../types/types';
 import { allFilters, syncURL } from '../forQueryParam/forQueryParam';
 import 'nouislider/dist/nouislider.css';
 import '../../style/range.scss';
@@ -41,8 +41,8 @@ export class FilterStock {
         }),
       });
       rangeWrapper.noUiSlider?.on('update', function (values) {
-        let leftValue: string | number = values[0];
-        let rightValue: string | number = values[1];
+        const leftValue: string | number = values[0];
+        const rightValue: string | number = values[1];
 
         localStorage.setItem('leftStockValue', leftValue.toString());
         localStorage.setItem('rightStockValue', rightValue.toString());
@@ -64,17 +64,17 @@ export class FilterStock {
     const searchClear = location.search.split('');
     searchClear.shift();
     const queryParamsString = searchClear.join('').toString();
-    let paramsObject = JSON.parse(
+    const paramsObject = JSON.parse(
       '{"' + decodeURI(queryParamsString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}'
     );
-    let minMaxPrice: string[] = paramsObject.stock.split(',');
+    const minMaxPrice: string[] = paramsObject.stock.split(',');
     localStorage.setItem('leftStockValue', minMaxPrice[0]);
     localStorage.setItem('rightStockValue', minMaxPrice[1]);
 
     this.stockFilterSlider?.noUiSlider?.on('set', () => {
       const filterValues = [this.stockFilterSlider.noUiSlider?.get()][0] as number[];
-      let leftCount: string | number = filterValues[0];
-      let rightCount: string | number = filterValues[1];
+      const leftCount: string | number = filterValues[0];
+      const rightCount: string | number = filterValues[1];
       paramsObject.stock = `${leftCount},${rightCount}`;
       syncURL(paramsObject);
     });

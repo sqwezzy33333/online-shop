@@ -1,6 +1,6 @@
-import { IProduct } from '../types/types';
+import { IProduct } from '../../../types/types';
 
-export class MainPage {
+export class DrawMain {
   async draw(data: IProduct[]) {
     const products: IProduct[] = data;
     let typeView = 'blocks';
@@ -64,12 +64,15 @@ export class MainPage {
               </div>`;
         div.innerHTML = cart;
         catalog.appendChild(div);
+        div.addEventListener('click', ()=>{
+          location.hash = 'product-page';
+          location.search = `/${product.id}/${product.title}`
+        });
       }
     }
     else {
       productsSpace.style.display = 'flex';
       productsSpace.style.flexDirection = 'column';
-      console.log(productsSpace)
       for (let i = 0; i < products.length; i++) {
         const product: IProduct = products[i];
         const div = document.createElement('div') as HTMLElement;
