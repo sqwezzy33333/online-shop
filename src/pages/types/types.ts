@@ -21,3 +21,10 @@ export type AllFiltersType = {
   type: string;
   view: string;
 };
+
+export type CartObject = {
+  id: string;
+  stock: string | undefined;
+  price: number;
+  count: number;
+};
