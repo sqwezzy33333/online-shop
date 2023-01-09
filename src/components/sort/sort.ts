@@ -14,13 +14,13 @@ export class Sort {
         this.sortBlock.addEventListener('click', (event) => {
             chooseList.style.display = 'block';
         });
-        document.addEventListener('click', function(e) {
+        /* document.addEventListener('click', function(e) {
             if (e.target instanceof Element) { 
                 if (!(document.querySelector('.catalog__sort') as HTMLSelectElement).contains(e.target)) {
                     chooseList.style.display = 'none';
                 }
             }
-        });
+        }); */
         chooseOption.forEach((item) => {
             item.addEventListener('click', function (e) {
                 if (e.target instanceof Element) { 
