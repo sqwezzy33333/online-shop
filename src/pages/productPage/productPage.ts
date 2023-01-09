@@ -38,12 +38,7 @@ export class ProductPage {
             <div class="main__product product">
               <div class="product__title">${product?.title}</div>
               <div class="product__inf">
-                <div class="product__pictures pictures">
-                  <img src="${product?.images[0]}" alt="picture"></img>
-                  <img src="${product?.images[1]}" alt="picture"></img>
-                  <img src="${product?.images[2]}" alt="picture"></img>
-                  <img src="${product?.images[3]}" alt="picture"></img>
-                </div>
+                <div class="product__pictures pictures"></div>
                 <div class="product__bidpict">
                   <img src="${product?.images[0]}" alt="picture"></img>
                 </div>
@@ -107,5 +102,33 @@ export class ProductPage {
           </div>
         </div>
       </footer>`;
+      this.addPictures(product?.images as string[]);
+      this.addEventListenersToPAge();
     }
+
+    addPictures(pictures: Array<string>){
+      const blockPict = this.productBlock.querySelector('.pictures');
+      pictures.forEach(function(item) {
+        const imgTag = createDivPict();
+        imgTag.src = item;
+        blockPict?.append(imgTag);
+      });
+    }
+
+    addEventListenersToPAge(){
+      const blockPict = (this.productBlock.querySelector('.pictures') as HTMLElement).getElementsByTagName('img');
+      const blockPictArr = Array.prototype.slice.call(blockPict)
+      const bigImg = (this.productBlock.querySelector('.product__bidpict') as HTMLElement).getElementsByTagName('img')
+      blockPictArr.forEach(function(item) {
+        item.addEventListener('click', ()=> {
+          bigImg[0].src = item.src;
+        });
+      });
+    }
+}
+
+function createDivPict(){
+  const block = document.createElement("img");
+  block.alt = 'picture';
+  return block
 }
