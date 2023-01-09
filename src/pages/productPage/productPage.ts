@@ -13,7 +13,6 @@ export class ProductPage {
       const infOfProduct = location.search.split('/');
       const data: IProduct[] = await this.loader.load();
       const product = data.find(o => o.id.toString() === infOfProduct[1]);
-      console.log(product)
       this.productBlock.id = id;
       this.productBlock.innerHTML = `<header class="header">
         <div class="header__container container">
