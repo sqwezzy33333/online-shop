@@ -35,6 +35,13 @@ export class Cart {
     });
   }
 
+  addEventListeners(btn: HTMLElement){
+    btn?.addEventListener('click', ()=>{
+      const popup = createPopup();
+      document.body.append(popup);
+    });
+  }
+
   drawCart(arr: IProduct[]) {
     this.cartIcoBtn.addEventListener('click', () => {
      const numberPage = document.getElementById('number-page-incart');
@@ -100,11 +107,11 @@ export class Cart {
           <h2 class="summary__title">Summary</h2>
             <div class="summary__products">Products: <span id="cart-prod">${filtredArray.length}</span></div>
             <div class="summary__total"><div class="summary-wrapper-tot">Total: <span id="cart-total">${currentPay}$</span></div></div>
-            <form action="#" class="summary__form">
+            <div class="summary__form">
               <input maxlength="8" type="text" placeholder="Enter promo" class="summary__input">
               <div class="summary__promo-info">Promo - 'P5683L', 'BL7DOF22'</div>
               <button class="summary__buy-btn">BUY NOW</button>
-            </form>
+            </div>
          </div>
         </div>
       </div>
@@ -142,6 +149,7 @@ export class Cart {
         `;
         wrapper?.append(item);
       });
+      this.addEventListeners(document.querySelector('.summary__buy-btn') as HTMLElement)
       this.makeDiscount();
       this.addMoreProd();
     });
@@ -300,4 +308,53 @@ export class Cart {
       })
     })
   }
+}
+
+function createPopup(){
+  const popup = document.createElement("div");
+  popup.classList.add('popup');
+  const shadow = document.createElement("div");
+  shadow.classList.add('popup__shadow');
+  const popupWrap = document.createElement("div");
+  popupWrap.classList.add('popup__block');
+  const popupForm = document.createElement("form");
+  popupForm.classList.add('popup__form');
+  popupForm.classList.add('form');
+  const details = document.createElement("p");
+  details.classList.add('form__details');
+  const inpName = document.createElement("input");
+  inpName.classList.add('form__name');
+  inpName.type = 'text';
+  const inpPhoneNumber = document.createElement("input");
+  inpPhoneNumber.classList.add('form__phone');
+  inpPhoneNumber.type = 'text';
+  const inpAdress = document.createElement("input");
+  inpAdress.classList.add('form__adress');
+  inpAdress.type = 'text';
+  const inpEmail = document.createElement("input");
+  inpEmail.classList.add('form__email');
+  inpEmail.type = 'text';
+  const credit = document.createElement("p");
+  const inpCardNumber = document.createElement("input");
+  inpCardNumber.classList.add('form__cardNumber');
+  inpCardNumber.type = 'text';
+  const inpData = document.createElement("input");
+  inpData.classList.add('form__data');
+  inpData.type = 'text';
+  const inpCvv = document.createElement("input");
+  inpCvv.classList.add('form__cvv');
+  inpCvv.type = 'text';
+  popupForm.append(inpCvv);
+  popupForm.append(inpData);
+  popupForm.append(inpCardNumber);
+  popupForm.append(credit);
+  popupForm.append(inpEmail);
+  popupForm.append(inpAdress);
+  popupForm.append(inpPhoneNumber);
+  popupForm.append(inpName);
+  popupForm.append(details);
+  popupWrap.append(popupForm);
+  popup.append(popupWrap);
+  popup.append(shadow);
+  return popup;
 }
