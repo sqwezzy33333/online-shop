@@ -1,6 +1,7 @@
 import { IProduct } from '../../../types/types';
 
 export class DrawMain {
+  private arrayOfProdForCart: string[] = [];
   async draw(data: IProduct[]) {
     const products: IProduct[] = data;
     let typeView = 'blocks';
@@ -60,15 +61,22 @@ export class DrawMain {
               </p>
               </div>
               <div class="product__add-wrap">
-              <button class="product__add">Add to cart</button>
+                <button class="product__add" id="${product.id}">Add to cart</button>
               </div>`;
         div.innerHTML = cart;
         catalog.appendChild(div);
-        div.addEventListener('click', ()=>{
+        (div.querySelector('.product__image') as HTMLElement).addEventListener('click', ()=>{
           location.hash = 'product-page';
           location.search = `/${product.id}/${product.title}`
         });
       }
+      const btns = document.querySelectorAll('.product__add');
+      btns.forEach((el) => {
+        el.addEventListener('click', () => {
+          console.log(el)
+          this.makeArrayOfProducts(products, el);
+        });
+      });
     }
     else {
       productsSpace.style.display = 'flex';
@@ -110,12 +118,40 @@ export class DrawMain {
                   </p>
                 </div>
                 <div class="product_line__add-wrap">
-                  <button class="product_line__add">Add to cart</button>
+                  <button class="product_line__add" id="${product.id}">Add to cart</button>
                 </div>
               </div>`;
         div.innerHTML = cart;
         catalog.appendChild(div);
       }
+      const btns = document.querySelectorAll('.product_line__add');
+      btns.forEach((el) => {
+        el.addEventListener('click', () => {
+          console.log(el)
+          this.makeArrayOfProducts(products, el);
+        });
+      });
     }
+    (document.querySelector('.to-basket__pict') as HTMLElement).addEventListener('click', () => {
+      location.hash = 'cart-page';
+    });
+  }
+  makeArrayOfProducts(arr: IProduct[], el: Element) {
+    let filtredArray: IProduct[] = [];
+    this.arrayOfProdForCart.push(el.id);
+    localStorage.setItem('arrayOfId', this.arrayOfProdForCart.toString());
+    filtredArray = arr.filter((el) => {
+      let isitem: boolean = false;
+      for (let i = 0; i < this.arrayOfProdForCart.length; i++) {
+        const itemNum: string = this.arrayOfProdForCart[i].toString();
+        if (Number(el.id) === Number(itemNum)) {
+          isitem = true;
+        }
+      }
+      if (isitem) return true;
+    });
+    const sum: number = filtredArray.map((el) => el.price).reduce((partialSum, a) => partialSum + a, 0);
+    localStorage.setItem('total-header', `${sum}`);
+    (document.querySelector('.price-basket__name_count') as HTMLElement).innerHTML = `${sum}`;
   }
 }

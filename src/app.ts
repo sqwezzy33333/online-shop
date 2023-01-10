@@ -18,6 +18,7 @@ class App {
   productPage: ProductPage;
   errorPage: ErrorPage;
   bodyPage: HTMLElement;
+
   constructor(){
     this.mainPage = new Main();
     this.productPage = new ProductPage();
@@ -27,16 +28,15 @@ class App {
   }
 
   run(){
-    this.bodyPage.innerHTML = '';
+    (this.bodyPage.querySelector('.main') as HTMLElement).innerHTML = '';
     this.renderNewPage(window.location.hash.slice(1));
     this.enableRouteChange();
     alert("Привет! Проверь,пожалуйста, в четверг вечером, спасибо)")
   }
 
   renderNewPage(idPage: string){
-    document.body.innerHTML = '';
+    (document.body.querySelector('.main') as HTMLElement).innerHTML = '';
     if(idPage === PageIds.MainPage || idPage === ''){
-      console.log(location.hash)
       this.mainPage.init();
     }
     else if(idPage === PageIds.ProductPage){
@@ -46,7 +46,7 @@ class App {
       this.errorPage.createPage(PageIds.ErrorPage);
     }
     else if(idPage === PageIds.CartPage){
-      //this.cartPage.createPage(PageIds.CartPage);
+      this.cartPage.createPage(PageIds.CartPage);
     }
   }
 

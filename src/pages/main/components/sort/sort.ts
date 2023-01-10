@@ -13,7 +13,7 @@ export class Sort {
         document.addEventListener('click', function outDiv(e) {
             if(location.hash !== '' && location.hash !== 'main-page'){
                 document.removeEventListener('click', outDiv);
-              }
+            }
             if (e.target instanceof Element) { 
                 if (!(document.querySelector('.catalog__sort') as HTMLSelectElement).contains(e.target)) {
                     chooseList.style.display = 'none';
