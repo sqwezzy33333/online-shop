@@ -1,6 +1,7 @@
 import { IProduct } from '../../../types/types';
 
 export class DrawMain {
+  private arrayOfProdForCart: string[] = [];
   async draw(data: IProduct[]) {
     const products: IProduct[] = data;
     let typeView = 'blocks';
@@ -60,15 +61,22 @@ export class DrawMain {
               </p>
               </div>
               <div class="product__add-wrap">
-              <button class="product__add">Add to cart</button>
+                <button class="product__add" id="${product.id}">Add to cart</button>
               </div>`;
         div.innerHTML = cart;
         catalog.appendChild(div);
-        div.addEventListener('click', ()=>{
+        (div.querySelector('.product__image') as HTMLElement).addEventListener('click', ()=>{
           location.hash = 'product-page';
           location.search = `/${product.id}/${product.title}`
         });
       }
+      const btns = document.querySelectorAll('.product__add');
+      btns.forEach((el) => {
+        el.addEventListener('click', () => {
+          console.log(el)
+          this.makeArrayOfProducts(products, el);
+        });
+      });
     }
     else {
       productsSpace.style.display = 'flex';
@@ -110,12 +118,19 @@ export class DrawMain {
                   </p>
                 </div>
                 <div class="product_line__add-wrap">
-                  <button class="product_line__add">Add to cart</button>
+                  <button class="product_line__add" id="${product.id}">Add to cart</button>
                 </div>
               </div>`;
         div.innerHTML = cart;
         catalog.appendChild(div);
       }
+      const btns = document.querySelectorAll('.product_line__add');
+      btns.forEach((el) => {
+        el.addEventListener('click', () => {
+          console.log(el)
+          this.makeArrayOfProducts(products, el);
+        });
+      });
     }
     const startSort: Sort = new Sort();
     const startTypeSort: string = 'rating';

@@ -4,10 +4,11 @@ import { Filter } from './components/filters/filter';
 import { IProduct } from '../types/types';
 import { Sort } from './components/sort/sort';
 import { AllFiltersType } from '../types/types';
-import { allFilters } from './components/forQueryParam/forQueryParam';
+import { allFilters, syncURL } from './components/forQueryParam/forQueryParam';
 import { Search } from './components/search/search';
 import { copyLink } from './components/copyLink/copyLink';
 import { typeOfView } from './components/typeOfView/typeOfView';
+import { CartPage } from '../cart/cartPage';
 
 export class Main {
   drawMain: DrawMain;
@@ -38,22 +39,7 @@ export class Main {
 
   async createPage(){
     this.mainBlock.id = 'main-page';
-    this.mainBlock.innerHTML = `
-    <header class="header">
-      <div class="header__container container">
-        <div class="container__logo logo">
-          <div class="logo__pict">&nbsp;</div>
-          <h1 class="logo__caption"><a class="logo__home" href="./index.html">Online Store</a></h1>
-        </div>
-        <div class="container__price-basket price-basket">
-          <p class="price-basket__name">Cart total: <span class="price-basket__name_count">0</span>$</p>
-        </div>
-        <div class="container__to-basket to-basket">
-          <div class="to-basket__pict">&nbsp;</div>
-        </div>
-      </div>
-    </header>
-    <main class="main">
+    (this.mainBlock.querySelector('.main') as HTMLElement).innerHTML = `
       <div class="container">
         <div class="main__wrapper">
           <div class="main__aside aside">
@@ -105,32 +91,7 @@ export class Main {
             <div class="catalog__products"></div>
           </div>
         </div>
-      </div>
-    </main>
-    <footer class="footer">
-      <div class="footer__container container">
-        <div class="container__github github">
-          <a class="github__link" href="https://github.com/ich-kirich" target="_blank">
-            <div class="github__pict author1">&nbsp;</div>
-          </a>
-          <a class="github__link" href="https://github.com/sqwezzy33333" target="_blank">
-            <div class="github__pict author2">&nbsp;</div>
-          </a>
-        </div>
-        <div class="container__year year">
-          <p class="year__caption">2022</p>
-        </div>
-        <div class="container__course course">
-          <a
-            class="course__link"
-            href="https://github.com/rolling-scopes-school/tasks/tree/master/stage2"
-            target="_blank"
-          >
-            <div class="course__pict">&nbsp;</div>
-          </a>
-        </div>
-      </div>
-    </footer>`;
+      </div>`;
   }
 
   async start(): Promise<void> {
@@ -249,7 +210,7 @@ export class Main {
     await this.render();
     const btn = document.querySelector('.logo__home');
     btn?.addEventListener('click', () => {
-      localStorage.clear();
+      syncURL(this.allFilters)
     });
   }
 

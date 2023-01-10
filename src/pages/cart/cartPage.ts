@@ -1,161 +1,118 @@
+import { Loader } from '../main/components/loader/loader';
 import { IProduct, CartObject } from '../types/types';
 
 export class CartPage {
-  mainWrapper = document.querySelector('.main__wrapper') as HTMLElement;
+  mainWrapper = document.querySelector('.main') as HTMLElement;
   cartIcoBtn = document.querySelector('.to-basket__pict') as HTMLElement;
   headerFound = document.querySelector('.header__found') as HTMLElement;
   cartHeaderTotal = document.querySelector('.price-basket__name_count') as HTMLElement;
-  constructor() {}
-  
+  loader: Loader;
+  cartBlock: HTMLElement;
 
-  makeArrayOfProducts(arr: IProduct[]) {
-    const btns = document.querySelectorAll('.product__add');
-    let arrayOfProdForCart: string[] = [];
-    let filtredArray: IProduct[] = [];
-    let sum: number;
-    btns.forEach((el) => {
-      el.addEventListener('click', () => {
-        arrayOfProdForCart.push(el.id);
-        localStorage.setItem('arrayOfId', arrayOfProdForCart.toString());
+  constructor(){
+    this.loader = new Loader('assets/data/data.json');
+    this.cartBlock = document.body;
+  }
 
-        filtredArray = arr.filter((el) => {
-          let isitem: boolean = false;
-          for (let i = 0; i < arrayOfProdForCart.length; i++) {
-            let itemNum: string = arrayOfProdForCart[i].toString();
-            if (Number(el.id) === Number(itemNum)) {
-              isitem = true;
-            }
-          }
-          if (isitem) return true;
-        });
-        sum = filtredArray.map((el) => el.price).reduce((partialSum, a) => partialSum + a, 0);
-        localStorage.setItem('total-header', `${sum}`);
-
-        this.cartHeaderTotal.innerHTML = `${sum}`;
-      });
-    });
+  async createPage(id: string){
+    this.cartBlock.id = id;
+    const data: IProduct[] = await this.loader.load();
+    this.drawCart(data);
   }
 
   drawCart(arr: IProduct[]) {
-    this.cartIcoBtn.addEventListener('click', () => {
-      const numberPage = document.getElementById('number-page-incart');
+    this.cartHeaderTotal = document.querySelector('.price-basket__name_count') as HTMLElement;
+    const currentPay: string | null = this.cartHeaderTotal.textContent;
+    const idsFormLocal: string | null = localStorage.getItem('arrayOfId');
+    let arrayIdFromLocal: string[] = [];
+    if (idsFormLocal) {
+      arrayIdFromLocal = idsFormLocal.split(',');
+    }
 
-      const inputItemOnePage = document.getElementById('count-prod-on-cart');
-
-      const lessItemInCardBtn = document.querySelector('.list-products__left-btn');
-      const moreItemInCardBtn = document.querySelector('.list-products__right-btn');
-
-      const countOneProdInCart = document.getElementById('cart-count-of-prod');
-
-      const addProdInCart = document.querySelector('.stock-and-price-block__add');
-      const deleteProdInCart = document.querySelector('.stock-and-price-block__delete');
-
-      const sumOfOneProdInCart = document.getElementById('cart-price-one-prod');
-      const countOfProdAll = document.getElementById('cart-prod');
-      const allPriceOfProductsInCart = document.getElementById('cart-total');
-
-      let currentPay: string | null = this.cartHeaderTotal.textContent;
-
-      let idsFormLocal: string | null = localStorage.getItem('arrayOfId');
-      let filtredArray: IProduct[];
-      let arrayIdFromLocal: string[] = [];
-      if (idsFormLocal) {
-        arrayIdFromLocal = idsFormLocal.split(',');
-      }
-
-      filtredArray = arr.filter((el) => {
-        let isitem: boolean = false;
-        for (let i = 0; i < arrayIdFromLocal.length; i++) {
-          let itemNum: string = arrayIdFromLocal[i].toString();
-          if (Number(el.id) === Number(itemNum)) {
-            isitem = true;
-          }
+    const filtredArray: IProduct[] = arr.filter((el) => {
+      let isitem: boolean = false;
+      for (let i = 0; i < arrayIdFromLocal.length; i++) {
+        const itemNum: string = arrayIdFromLocal[i].toString();
+        if (Number(el.id) === Number(itemNum)) {
+          isitem = true;
         }
-        if (isitem) return true;
-      });
-      this.headerFound.innerHTML = '';
+      }
+      if (isitem) return true;
+    });
+    this.headerFound.innerHTML = '';
 
-      this.mainWrapper.innerHTML =
-        /*html*/
-        `
-      <div class="main__cart cart">
-      <div class="cart__wrapper">
-        <div class="cart__list-products list-products">
-          <div class="list-products__header">
-            <h2 class="list-products__title">All products:</h2>
-            <div class="list-products__limit">
-              <span class="list-products__limit-info">Limit:</span>
-              <input min="1" class="list-products__input" id="count-prod-on-cart" value="1" type="number"/>
-            </div>
-            <div class="list-products__page-caunt">
-              <span class="list-products__page-title">Page:</span>
-              <div class="list-products__left-btn cart-btn">←</div>
-              <span id="number-page-incart" class="list-products__page-number">1</span>
-              <div class="list-products__right-btn cart-btn">→</div>
-            </div>
+    this.mainWrapper.innerHTML =`
+    <div class="main__cart cart">
+    <div class="cart__wrapper">
+      <div class="cart__list-products list-products">
+        <div class="list-products__header">
+          <h2 class="list-products__title">All products:</h2>
+          <div class="list-products__limit">
+            <span class="list-products__limit-info">Limit:</span>
+            <input min="1" class="list-products__input" id="count-prod-on-cart" value="1" type="number"/>
           </div>
-          
         </div>
-        <div class="cart__summary summary">
-         <div class="summary__wrapper">
-          <h2 class="summary__title">Summary</h2>
-            <div class="summary__products">Products: <span id="cart-prod">${filtredArray.length}</span></div>
-            <div class="summary__total"><div class="summary-wrapper-tot">Total: <span id="cart-total">${currentPay}$</span></div></div>
-            <form action="#" class="summary__form">
-              <input maxlength="8" type="text" placeholder="Enter promo" class="summary__input">
-              <div class="summary__promo-info">Promo - 'P5683L', 'BL7DOF22'</div>
-              <button class="summary__buy-btn">BUY NOW</button>
-            </form>
-         </div>
-        </div>
+        
+      </div>
+      <div class="cart__summary summary">
+       <div class="summary__wrapper">
+        <h2 class="summary__title">Summary</h2>
+          <div class="summary__products">Products: <span id="cart-prod">${filtredArray.length}</span></div>
+          <div class="summary__total"><div class="summary-wrapper-tot">Total: <span id="cart-total">${currentPay}$</span></div></div>
+          <form action="#" class="summary__form">
+            <input maxlength="8" type="text" placeholder="Enter promo" class="summary__input">
+            <div class="summary__promo-info">Promo - 'P5683L', 'BL7DOF22'</div>
+            <button class="summary__buy-btn">BUY NOW</button>
+          </form>
+       </div>
       </div>
     </div>
-    `;
-      let arrayFromSorage: CartObject[] = [];
-      let stringProdFromLS: string | null = localStorage.getItem('storeBuyList');
-      let wrapper = document.querySelector('.list-products');
-      filtredArray.forEach((el) => {
-        if (stringProdFromLS) arrayFromSorage = JSON.parse(stringProdFromLS);
-        let item = document.createElement('div');
-        let index: number = filtredArray.findIndex((i) => i === el) + 1;
-        arrayFromSorage = arrayFromSorage.filter((itemFromLS) => {
-          return Number(itemFromLS.price) === Number(el.price);
-        });
-        console.log(arrayFromSorage);
-        let countOfCard: string = '1';
-
-        if (arrayFromSorage.length > 0) countOfCard = arrayFromSorage[0].count.toString();
-        item.className = 'cart-item';
-        item.innerHTML =
-          /*html*/
-          `
-        <span class="cart-item__number">${index}.</span>
-        <div class="cart-item__img">
-          <img src="${el.images[0]}" alt="">
-        </div>
-        <div class="cart-item__info-block info-block">
-          <h2 class="info-block__title">${el.title}</h2>
-          <span class="info-block__information">${el.description}</span>
-          <div class="info-block__rat-discount">
-            <div class="info-block__rating stock-and-price-block__base">Rating: <span id="cart-rating">${el.rating}</span></div>
-            <div class="info-block__discount stock-and-price-block__base">Discount: <span id="cart-discount">${el.discountPercentage}</span></div>
-          </div>
-        </div>
-        <div class="cart-item__stock-and-price-block stock-and-price-block">
-          <div  class="stock-and-price-block__stock stock-and-price-block__base">Stock: <span id="cart-stock">${el.stock}</span></div>
-          <div id="arr_${index}" class="stock-and-price-block__count-of-prod">
-            <div class="stock-and-price-block__add stock-and-price-block__btn">+</div>
-            <span id="cart-count-of-prod">${countOfCard}</span>
-            <div class="stock-and-price-block__delete stock-and-price-block__btn">-</div>
-          </div>
-          <span id="cart-price-one-prod">${el.price}$</span>
-        </div>
-        `;
-        wrapper?.append(item);
+  </div>
+  `;
+    let arrayFromSorage: CartObject[] = [];
+    const stringProdFromLS: string | null = localStorage.getItem('storeBuyList');
+    const wrapper = document.querySelector('.list-products');
+    filtredArray.forEach((el) => {
+      if (stringProdFromLS) arrayFromSorage = JSON.parse(stringProdFromLS);
+      const item = document.createElement('div');
+      const index: number = filtredArray.findIndex((i) => i === el) + 1;
+      arrayFromSorage = arrayFromSorage.filter((itemFromLS) => {
+        return Number(itemFromLS.price) === Number(el.price);
       });
-      this.makeDiscount();
-      this.addMoreProd(filtredArray);
+      console.log(arrayFromSorage);
+      let countOfCard: string = '1';
+
+      if (arrayFromSorage.length > 0) countOfCard = arrayFromSorage[0].count.toString();
+      item.className = 'cart-item';
+      item.innerHTML =
+        /*html*/
+        `
+      <span class="cart-item__number">${index}.</span>
+      <div class="cart-item__img">
+        <img src="${el.images[0]}" alt="">
+      </div>
+      <div class="cart-item__info-block info-block">
+        <h2 class="info-block__title">${el.title}</h2>
+        <span class="info-block__information">${el.description}</span>
+        <div class="info-block__rat-discount">
+          <div class="info-block__rating stock-and-price-block__base">Rating: <span id="cart-rating">${el.rating}</span></div>
+          <div class="info-block__discount stock-and-price-block__base">Discount: <span id="cart-discount">${el.discountPercentage}</span></div>
+        </div>
+      </div>
+      <div class="cart-item__stock-and-price-block stock-and-price-block">
+        <div  class="stock-and-price-block__stock stock-and-price-block__base">Stock: <span id="cart-stock">${el.stock}</span></div>
+        <div id="arr_${index}" class="stock-and-price-block__count-of-prod">
+          <div class="stock-and-price-block__add stock-and-price-block__btn">+</div>
+          <span id="cart-count-of-prod">${countOfCard}</span>
+          <div class="stock-and-price-block__delete stock-and-price-block__btn">-</div>
+        </div>
+        <span id="cart-price-one-prod">${el.price}$</span>
+      </div>
+      `;
+      wrapper?.append(item);
     });
+    this.makeDiscount();
+    this.addMoreProd(filtredArray);
   }
 
   makeDiscount(): void {
@@ -210,17 +167,17 @@ export class CartPage {
           if (document.getElementById('added-btn-P5683L')) {
             const btn = document.getElementById('added-btn-P5683L') as HTMLElement;
             btn.addEventListener('click', () => {
-              let newPriceBlock = document.querySelector('.newPriceBlock') as HTMLAnchorElement;
-              let discount = document.getElementById('discount-block-P5683L');
+              const newPriceBlock = document.querySelector('.newPriceBlock') as HTMLAnchorElement;
+              const discount = document.getElementById('discount-block-P5683L');
               discount?.remove();
-              let newPrice: number = Math.round(
+              const newPrice: number = Math.round(
                 Number(this.cartHeaderTotal.textContent) - Number(this.cartHeaderTotal.textContent) / 15
               );
               newPriceBlock.innerHTML = `Total: <span class="newPriceSpan">${newPrice}$</span>`;
               if (document.getElementById('added-btn-BL7DOF22') === null) {
                 newPriceBlock.remove();
                 titalWrapperBlock.style.textDecoration = 'none';
-                let headerPrice = this.cartHeaderTotal.textContent;
+                const headerPrice = this.cartHeaderTotal.textContent;
                 if (headerPrice !== null) localStorage.setItem('newPrice', headerPrice);
               }
             });
@@ -251,7 +208,7 @@ export class CartPage {
             localStorage.setItem('newPrice', `${newPrice}`);
             titalWrapperBlock.style.textDecoration = 'line-through';
 
-            let discount = document.createElement('div');
+            const discount = document.createElement('div');
             discount.innerHTML = `<div class="added-discount" id='discount-block-BL7DOF22'><span class="added-span" >BL7DOF22 - 15%</span><div class="added-btn" id="added-btn-BL7DOF22">delete</div></div>`;
 
             if (document.querySelector('.newPriceSpan') === null) {
@@ -272,17 +229,17 @@ export class CartPage {
           if (document.getElementById('added-btn-BL7DOF22')) {
             const btn = document.getElementById('added-btn-BL7DOF22') as HTMLElement;
             btn.addEventListener('click', () => {
-              let discount = document.getElementById('discount-block-BL7DOF22');
-              let newPriceBlock = document.querySelector('.newPriceBlock') as HTMLAnchorElement;
+              const discount = document.getElementById('discount-block-BL7DOF22');
+              const newPriceBlock = document.querySelector('.newPriceBlock') as HTMLAnchorElement;
               discount?.remove();
-              let newPrice: number = Math.round(
+              const newPrice: number = Math.round(
                 Number(this.cartHeaderTotal.textContent) - Number(this.cartHeaderTotal.textContent) / 10
               );
               newPriceBlock.innerHTML = `Total: <span class="newPriceSpan">${newPrice}$</span>`;
               if (document.getElementById('added-btn-P5683L') === null) {
                 titalWrapperBlock.style.textDecoration = 'none';
                 newPriceBlock.remove();
-                let headerPrice = this.cartHeaderTotal.textContent;
+                const headerPrice = this.cartHeaderTotal.textContent;
                 if (headerPrice !== null) localStorage.setItem('newPrice', headerPrice);
               }
             });
@@ -291,10 +248,10 @@ export class CartPage {
       }
 
       if (inputPromo.value === 'P5683L' && document.getElementById('BL7DOF22')) {
-        let deleteBlock = document.getElementById('BL7DOF22') as HTMLElement;
+        const deleteBlock = document.getElementById('BL7DOF22') as HTMLElement;
         deleteBlock.remove();
       } else if (inputPromo.value === 'BL7DOF22' && document.getElementById('P5683L')) {
-        let deleteBlock = document.getElementById('P5683L') as HTMLElement;
+        const deleteBlock = document.getElementById('P5683L') as HTMLElement;
         deleteBlock.remove();
       }
     });
@@ -302,28 +259,28 @@ export class CartPage {
 
   addMoreProd(filtredArray: IProduct[]): void {
     const collection = document.querySelectorAll('.stock-and-price-block__count-of-prod');
-    let cartTotal = document.getElementById('cart-total') as HTMLElement;
+    const cartTotal = document.getElementById('cart-total') as HTMLElement;
     let arrayOfValues: CartObject[] = [];
     let arrayFromSorage: CartObject[] = [];
-    let stringProdFromLS: string | null = localStorage.getItem('storeBuyList');
+    const stringProdFromLS: string | null = localStorage.getItem('storeBuyList');
     if (stringProdFromLS) {
       arrayFromSorage = JSON.parse(stringProdFromLS);
       arrayOfValues = arrayFromSorage;
     }
     collection.forEach((el) => {
-      let addProdBtn = el.children[0] as HTMLElement;
-      let countOfProdBlock = el.children[1] as HTMLElement;
-      let lessProdBtn = el.children[2] as HTMLElement;
+      const addProdBtn = el.children[0] as HTMLElement;
+      const countOfProdBlock = el.children[1] as HTMLElement;
+      const lessProdBtn = el.children[2] as HTMLElement;
       let countOfProd: number = 1;
 
       lessProdBtn.addEventListener('click', () => {
-        let stockString: string | undefined = el.previousSibling?.previousSibling?.textContent?.split(' ')[1];
-        let id: string = el.id.split('_')[1];
+        const stockString: string | undefined = el.previousSibling?.previousSibling?.textContent?.split(' ')[1];
+        const id: string = el.id.split('_')[1];
         countOfProd--;
         let stockNumber: number = 0;
         if (stockString) stockNumber = Number(stockString);
         countOfProdBlock.innerHTML = `${countOfProd}`;
-        let infoObj: CartObject = {
+        const infoObj: CartObject = {
           id: id,
           stock: stockString,
           price: filtredArray[Number(id) - 1].price,
@@ -342,15 +299,12 @@ export class CartPage {
       });
 
       addProdBtn.addEventListener('click', () => {
-        let stockString: string | undefined = el.previousSibling?.previousSibling?.textContent?.split(' ')[1];
-        let id: string = el.id.split('_')[1];
-        let agg: number = Number(id);
+        const stockString: string | undefined = el.previousSibling?.previousSibling?.textContent?.split(' ')[1];
+        const id: string = el.id.split('_')[1];
+        const agg: number = Number(id);
         console.log(arrayFromSorage)
         console.log(id)
         if (arrayFromSorage?.length > 0) countOfProd = Number(arrayFromSorage[Number(id) - 1].count);
-
-        
-
         let stockNumber: number = 0;
         console.log(countOfProd)
         if (stockString) stockNumber = Number(stockString);
@@ -358,7 +312,7 @@ export class CartPage {
         console.log(countOfProd)
         countOfProdBlock.innerHTML = `${countOfProd}`;
         console.log(countOfProd)
-        let infoObj: CartObject = {
+        const infoObj: CartObject = {
           id: id,
           stock: stockString,
           price: filtredArray[Number(id) - 1].price,
