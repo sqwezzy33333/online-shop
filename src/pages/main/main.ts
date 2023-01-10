@@ -41,10 +41,13 @@ export class Main {
     this.mainBlock.id = 'main-page';
     let sum = 0, stock = 0;
     if(localStorage.getItem('total-header') !== null){
-      sum = Number(localStorage.getItem('total-header'))
+      sum = Number(localStorage.getItem('total-header'));
     }
     if(localStorage.getItem('arrayOfId') !== null){
-      stock = Number(localStorage.getItem('arrayOfId')?.split(',').length)
+      stock = Number(localStorage.getItem('arrayOfId')?.split(',').length);
+    }
+    if(localStorage.getItem('arrayOfId') === ''){
+      localStorage.removeItem('arrayOfId');
     }
     (document.querySelector('.price-basket__name_count') as HTMLElement).innerHTML = sum.toString();
     (document.getElementById('found') as HTMLElement).innerHTML = stock.toString();

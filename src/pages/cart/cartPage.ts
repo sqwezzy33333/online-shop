@@ -80,11 +80,11 @@ export class CartPage {
       arrayFromSorage = arrayFromSorage.filter((itemFromLS) => {
         return Number(itemFromLS.price) === Number(el.price);
       });
-      console.log(arrayFromSorage);
       let countOfCard: string = '1';
 
       if (arrayFromSorage.length > 0) countOfCard = arrayFromSorage[0].count.toString();
       item.className = 'cart-item';
+      item.id = `${el.id}`
       item.innerHTML =`
       <span class="cart-item__number">${index}.</span>
       <div class="cart-item__img">
@@ -100,7 +100,7 @@ export class CartPage {
       </div>
       <div class="cart-item__stock-and-price-block stock-and-price-block">
         <div  class="stock-and-price-block__stock stock-and-price-block__base">Stock: <span id="cart-stock">${el.stock}</span></div>
-        <div id="arr_${index}" class="stock-and-price-block__count-of-prod">
+        <div id="arr_${el.id}" class="stock-and-price-block__count-of-prod">
           <div class="stock-and-price-block__add stock-and-price-block__btn">+</div>
           <span id="cart-count-of-prod">${countOfCard}</span>
           <div class="stock-and-price-block__delete stock-and-price-block__btn">-</div>
@@ -130,7 +130,6 @@ export class CartPage {
         promoBlock.innerHTML = `<span>P5683L - 10%</span><div class="discount-btn" id="disc-P5683L">add</div>`;
         formWrapper.append(promoBlock);
         const btnAdd = document.getElementById('disc-P5683L') as HTMLElement;
-
         btnAdd?.addEventListener('click', () => {
           if (document.getElementById('added-btn-P5683L') === null) {
             let newPrice: number = 0;
@@ -270,7 +269,7 @@ export class CartPage {
       const addProdBtn = el.children[0] as HTMLElement;
       const countOfProdBlock = el.children[1] as HTMLElement;
       const lessProdBtn = el.children[2] as HTMLElement;
-      let countOfProd: number = 1;
+      let countOfProd: number = Number(countOfProdBlock.innerHTML);
 
       lessProdBtn.addEventListener('click', () => {
         const stockString: string | undefined = el.previousSibling?.previousSibling?.textContent?.split(' ')[1];
@@ -279,54 +278,70 @@ export class CartPage {
         let stockNumber: number = 0;
         if (stockString) stockNumber = Number(stockString);
         countOfProdBlock.innerHTML = `${countOfProd}`;
+        const index = filtredArray.map(x => {
+          return x.id;
+        }).indexOf(Number(id));
         const infoObj: CartObject = {
           id: id,
           stock: stockString,
-          price: filtredArray[Number(id) - 1].price,
+          price: filtredArray[index].price,
           count: countOfProd,
         };
         arrayOfValues = arrayOfValues.filter((el) => {
           return el.id !== infoObj.id;
         });
         this.cartHeaderTotal.innerText = (
-          Number(this.cartHeaderTotal.innerText) - filtredArray[Number(id) - 1].price
+          Number(this.cartHeaderTotal.innerText) - filtredArray[index].price
         ).toString();
         cartTotal.innerHTML = this.cartHeaderTotal.innerText;
-        arrayOfValues.push(infoObj);
+        if(infoObj.count > 0){
+          arrayOfValues.push(infoObj);
+        }
         localStorage.setItem('total-header', cartTotal.innerHTML);
         localStorage.setItem('storeBuyList', JSON.stringify(arrayOfValues));
+        if(Number(countOfProdBlock.innerHTML) - 1 < 0){
+          document.querySelector('.list-products')?.removeChild(document.getElementById(`${filtredArray[index].id}`) as HTMLElement);
+          (document.getElementById('cart-prod') as HTMLElement).innerHTML = (Number((document.getElementById('cart-prod') as HTMLElement).innerHTML) - 1).toString();
+          if(localStorage.getItem('arrayOfId') !== null){
+            const id: string = el.id.split('_')[1];
+            const arrOfProducts = localStorage.getItem('arrayOfId')?.split(',') as string[];
+            arrOfProducts.splice(arrOfProducts.indexOf(id), 1);
+            localStorage.setItem('arrayOfId', arrOfProducts.toString());
+          }
+        }
       });
 
       addProdBtn.addEventListener('click', () => {
-        const stockString: string | undefined = el.previousSibling?.previousSibling?.textContent?.split(' ')[1];
         const id: string = el.id.split('_')[1];
-        const agg: number = Number(id);
-        console.log(arrayFromSorage)
-        console.log(id)
-        if (arrayFromSorage?.length > 0) countOfProd = Number(arrayFromSorage[Number(id) - 1].count);
-        let stockNumber: number = 0;
-        console.log(countOfProd)
-        if (stockString) stockNumber = Number(stockString);
-        countOfProd++;
-        console.log(countOfProd)
-        countOfProdBlock.innerHTML = `${countOfProd}`;
-        console.log(countOfProd)
-        const infoObj: CartObject = {
-          id: id,
-          stock: stockString,
-          price: filtredArray[Number(id) - 1].price,
-          count: countOfProd,
-        };
-        arrayOfValues = arrayOfValues.filter((el) => {
-          return el.id !== infoObj.id;
-        });
-        this.cartHeaderTotal.innerText = (
-          Number(this.cartHeaderTotal.innerText) + filtredArray[Number(id) - 1].price
-        ).toString();
-        cartTotal.innerHTML = this.cartHeaderTotal.innerText;
-        localStorage.setItem('total-header', cartTotal.innerHTML);
-        arrayOfValues.push(infoObj);
-        localStorage.setItem('storeBuyList', JSON.stringify(arrayOfValues));
+        const index = filtredArray.map(x => {
+          return x.id;
+        }).indexOf(Number(id));
+        if(Number(countOfProdBlock.innerHTML) < filtredArray[index].stock){
+          const stockString: string | undefined = el.previousSibling?.previousSibling?.textContent?.split(' ')[1];
+          console.log(arrayFromSorage)
+          console.log(index)
+          if (arrayFromSorage?.length >= Number(document.getElementById('cart-prod')?.innerHTML)) countOfProd = Number(arrayFromSorage[index].count);
+          let stockNumber: number = 0;
+          if (stockString) stockNumber = Number(stockString);
+          countOfProd++;
+          countOfProdBlock.innerHTML = `${countOfProd}`;
+          const infoObj: CartObject = {
+            id: id,
+            stock: stockString,
+            price: filtredArray[index].price,
+            count: countOfProd,
+          };
+          arrayOfValues = arrayOfValues.filter((el) => {
+            return el.id !== infoObj.id;
+          });
+          this.cartHeaderTotal.innerText = (
+            Number(this.cartHeaderTotal.innerText) + filtredArray[index].price
+          ).toString();
+          cartTotal.innerHTML = this.cartHeaderTotal.innerText;
+          localStorage.setItem('total-header', cartTotal.innerHTML);
+          arrayOfValues.push(infoObj);
+          localStorage.setItem('storeBuyList', JSON.stringify(arrayOfValues));
+        }
       });
     });
   }
