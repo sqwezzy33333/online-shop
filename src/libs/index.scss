@@ -96,6 +96,10 @@ body {
     }
   }
 
+  &__found {
+      @extend %tpclfontsize;
+  }
+
   .container {
     .price-basket {
       &__name {

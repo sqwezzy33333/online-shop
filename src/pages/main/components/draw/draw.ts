@@ -1,7 +1,6 @@
 import { IProduct } from '../../../types/types';
 
 export class DrawMain {
-  private arrayOfProdForCart: string[] = [];
   async draw(data: IProduct[]) {
     const products: IProduct[] = data;
     let typeView = 'blocks';
@@ -30,6 +29,11 @@ export class DrawMain {
     const catalog = document.querySelector('.catalog__products') as HTMLElement;
     const productsSpace = document.querySelector('.catalog__products') as HTMLElement;
     catalog.innerHTML = '';
+    let textButton = 'Add to cart';
+    let idInCart: string[] = []
+    if(localStorage.getItem('arrayOfId') !== null){
+      idInCart = localStorage.getItem('arrayOfId')?.split(',') as string[];
+    }
     if(typeView === 'blocks'){
       productsSpace.style.display = 'grid';
       for (let i = 0; i < products.length; i++) {
@@ -37,6 +41,12 @@ export class DrawMain {
         const div = document.createElement('div') as HTMLElement;
         div.classList.add('catalog__product');
         div.classList.add('product');
+        if(idInCart.indexOf(product.id.toString()) >= 0){
+          textButton = 'Remove from cart';
+        }
+        else {
+          textButton = 'Add to cart';
+        }
         const cart: string = `
               <div class="product__discount-wrap">
               <p class="product__discount">-${product.discountPercentage}%</p>
@@ -61,7 +71,7 @@ export class DrawMain {
               </p>
               </div>
               <div class="product__add-wrap">
-                <button class="product__add" id="${product.id}">Add to cart</button>
+                <button class="product__add" id="${product.id}">${textButton}</button>
               </div>`;
         div.innerHTML = cart;
         catalog.appendChild(div);
@@ -73,8 +83,14 @@ export class DrawMain {
       const btns = document.querySelectorAll('.product__add');
       btns.forEach((el) => {
         el.addEventListener('click', () => {
-          console.log(el)
-          this.makeArrayOfProducts(products, el);
+          if(el.innerHTML === 'Add to cart'){
+            el.innerHTML = 'Remove from cart';
+            this.makeArrayOfProducts(products, el);
+          }
+          else {
+            el.innerHTML = 'Add to cart';
+            this.removeFromCart(products, el);
+          }
         });
       });
     }
@@ -86,6 +102,12 @@ export class DrawMain {
         const div = document.createElement('div') as HTMLElement;
         div.classList.add('catalog__product_line');
         div.classList.add('product_line');
+        if(idInCart.indexOf(product.id.toString()) >= 0){
+          textButton = 'Remove from cart';
+        }
+        else {
+          textButton = 'Add to cart';
+        }
         const cart: string = `
               <div class="product_line__img-wrap">
                 <div class="product_line__image">
@@ -118,7 +140,7 @@ export class DrawMain {
                   </p>
                 </div>
                 <div class="product_line__add-wrap">
-                  <button class="product_line__add" id="${product.id}">Add to cart</button>
+                  <button class="product_line__add" id="${product.id}">${textButton}</button>
                 </div>
               </div>`;
         div.innerHTML = cart;
@@ -127,8 +149,14 @@ export class DrawMain {
       const btns = document.querySelectorAll('.product_line__add');
       btns.forEach((el) => {
         el.addEventListener('click', () => {
-          console.log(el)
-          this.makeArrayOfProducts(products, el);
+          if(el.innerHTML === 'Add to cart'){
+            el.innerHTML = 'Remove from cart';
+            this.makeArrayOfProducts(products, el);
+          }
+          else {
+            el.innerHTML = 'Add to cart';
+            this.removeFromCart(products, el);
+          }
         });
       });
     }

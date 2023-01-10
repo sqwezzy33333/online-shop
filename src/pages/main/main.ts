@@ -39,6 +39,15 @@ export class Main {
 
   async createPage(){
     this.mainBlock.id = 'main-page';
+    let sum = 0, stock = 0;
+    if(localStorage.getItem('total-header') !== null){
+      sum = Number(localStorage.getItem('total-header'))
+    }
+    if(localStorage.getItem('arrayOfId') !== null){
+      stock = Number(localStorage.getItem('arrayOfId')?.split(',').length)
+    }
+    (document.querySelector('.price-basket__name_count') as HTMLElement).innerHTML = sum.toString();
+    (document.getElementById('found') as HTMLElement).innerHTML = stock.toString();
     (this.mainBlock.querySelector('.main') as HTMLElement).innerHTML = `
       <div class="container">
         <div class="main__wrapper">
@@ -210,7 +219,7 @@ export class Main {
     await this.render();
     const btn = document.querySelector('.logo__home');
     btn?.addEventListener('click', () => {
-      syncURL(this.allFilters)
+      localStorage.clear();
     });
   }
 

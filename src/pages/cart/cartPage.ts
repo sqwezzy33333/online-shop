@@ -22,6 +22,7 @@ export class CartPage {
 
   drawCart(arr: IProduct[]) {
     this.cartHeaderTotal = document.querySelector('.price-basket__name_count') as HTMLElement;
+    this.cartHeaderTotal.innerHTML = localStorage.getItem('total-header') as string
     const currentPay: string | null = this.cartHeaderTotal.textContent;
     const idsFormLocal: string | null = localStorage.getItem('arrayOfId');
     let arrayIdFromLocal: string[] = [];
@@ -84,9 +85,7 @@ export class CartPage {
 
       if (arrayFromSorage.length > 0) countOfCard = arrayFromSorage[0].count.toString();
       item.className = 'cart-item';
-      item.innerHTML =
-        /*html*/
-        `
+      item.innerHTML =`
       <span class="cart-item__number">${index}.</span>
       <div class="cart-item__img">
         <img src="${el.images[0]}" alt="">
