@@ -1,4 +1,4 @@
-import { IProduct } from '../../../types/types';
+import { CartObject, IProduct } from '../../../types/types';
 
 export class DrawMain {
   async draw(data: IProduct[]) {
@@ -160,8 +160,69 @@ export class DrawMain {
         });
       });
     }
-    const startSort: Sort = new Sort();
-    const startTypeSort: string = 'rating';
-    await startSort.sort(startTypeSort, listCardProducts);
+    (document.querySelector('.to-basket__pict') as HTMLElement).addEventListener('click', () => {
+      location.hash = 'cart-page';
+    });
+  }
+  makeArrayOfProducts(arr: IProduct[], el: Element) {
+    let filtredArray: IProduct[] = [];
+    let arrayOfProdForCart: string[] = [];
+    if(localStorage.getItem('arrayOfId') !== null){
+      arrayOfProdForCart = localStorage.getItem('arrayOfId')?.split(',') as string[];
+    }
+    arrayOfProdForCart.push(el.id);
+    localStorage.setItem('arrayOfId', arrayOfProdForCart.toString());
+    filtredArray = arr.filter((el) => {
+      let isitem: boolean = false;
+      for (let i = 0; i < arrayOfProdForCart.length; i++) {
+        const itemNum: string = arrayOfProdForCart[arrayOfProdForCart.length - 1];
+        if (Number(el.id) === Number(itemNum)) {
+          isitem = true;
+        }
+      }
+      if (isitem) return true;
+    });
+    let sum: number = filtredArray.map((el) => el.price).reduce((partialSum, a) => partialSum + a, 0);
+    sum = sum + Number((document.querySelector('.price-basket__name_count') as HTMLElement).innerHTML);
+    localStorage.setItem('total-header', `${sum}`);
+    (document.querySelector('.price-basket__name_count') as HTMLElement).innerHTML = `${sum}`;
+    (document.getElementById('found') as HTMLElement).innerHTML = (Number((document.getElementById('found') as HTMLElement).innerHTML) + 1).toString();
+  }
+
+  removeFromCart(arr: IProduct[], el: Element) {
+    let filtredArray: IProduct[] = [];
+    let arrayOfProdForCart: string[] = [];
+    if(localStorage.getItem('arrayOfId') !== null){
+      arrayOfProdForCart = localStorage.getItem('arrayOfId')?.split(',') as string[];
+    }
+    filtredArray = arr.filter((elem) => {
+      let isitem: boolean = false;
+      for (let i = 0; i < arrayOfProdForCart.length; i++) {
+        const itemNum: string = arrayOfProdForCart[arrayOfProdForCart.indexOf(el.id)];
+        if (Number(elem.id) === Number(itemNum)) {
+          isitem = true;
+        }
+      }
+      if (isitem) return true;
+    });
+    let sum: number = filtredArray.map((el) => el.price).reduce((partialSum, a) => partialSum + a, 0);
+    let arrayFromSorage: CartObject[] = [];
+    const stringProdFromLS: string | null = localStorage.getItem('storeBuyList');
+    if (stringProdFromLS) {
+      arrayFromSorage = JSON.parse(stringProdFromLS);
+    }
+    const index = arrayFromSorage.map(x => {
+      return x.id;
+    }).indexOf(el.id);
+    sum = Number((document.querySelector('.price-basket__name_count') as HTMLElement).innerHTML) - sum * arrayFromSorage[index].count;
+    if(arrayFromSorage[index] !== undefined){
+      arrayFromSorage.splice(arrayFromSorage.indexOf(arrayFromSorage[index]), 1);
+    }
+    localStorage.setItem('storeBuyList', JSON.stringify(arrayFromSorage));
+    localStorage.setItem('total-header', `${sum}`);
+    arrayOfProdForCart.splice(arrayOfProdForCart.indexOf(el.id), 1);
+    localStorage.setItem('arrayOfId', arrayOfProdForCart.toString());
+    (document.querySelector('.price-basket__name_count') as HTMLElement).innerHTML = `${sum}`;
+    (document.getElementById('found') as HTMLElement).innerHTML = (Number((document.getElementById('found') as HTMLElement).innerHTML) - 1).toString();
   }
 }
