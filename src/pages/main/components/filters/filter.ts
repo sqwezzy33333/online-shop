@@ -3,20 +3,17 @@ import { IProduct, AllFiltersType } from '../../../types/types';
 import { FilterBrand } from '../filters/filterByBrand';
 import { FilterPrice } from './filterByPrice';
 import { FilterStock } from './filterByStock';
-import { Clear } from './clear';
 
 export class Filter {
   filterCategory: FilterCategory;
   filterBrand: FilterBrand;
   filterPrice: FilterPrice;
   filterStock: FilterStock;
-  clear: Clear;
   constructor() {
     this.filterCategory = new FilterCategory();
     this.filterBrand = new FilterBrand();
     this.filterPrice = new FilterPrice();
     this.filterStock = new FilterStock();
-    this.clear = new Clear();
   }
   async start(data: IProduct[], filtredData?: IProduct[], allFilters?: AllFiltersType) {
     this.filterCategory.drawFilter(data, filtredData);
@@ -25,7 +22,6 @@ export class Filter {
     this.filterStock.drawFilter();
     this.filterCategory.drawChekedInput(allFilters);
     this.filterBrand.drawChekedInput(allFilters);
-    this.clear.clearFilters();
   }
   filter(allFiltersOnload?: AllFiltersType) {
     this.filterCategory.checkFilter(allFiltersOnload);
@@ -109,13 +105,13 @@ export class Filter {
     return data;
   }
   checkRangeFilters(array: IProduct[]):void{
-    let priceArray = array.map(x=>x.price);
-    let stockArray = array.map(x=>x.stock);
+    const priceArray = array.map(x=>x.price);
+    const stockArray = array.map(x=>x.stock);
 
-    let maxPrice = Math.max(...priceArray);
-    let minPrice = Math.min(...priceArray);
-    let maxStock = Math.max(...stockArray);
-    let minStock = Math.min(...stockArray);
+    const maxPrice = Math.max(...priceArray);
+    const minPrice = Math.min(...priceArray);
+    const maxStock = Math.max(...stockArray);
+    const minStock = Math.min(...stockArray);
 
     localStorage.setItem('leftPriceValue', minPrice.toString());
     localStorage.setItem('rightPriceValue', maxPrice.toString());

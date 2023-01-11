@@ -8,7 +8,6 @@ import { allFilters, syncURL } from './components/forQueryParam/forQueryParam';
 import { Search } from './components/search/search';
 import { copyLink } from './components/copyLink/copyLink';
 import { typeOfView } from './components/typeOfView/typeOfView';
-import { CartPage } from '../cart/cartPage';
 
 export class Main {
   drawMain: DrawMain;
@@ -129,6 +128,17 @@ export class Main {
     await this.copyLink.addEventListenerToCopyBtn();
     await this.typeOfView.addEventListenerButtonView();
     this.filter.filter();
+    const buttonClear = document.querySelector('.clear-btn') as HTMLSelectElement;
+    buttonClear.addEventListener('click', () => {
+      syncURL(allFilters);
+      this.filter.start(data, this.filtredData);
+      this.drawMain.draw(data);
+      this.filter.filter();
+      localStorage.setItem('category', '');
+      localStorage.setItem('brand', '');
+      (document.querySelector('.typeView__icon') as HTMLElement).innerHTML = '≡';
+      (document.querySelector('.sort__text') as HTMLElement).innerHTML = 'Choose Sort';
+    });
   }
 
   async render(): Promise<void> {
