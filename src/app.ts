@@ -31,7 +31,6 @@ class App {
     (this.bodyPage.querySelector('.main') as HTMLElement).innerHTML = '';
     this.renderNewPage(window.location.hash.slice(1));
     this.enableRouteChange();
-    alert("Привет! Проверь,пожалуйста, в четверг вечером, спасибо)")
   }
 
   renderNewPage(idPage: string){
