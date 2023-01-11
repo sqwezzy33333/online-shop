@@ -22,7 +22,12 @@ export class CartPage {
 
   drawCart(arr: IProduct[]) {
     this.cartHeaderTotal = document.querySelector('.price-basket__name_count') as HTMLElement;
-    this.cartHeaderTotal.innerHTML = localStorage.getItem('total-header') as string
+    if(localStorage.getItem('total-header') !== null){
+      this.cartHeaderTotal.innerHTML = localStorage.getItem('total-header') as string;
+    }
+    else {
+      this.cartHeaderTotal.innerHTML = '0';
+    }
     const currentPay: string | null = this.cartHeaderTotal.textContent;
     const idsFormLocal: string | null = localStorage.getItem('arrayOfId');
     let arrayIdFromLocal: string[] = [];
@@ -60,11 +65,11 @@ export class CartPage {
         <h2 class="summary__title">Summary</h2>
           <div class="summary__products">Products: <span id="cart-prod">${filtredArray.length}</span></div>
           <div class="summary__total"><div class="summary-wrapper-tot">Total: <span id="cart-total">${currentPay}$</span></div></div>
-          <form action="#" class="summary__form">
+          <div class="summary__form">
             <input maxlength="8" type="text" placeholder="Enter promo" class="summary__input">
             <div class="summary__promo-info">Promo - 'P5683L', 'BL7DOF22'</div>
             <button class="summary__buy-btn">BUY NOW</button>
-          </form>
+          </div>
        </div>
       </div>
     </div>
@@ -308,6 +313,19 @@ export class CartPage {
             arrOfProducts.splice(arrOfProducts.indexOf(id), 1);
             localStorage.setItem('arrayOfId', arrOfProducts.toString());
           }
+          if(localStorage.getItem('storeBuyList') !== null){
+            let arr: CartObject[] = [];
+            const id: string = el.id.split('_')[1];
+            const fronLocal: string | null = localStorage.getItem('storeBuyList');
+            arr = JSON.parse(fronLocal as string);
+            const index = arr.map(x => {
+              return x.id;
+            }).indexOf(id);
+            if(arr[index] !== undefined){
+              arr.splice(arr.indexOf(arr[index]), 1);
+            }
+            localStorage.setItem('storeBuyList', JSON.stringify(arrayOfValues));
+          }
         }
       });
 
@@ -318,9 +336,6 @@ export class CartPage {
         }).indexOf(Number(id));
         if(Number(countOfProdBlock.innerHTML) < filtredArray[index].stock){
           const stockString: string | undefined = el.previousSibling?.previousSibling?.textContent?.split(' ')[1];
-          console.log(arrayFromSorage)
-          console.log(index)
-          if (arrayFromSorage?.length >= Number(document.getElementById('cart-prod')?.innerHTML)) countOfProd = Number(arrayFromSorage[index].count);
           let stockNumber: number = 0;
           if (stockString) stockNumber = Number(stockString);
           countOfProd++;

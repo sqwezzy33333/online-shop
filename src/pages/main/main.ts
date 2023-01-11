@@ -43,11 +43,11 @@ export class Main {
     if(localStorage.getItem('total-header') !== null){
       sum = Number(localStorage.getItem('total-header'));
     }
-    if(localStorage.getItem('arrayOfId') !== null){
-      stock = Number(localStorage.getItem('arrayOfId')?.split(',').length);
-    }
     if(localStorage.getItem('arrayOfId') === ''){
       localStorage.removeItem('arrayOfId');
+    }
+    if(localStorage.getItem('arrayOfId') !== null){
+      stock = Number(localStorage.getItem('arrayOfId')?.split(',').length);
     }
     (document.querySelector('.price-basket__name_count') as HTMLElement).innerHTML = sum.toString();
     (document.getElementById('found') as HTMLElement).innerHTML = stock.toString();

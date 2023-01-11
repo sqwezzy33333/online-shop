@@ -1,4 +1,4 @@
-import { IProduct } from '../../../types/types';
+import { CartObject, IProduct } from '../../../types/types';
 
 export class DrawMain {
   async draw(data: IProduct[]) {
@@ -206,7 +206,19 @@ export class DrawMain {
       if (isitem) return true;
     });
     let sum: number = filtredArray.map((el) => el.price).reduce((partialSum, a) => partialSum + a, 0);
-    sum = Number((document.querySelector('.price-basket__name_count') as HTMLElement).innerHTML) - sum;
+    let arrayFromSorage: CartObject[] = [];
+    const stringProdFromLS: string | null = localStorage.getItem('storeBuyList');
+    if (stringProdFromLS) {
+      arrayFromSorage = JSON.parse(stringProdFromLS);
+    }
+    const index = arrayFromSorage.map(x => {
+      return x.id;
+    }).indexOf(el.id);
+    sum = Number((document.querySelector('.price-basket__name_count') as HTMLElement).innerHTML) - sum * arrayFromSorage[index].count;
+    if(arrayFromSorage[index] !== undefined){
+      arrayFromSorage.splice(arrayFromSorage.indexOf(arrayFromSorage[index]), 1);
+    }
+    localStorage.setItem('storeBuyList', JSON.stringify(arrayFromSorage));
     localStorage.setItem('total-header', `${sum}`);
     arrayOfProdForCart.splice(arrayOfProdForCart.indexOf(el.id), 1);
     localStorage.setItem('arrayOfId', arrayOfProdForCart.toString());
