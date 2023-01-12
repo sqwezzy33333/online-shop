@@ -28,6 +28,12 @@ export class DrawMain {
   drawCards(products: IProduct[], typeView: string){
     const catalog = document.querySelector('.catalog__products') as HTMLElement;
     const productsSpace = document.querySelector('.catalog__products') as HTMLElement;
+    const headerFound = document.getElementById('foundblock');
+    if(headerFound){
+      headerFound.innerHTML = `${products.length}`;
+      localStorage.setItem('headerTotalTrod', headerFound.innerText)
+    } 
+
     catalog.innerHTML = '';
     let textButton = 'Add to cart';
     let idInCart: string[] = []
