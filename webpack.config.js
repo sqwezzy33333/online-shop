@@ -28,13 +28,6 @@ const baseConfig = {
                 test: /\.s[ac]ss$/,
                 use: ['style-loader', 'css-loader', 'sass-loader'],
             },
-            //   {
-            //     test: /\.(png|jpg|svg|gif|webp)$/,
-            //     loader: 'file-loader',
-            //     options: {
-            //       outputPath: 'assets/images',
-            //     },
-            //   },
             {
                 test: /\.(?:ico|gif|png|jpg|jpeg|svg|webp)$/i,
                 loader: 'file-loader',
@@ -43,10 +36,6 @@ const baseConfig = {
                     name: '[name].[ext]',
                 },
             },
-            // {
-            //     test: /\.(woff(2)?|eot|ttf|otf)$/i,
-            //     type: 'asset/resource',
-            // },
         ],
     },
     resolve: {
@@ -66,8 +55,8 @@ const baseConfig = {
         new CopyPlugin({
             patterns: [
                 {
-                    from: 'src/assets',
-                    to: 'assets',
+                    from: 'src/assets/data',
+                    to: 'assets/data',
                 },
             ],
         }),

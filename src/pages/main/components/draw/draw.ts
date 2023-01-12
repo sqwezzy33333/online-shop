@@ -216,15 +216,18 @@ export class DrawMain {
     const stringProdFromLS: string | null = localStorage.getItem('storeBuyList');
     if (stringProdFromLS) {
       arrayFromSorage = JSON.parse(stringProdFromLS);
+      const index = arrayFromSorage.map(x => {
+        return x.id;
+      }).indexOf(el.id);
+      sum = Number((document.querySelector('.price-basket__name_count') as HTMLElement).innerHTML) - sum * arrayFromSorage[index].count;
+      if(arrayFromSorage[index] !== undefined){
+        arrayFromSorage.splice(arrayFromSorage.indexOf(arrayFromSorage[index]), 1);
+      }
+      localStorage.setItem('storeBuyList', JSON.stringify(arrayFromSorage));
     }
-    const index = arrayFromSorage.map(x => {
-      return x.id;
-    }).indexOf(el.id);
-    sum = Number((document.querySelector('.price-basket__name_count') as HTMLElement).innerHTML) - sum * arrayFromSorage[index].count;
-    if(arrayFromSorage[index] !== undefined){
-      arrayFromSorage.splice(arrayFromSorage.indexOf(arrayFromSorage[index]), 1);
+    else {
+      sum = Number((document.querySelector('.price-basket__name_count') as HTMLElement).innerHTML) - sum;
     }
-    localStorage.setItem('storeBuyList', JSON.stringify(arrayFromSorage));
     localStorage.setItem('total-header', `${sum}`);
     arrayOfProdForCart.splice(arrayOfProdForCart.indexOf(el.id), 1);
     localStorage.setItem('arrayOfId', arrayOfProdForCart.toString());
