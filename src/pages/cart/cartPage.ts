@@ -9,12 +9,12 @@ export class CartPage {
   loader: Loader;
   cartBlock: HTMLElement;
 
-  constructor(){
+  constructor() {
     this.loader = new Loader('assets/data/data.json');
     this.cartBlock = document.body;
   }
 
-  async createPage(id: string){
+  async createPage(id: string) {
     this.cartBlock.id = id;
     const data: IProduct[] = await this.loader.load();
     this.drawCart(data);
@@ -22,10 +22,9 @@ export class CartPage {
 
   drawCart(arr: IProduct[]) {
     this.cartHeaderTotal = document.querySelector('.price-basket__name_count') as HTMLElement;
-    if(localStorage.getItem('total-header') !== null){
+    if (localStorage.getItem('total-header') !== null) {
       this.cartHeaderTotal.innerHTML = localStorage.getItem('total-header') as string;
-    }
-    else {
+    } else {
       this.cartHeaderTotal.innerHTML = '0';
     }
     const currentPay: string | null = this.cartHeaderTotal.textContent;
@@ -34,6 +33,17 @@ export class CartPage {
     if (idsFormLocal) {
       arrayIdFromLocal = idsFormLocal.split(',');
     }
+
+    const headerFound = document.getElementById('foundblock');
+    const inCart = document.getElementById('found');
+    if (headerFound) {
+      headerFound.innerHTML = `${localStorage.getItem('headerTotalTrod')}`;
+    }
+
+    if (inCart) {
+      inCart.innerHTML = `${localStorage.getItem('inCart')}`;
+    }
+
 
     const filtredArray: IProduct[] = arr.filter((el) => {
       let isitem: boolean = false;
@@ -45,9 +55,8 @@ export class CartPage {
       }
       if (isitem) return true;
     });
-    this.headerFound.innerHTML = '';
 
-    this.mainWrapper.innerHTML =`
+    this.mainWrapper.innerHTML = `
     <div class="main__cart cart">
     <div class="cart__wrapper">
       <div class="cart__list-products list-products">
@@ -89,8 +98,8 @@ export class CartPage {
 
       if (arrayFromSorage.length > 0) countOfCard = arrayFromSorage[0].count.toString();
       item.className = 'cart-item';
-      item.id = `${el.id}`
-      item.innerHTML =`
+      item.id = `${el.id}`;
+      item.innerHTML = `
       <span class="cart-item__number">${index}.</span>
       <div class="cart-item__img">
         <img src="${el.images[0]}" alt="">
@@ -283,9 +292,11 @@ export class CartPage {
         let stockNumber: number = 0;
         if (stockString) stockNumber = Number(stockString);
         countOfProdBlock.innerHTML = `${countOfProd}`;
-        const index = filtredArray.map(x => {
-          return x.id;
-        }).indexOf(Number(id));
+        const index = filtredArray
+          .map((x) => {
+            return x.id;
+          })
+          .indexOf(Number(id));
         const infoObj: CartObject = {
           id: id,
           stock: stockString,
@@ -299,29 +310,35 @@ export class CartPage {
           Number(this.cartHeaderTotal.innerText) - filtredArray[index].price
         ).toString();
         cartTotal.innerHTML = this.cartHeaderTotal.innerText;
-        if(infoObj.count > 0){
+        if (infoObj.count > 0) {
           arrayOfValues.push(infoObj);
         }
         localStorage.setItem('total-header', cartTotal.innerHTML);
         localStorage.setItem('storeBuyList', JSON.stringify(arrayOfValues));
-        if(Number(countOfProdBlock.innerHTML) - 1 < 0){
-          document.querySelector('.list-products')?.removeChild(document.getElementById(`${filtredArray[index].id}`) as HTMLElement);
-          (document.getElementById('cart-prod') as HTMLElement).innerHTML = (Number((document.getElementById('cart-prod') as HTMLElement).innerHTML) - 1).toString();
-          if(localStorage.getItem('arrayOfId') !== null){
+        if (Number(countOfProdBlock.innerHTML) - 1 < 0) {
+          document
+            .querySelector('.list-products')
+            ?.removeChild(document.getElementById(`${filtredArray[index].id}`) as HTMLElement);
+          (document.getElementById('cart-prod') as HTMLElement).innerHTML = (
+            Number((document.getElementById('cart-prod') as HTMLElement).innerHTML) - 1
+          ).toString();
+          if (localStorage.getItem('arrayOfId') !== null) {
             const id: string = el.id.split('_')[1];
             const arrOfProducts = localStorage.getItem('arrayOfId')?.split(',') as string[];
             arrOfProducts.splice(arrOfProducts.indexOf(id), 1);
             localStorage.setItem('arrayOfId', arrOfProducts.toString());
           }
-          if(localStorage.getItem('storeBuyList') !== null){
+          if (localStorage.getItem('storeBuyList') !== null) {
             let arr: CartObject[] = [];
             const id: string = el.id.split('_')[1];
             const fronLocal: string | null = localStorage.getItem('storeBuyList');
             arr = JSON.parse(fronLocal as string);
-            const index = arr.map(x => {
-              return x.id;
-            }).indexOf(id);
-            if(arr[index] !== undefined){
+            const index = arr
+              .map((x) => {
+                return x.id;
+              })
+              .indexOf(id);
+            if (arr[index] !== undefined) {
               arr.splice(arr.indexOf(arr[index]), 1);
             }
             localStorage.setItem('storeBuyList', JSON.stringify(arrayOfValues));
@@ -331,10 +348,12 @@ export class CartPage {
 
       addProdBtn.addEventListener('click', () => {
         const id: string = el.id.split('_')[1];
-        const index = filtredArray.map(x => {
-          return x.id;
-        }).indexOf(Number(id));
-        if(Number(countOfProdBlock.innerHTML) < filtredArray[index].stock){
+        const index = filtredArray
+          .map((x) => {
+            return x.id;
+          })
+          .indexOf(Number(id));
+        if (Number(countOfProdBlock.innerHTML) < filtredArray[index].stock) {
           const stockString: string | undefined = el.previousSibling?.previousSibling?.textContent?.split(' ')[1];
           let stockNumber: number = 0;
           if (stockString) stockNumber = Number(stockString);

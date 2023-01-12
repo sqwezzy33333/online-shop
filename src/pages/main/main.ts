@@ -36,20 +36,25 @@ export class Main {
     this.mainBlock = document.body;
   }
 
-  async createPage(){
+  async createPage() {
     this.mainBlock.id = 'main-page';
-    let sum = 0, stock = 0;
-    if(localStorage.getItem('total-header') !== null){
+    let sum = 0,
+      stock = 0;
+    if (localStorage.getItem('total-header') !== null) {
       sum = Number(localStorage.getItem('total-header'));
     }
-    if(localStorage.getItem('arrayOfId') === ''){
+    if (localStorage.getItem('arrayOfId') === '') {
       localStorage.removeItem('arrayOfId');
     }
-    if(localStorage.getItem('arrayOfId') !== null){
+    if (localStorage.getItem('arrayOfId') !== null) {
       stock = Number(localStorage.getItem('arrayOfId')?.split(',').length);
     }
     (document.querySelector('.price-basket__name_count') as HTMLElement).innerHTML = sum.toString();
-    (document.getElementById('found') as HTMLElement).innerHTML = stock.toString();
+    const inCart = document.getElementById('found');
+    if (inCart) {
+      inCart.innerHTML = stock.toString();
+      localStorage.setItem('inCart', inCart.innerText);
+    }
     (this.mainBlock.querySelector('.main') as HTMLElement).innerHTML = `
       <div class="container">
         <div class="main__wrapper">
@@ -145,17 +150,16 @@ export class Main {
     const data: IProduct[] = await this.loader.load();
     let filtredData: IProduct[] = data;
     const popstate = (event: PopStateEvent) => {
-      if(location.hash !== '' && location.hash !== 'main-page'){
+      if (location.hash !== '' && location.hash !== 'main-page') {
         window.removeEventListener('popstate', popstate);
-        location.search = ''
-      }
-      else {
-        if(event.state !== null){
+        location.search = '';
+      } else {
+        if (event.state !== null) {
           if (event.state.category) {
             filtredData = this.filter.filterArrayByCategory(data, event.state.category);
             filtredData = this.filter.filterArrayByBrand(filtredData, event.state.brand);
           } else filtredData = data;
-    
+
           if (event.state.brand) {
             filtredData = this.filter.filterArrayByBrand(data, event.state.brand);
             filtredData = this.sort.sort(event.state.type, filtredData);
@@ -163,7 +167,7 @@ export class Main {
           if (event.state.type === '') {
             filtredData = this.sort.sort('By popularity(Ascending)', filtredData);
           } else filtredData = this.sort.sort(event.state.type, filtredData);
-    
+
           if (event.state.price) filtredData = this.filter.filterByPrice(filtredData, event.state.price);
           if (event.state.stock) filtredData = this.filter.filterByStock(filtredData, event.state.stock);
           if (event.state.type && this.filtredData.length > 0 && event.state.category) {
@@ -171,7 +175,7 @@ export class Main {
             filtredData = this.filter.filterArrayByCategory(this.data, event.state.category);
             filtredData = this.sort.sort(event.state.type, filtredData);
           }
-    
+
           if (event.state.search) filtredData = this.search.searchProducts(filtredData, event.state.search);
           if (filtredData.length === 0 && event.state.search === '') filtredData = data;
           this.drawMain.draw(filtredData);
@@ -179,7 +183,7 @@ export class Main {
           this.filter.filter(event.state);
         }
       }
-    }
+    };
     window.addEventListener('popstate', popstate);
   }
 
