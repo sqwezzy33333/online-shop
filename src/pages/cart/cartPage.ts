@@ -8,7 +8,6 @@ export class CartPage {
   cartHeaderTotal = document.querySelector('.price-basket__name_count') as HTMLElement;
   loader: Loader;
   cartBlock: HTMLElement;
-
   constructor() {
     this.loader = new Loader('assets/data/data.json');
     this.cartBlock = document.body;
@@ -18,6 +17,7 @@ export class CartPage {
     this.cartBlock.id = id;
     const data: IProduct[] = await this.loader.load();
     this.drawCart(data);
+    this.openValid();
   }
 
   drawCart(arr: IProduct[]) {
@@ -43,7 +43,6 @@ export class CartPage {
     if (inCart) {
       inCart.innerHTML = `${localStorage.getItem('inCart')}`;
     }
-
 
     const filtredArray: IProduct[] = arr.filter((el) => {
       let isitem: boolean = false;
@@ -77,7 +76,7 @@ export class CartPage {
           <div class="summary__form">
             <input maxlength="8" type="text" placeholder="Enter promo" class="summary__input">
             <div class="summary__promo-info">Promo - 'P5683L', 'BL7DOF22'</div>
-            <button class="summary__buy-btn">BUY NOW</button>
+            <button id="btnVal" class="summary__buy-btn">BUY NOW</button>
           </div>
        </div>
       </div>
@@ -376,6 +375,47 @@ export class CartPage {
           arrayOfValues.push(infoObj);
           localStorage.setItem('storeBuyList', JSON.stringify(arrayOfValues));
         }
+      });
+    });
+  }
+  openValid(): void {
+    const btnInCart = document.getElementById('btnVal');
+
+    const valBlock = document.createElement('div');
+    btnInCart?.addEventListener('click', () => {
+      valBlock.classList.add('val');
+      valBlock.innerHTML = `
+      <div class="validation">
+        <div class="validation__block">
+          <form class="validation__form" action="#" id="form-valid">
+            <span class="validation__title">Personal details</span>
+            <input class="validation__input" id="val-name" type="text" placeholder="Name" />
+            <input class="validation__input" id="val-phone" type="number" placeholder="Phone number" />
+            <input class="validation__input" id="val-address" type="text" placeholder="Delivery address" />
+            <input class="validation__input" id="val-e-mail" type="email" placeholder="E=mail" />
+            <span class="validation__tilte2">Credit card details</span>
+            <div class="validations__card-block card-block">
+              <input class="validation__input" type="number" placeholder="Card number" id="val-card-number" />
+              <div class="validation__flex">
+                <div class="validation__item">
+                  <span class="validation__info">VALID:</span
+                  ><input class="validation__input" id="val-card-name" type="text" placeholder="Sergei Korn" />
+                </div>
+                <div class="validation__item">
+                  <span class="validation__info">CVV:</span
+                  ><input class="validation__input" id="val-cvv" type="number" placeholder="SVV" />
+                </div>
+              </div>
+            </div>
+            <div class="validation__close">close</div>
+          </form>
+        </div>
+    </div>`;
+
+      this.mainWrapper.append(valBlock);
+      const close = document.querySelector('.validation__close');
+      close?.addEventListener('click', () => {
+        valBlock.remove();
       });
     });
   }
